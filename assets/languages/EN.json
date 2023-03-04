@@ -1,0 +1,24 @@
+{
+    "RegisterScreen": {
+        "Name": {
+            "HintText": "Name",
+            "LabelText": "Name"
+        },
+        "Surname": {
+            "HintText": "Surname",
+            "LabelText": "Surname"
+        },
+        "Username": {
+            "HintText": "Username",
+            "LabelText": "Username"
+        },
+        "Email": {
+            "HintText": "Email",
+            "LabelText": "Email"
+        },
+        "Password": {
+            "HintText": "Password",
+            "LabelText": "Password"
+        }
+    }
+}

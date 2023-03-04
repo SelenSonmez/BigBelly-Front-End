@@ -1,0 +1,13 @@
+{
+    "LoginScreen": {
+      
+        "Username": {
+            "HintText": "Kullanici adi",
+            "LabelText": "Kullanici adi"
+        },
+        "Password": {
+            "HintText": "Şifre",
+            "LabelText": "Şifre"
+        }
+    }
+}

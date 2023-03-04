@@ -8,12 +8,15 @@ import '../../constants/Colors.dart';
 import '../../helpers/blocs/login/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
+
+  final LoginFormWidget loginForm = LoginFormWidget();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
+        lazy: false,
         create: (context) =>
             LoginBloc(authRepo: context.read<LoginRepository>()),
         child: BlocListener<LoginBloc, LoginState>(
@@ -32,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Hero(tag: "logo", child: logoImage),
-                    LoginFormWidget()
+                    LoginFormWidget(),
                   ],
                 ),
               ),

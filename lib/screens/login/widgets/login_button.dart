@@ -20,6 +20,7 @@ class LoginButton extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : ElevatedButton(
                 onPressed: () {
+                  formKey.currentState!.save();
                   if (formKey.currentState!.validate()) {
                     context.read<LoginBloc>().add(LoginSubmitted());
                   }

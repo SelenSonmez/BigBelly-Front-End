@@ -22,6 +22,12 @@ class UsernameTextField extends StatelessWidget {
           onChanged: (value) => context
               .read<LoginBloc>()
               .add(LoginUsernameChanged(username: value)),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
         );
       }),
     );
