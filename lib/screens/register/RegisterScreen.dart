@@ -12,7 +12,6 @@ import 'helpers/BigBellyTextField.dart';
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
-  bool isPasswordValid = false;
   static final _formKey = GlobalKey<FormState>();
 
   Map<String, dynamic> fields = {
@@ -182,12 +181,14 @@ class RegisterScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: Colors.red,
                       content: Text("Please enter valid inputs")));
+                } else {
+                  Response response =
+                      await dio.post('/account/register', data: fields);
+
+                  debugPrint(response.data.toString());
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => LoginScreen())));
                 }
-
-                // Response response =
-                //     await dio.post('/account/register', data: fields);
-
-                // debugPrint(response.data.toString());
               },
               style: ElevatedButton.styleFrom(
                   elevation: 5.h,
