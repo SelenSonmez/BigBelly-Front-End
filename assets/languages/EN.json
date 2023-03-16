@@ -19,6 +19,16 @@
         "Password": {
             "HintText": "Password",
             "LabelText": "Password"
+        },
+        "PasswordValidator": {
+            "AtLeast": "At least",
+            "Character": "Character",
+            "Letter": "Letter",
+            "UpperCaseLetter": "Uppercase Letter",
+            "SpecialCharacter": "Special Character",
+            "NumericCharacter": "Numeric Character",
+            "NormalLetter": "Normal Letter"
         }
+        
     }
 }
