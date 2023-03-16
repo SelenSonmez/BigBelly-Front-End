@@ -20,5 +20,18 @@
             "HintText": "Password",
             "LabelText": "Password"
         }
+    },
+    "LoginScreen": {
+        "Username": {
+            "HintText": "Name",
+            "LabelText": "Name"
+        },
+        "Password": {
+            "HintText": "Password",
+            "LabelText": "Password"
+        },
+        "NoAccount" : "Don't have an account yet?",
+        "SignUp" : "Sign Up",
+        "LoginButton" : "Login"
     }
 }
