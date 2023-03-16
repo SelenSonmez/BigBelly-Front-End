@@ -12,6 +12,7 @@ import 'helpers/BigBellyTextField.dart';
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
+  bool isPasswordValid = false;
   static final _formKey = GlobalKey<FormState>();
 
   Map<String, dynamic> fields = {
@@ -20,6 +21,15 @@ class RegisterScreen extends StatelessWidget {
     'email': null,
     'password': null
   };
+
+  // username consists of alphanumberic chars. lower or uppercase
+  // username allowed of the dot and underscore but no consecutively. e.g: flutter..regex
+  // they can't be used as first or last char.
+  // length must be between 5-20
+  final userNameRegex =
+      RegExp(r'^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$');
+  // https://www.w3resource.com/javascript/form/email-validation.php
+  final emailRegex = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
 
   @override
   Widget build(BuildContext context) {
@@ -41,40 +51,99 @@ class RegisterScreen extends StatelessWidget {
                   color: textFieldGray),
               "Sign Up"),
           BigBellyTextField(
-              labelText: TextDecider()
-                  .goOnPath('RegisterScreen')
-                  .goOnPath('Name')
-                  .target('LabelText')
-                  .decideText(),
-              hintText: TextDecider()
-                  .goOnPath('RegisterScreen')
-                  .goOnPath('Name')
-                  .target('HintText')
-                  .decideText(),
-              icon: const Icon(Icons.account_circle_rounded),
-              onSaved: (newValue) => fields['name'] = newValue),
-          BigBellyTextField(
-            labelText: "Surname",
-            hintText: "Surname",
-            icon: const Icon(Icons.family_restroom_rounded),
+            labelText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Name')
+                .target('LabelText')
+                .decideText(),
+            hintText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Name')
+                .target('HintText')
+                .decideText(),
+            icon: const Icon(Icons.account_circle_rounded),
+            onSaved: (newValue) => fields['name'] = newValue,
+            validator: (value) {
+              if (value == null || value.isEmpty) return "Name can't be empty";
+            },
           ),
           BigBellyTextField(
-              labelText: "Username",
-              hintText: "Username",
-              icon: const Icon(Icons.alternate_email),
-              onSaved: (newValue) => fields['username'] = newValue),
+            labelText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Surname')
+                .target('LabelText')
+                .decideText(),
+            hintText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Surname')
+                .target('HintText')
+                .decideText(),
+            icon: const Icon(Icons.family_restroom_rounded),
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return "Surname can't be empty";
+            },
+          ),
           BigBellyTextField(
-              labelText: "Email",
-              hintText: "Email",
-              icon: const Icon(Icons.mail_rounded),
-              onSaved: (newValue) => fields['email'] = newValue),
+            labelText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Username')
+                .target('LabelText')
+                .decideText(),
+            hintText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Username')
+                .target('HintText')
+                .decideText(),
+            icon: const Icon(Icons.alternate_email),
+            onSaved: (newValue) => fields['username'] = newValue,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Username can't be empty";
+              } else if (!userNameRegex.hasMatch(value))
+                return "username not matched";
+            },
+          ),
           BigBellyTextField(
-              labelText: "Password",
-              hintText: "Password",
-              icon: const Icon(Icons.lock_open_rounded),
-              isPassword: true,
-              isPwValidate: true,
-              onSaved: (newValue) => fields['password'] = newValue),
+            labelText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Email')
+                .target('LabelText')
+                .decideText(),
+            hintText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Email')
+                .target('HintText')
+                .decideText(),
+            icon: const Icon(Icons.mail_rounded),
+            onSaved: (newValue) => fields['email'] = newValue,
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return "Email can't be empty";
+              else if (!emailRegex.hasMatch(value)) return "email not valid";
+            },
+          ),
+          BigBellyTextField(
+            labelText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Password')
+                .target('LabelText')
+                .decideText(),
+            hintText: TextDecider()
+                .goOnPath('RegisterScreen')
+                .goOnPath('Password')
+                .target('HintText')
+                .decideText(),
+            icon: const Icon(Icons.lock_open_rounded),
+            isPassword: true,
+            isPwValidate: true,
+            onSaved: (newValue) => fields['password'] = newValue,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Password can't be empty";
+              }
+            },
+          ),
 
           //Sign In Text
           Container(
@@ -105,11 +174,17 @@ class RegisterScreen extends StatelessWidget {
           ElevatedButton(
               onPressed: () async {
                 _formKey.currentState!.save();
+                if (!_formKey.currentState!.validate()) {
+                  debugPrint("geldi");
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text("Please enter valid inputs")));
+                }
 
-                Response response =
-                    await dio.post('/account/register', data: fields);
+                // Response response =
+                //     await dio.post('/account/register', data: fields);
 
-                debugPrint(response.data.toString());
+                // debugPrint(response.data.toString());
               },
               style: ElevatedButton.styleFrom(
                   elevation: 5.h,
