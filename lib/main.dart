@@ -3,9 +3,11 @@ import 'package:bigbelly/repository/auth/login/login_repository.dart';
 import 'package:bigbelly/screens/login/LoginScreen.dart';
 import 'package:bigbelly/screens/login/widgets/form_widget.dart';
 import 'package:bigbelly/screens/login/widgets/password_field.dart';
+import 'package:bigbelly/screens/register/RegisterScreen.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -25,11 +27,15 @@ class MyApp extends StatelessWidget {
         Provider(create: (context) => LoginRepository()),
         Provider(create: (context) => LoginFormWidget()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.green),
-        home: LoginScreen(),
-      ),
+      child: ScreenUtilInit(
+          designSize: const Size(360, 732),
+          builder: (BuildContext context, Widget? child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(primarySwatch: Colors.green),
+              home: RegisterScreen(),
+            );
+          }),
     );
   }
 }
