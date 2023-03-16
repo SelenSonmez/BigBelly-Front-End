@@ -1,11 +1,14 @@
 import 'package:bigbelly/constants/Colors.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter/src/widgets/placeholder.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends StatefulWidget {
   const NavBar({super.key});
 
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -24,6 +27,7 @@ class NavBar extends StatelessWidget {
 
   Widget buildBottomIconButton(IconData icon) {
     return IconButton(
+      focusColor: Colors.red,
       iconSize: 30,
       icon: Icon(
         icon,

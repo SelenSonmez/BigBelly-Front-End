@@ -1,4 +1,4 @@
-import 'widgets/imports.dart';
+import 'main_page_imports.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -20,12 +20,13 @@ class MainPage extends StatelessWidget {
                       return Column(children: [
                         Image.asset('assets/images/hamburger.jpg'),
                         Padding(
-                            padding: EdgeInsets.all(18),
+                            padding: const EdgeInsets.all(18),
                             child: Column(
                               children: const [
                                 PostitleAndTags(),
                                 PostOwnerAndDate(),
                                 postReactions(),
+                                Divider(thickness: 2)
                               ],
                             )),
                       ]);
