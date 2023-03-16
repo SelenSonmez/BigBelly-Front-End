@@ -5,18 +5,18 @@ import 'package:flutter_pw_validator/Resource/Strings.dart';
 class ValidatorLanguage implements FlutterPwValidatorStrings {
   @override
   final String atLeast =
-      "${TextDecider().goOnPath('RegisterScreen').target('AtLeast').decideText()} - ${TextDecider().goOnPath('RegisterScreen').target('Character').decideText()}";
+      "${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('AtLeast').decideText()} - ${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('Character').decideText()}";
   @override
   final String uppercaseLetters =
-      "- ${TextDecider().goOnPath('RegisterScreen').target('UpperCaseLetter').decideText()}";
+      "- ${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('UpperCaseLetter').decideText()}";
   @override
   final String numericCharacters =
-      "- ${TextDecider().goOnPath('RegisterScreen').target('NumericCharacter').decideText()}";
+      "- ${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('NumericCharacter').decideText()}";
   @override
   final String specialCharacters =
-      "- ${TextDecider().goOnPath('RegisterScreen').target('SpecialCharacter').decideText()}";
+      "- ${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('SpecialCharacter').decideText()}";
 
   @override
   String get normalLetters =>
-      "- ${TextDecider().goOnPath('RegisterScreen').target('NormalLetter').decideText()}";
+      "- ${TextDecider().goOnPath('RegisterScreen').goOnPath("PasswordValidator").target('NormalLetter').decideText()}";
 }
