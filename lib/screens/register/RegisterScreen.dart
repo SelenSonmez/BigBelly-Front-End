@@ -1,5 +1,6 @@
 import 'package:bigbelly/constants/Dio.dart';
 import 'package:bigbelly/internationalization/text_decider.dart';
+import 'package:bigbelly/screens/widgets/page_below_string.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,7 +103,7 @@ class RegisterScreen extends StatelessWidget {
               if (value == null || value.isEmpty) {
                 return "Username can't be empty";
               } else if (!userNameRegex.hasMatch(value))
-                return "username not matched";
+                return "username not valid";
             },
           ),
           BigBellyTextField(
@@ -148,36 +149,15 @@ class RegisterScreen extends StatelessWidget {
           ),
 
           //Sign In Text
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                    style: TextStyle(fontSize: 16.sp),
-                    "Already have an account?  "),
-                TextButton(
-                  style: TextButton.styleFrom(
-                      textStyle: const TextStyle(
-                          color: Color.fromARGB(255, 143, 160, 78))),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => LoginScreen())));
-                  },
-                  child: const Text('Sign In'),
-                ),
-              ],
-            ),
-          ),
+          PageBelowString(
+              actionString: "Sign In",
+              longString: "Already have an account?  "),
 
           //Register Button
           ElevatedButton(
               onPressed: () async {
                 _formKey.currentState!.save();
                 if (!_formKey.currentState!.validate()) {
-                  debugPrint("geldi");
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: Colors.red,
                       content: Text("Please enter valid inputs")));

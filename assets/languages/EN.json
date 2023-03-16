@@ -28,7 +28,12 @@
             "SpecialCharacter": "Special Character",
             "NumericCharacter": "Numeric Character",
             "NormalLetter": "Normal Letter"
-        }
+        },
+        "NameNotEmpty": "Name Can't be empty",
+        "SurnameNotEmpty" : "Surname can't be empty",
+        "UsernameNotEmpty" : "Username can't be empty",
+        "EmailNotEmpty" : "Email can't be empty",
+        "PasswordNotEmpty" : "Password can't be empty"
         
     }
 }
