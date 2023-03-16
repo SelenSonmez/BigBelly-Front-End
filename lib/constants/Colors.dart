@@ -7,3 +7,10 @@ Color textFieldGray = const Color.fromRGBO(102, 94, 103, 1);
 BorderRadius textFieldCircleRadius =
     const BorderRadius.all(Radius.circular(32));
 Image logoImage = Image.asset('assets/images/logo.png');
+OutlineInputBorder textFieldDecoration = OutlineInputBorder(
+  borderSide: BorderSide(
+    color: textFieldGray,
+    width: 2.0,
+  ),
+  borderRadius: textFieldCircleRadius,
+);
