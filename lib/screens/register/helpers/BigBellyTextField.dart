@@ -93,15 +93,10 @@ class _BigBellyTextField extends State<BigBellyTextField> {
                           uppercaseCharCount: 1,
                           numericCharCount: 1,
                           specialCharCount: 1,
-                          normalCharCount: 3,
+                          // normalCharCount: 3,
                           width: 370.w,
                           height: 150.h,
-                          onSuccess: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    backgroundColor: Colors.greenAccent,
-                                    content: Text("Password is matched")));
-                          },
+                          onSuccess: () {},
                         )
                       : FlutterPwValidator(
                           width: 0,

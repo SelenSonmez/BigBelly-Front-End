@@ -31,6 +31,8 @@ class RegisterScreen extends StatelessWidget {
   // https://www.w3resource.com/javascript/form/email-validation.php
   final emailRegex = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
 
+  final passwordRegex =
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\?$&*~.]).{8,}$');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +122,7 @@ class RegisterScreen extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty)
                 return "Email can't be empty";
-              else if (!emailRegex.hasMatch(value)) return "email not valid";
+              else if (!emailRegex.hasMatch(value)) return "Email not valid";
             },
           ),
           BigBellyTextField(
@@ -141,7 +143,8 @@ class RegisterScreen extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Password can't be empty";
-              }
+              } else if (!passwordRegex.hasMatch(value))
+                return "Password not Valid";
             },
           ),
 
