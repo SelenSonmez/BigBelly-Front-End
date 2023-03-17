@@ -45,6 +45,7 @@ dependencies:
   screen_utils: ^0.0.1
   google_fonts: ^4.0.3
   dio: ^5.0.2
+  pin_code_fields: ^7.4.0
 
 dev_dependencies:
   flutter_test:
