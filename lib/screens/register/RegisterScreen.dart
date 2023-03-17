@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:bigbelly/constants/Dio.dart';
 import 'package:bigbelly/internationalization/text_decider.dart';
 import 'package:bigbelly/screens/widgets/page_below_string.dart';
@@ -9,6 +11,7 @@ import '../../../constants/Colors.dart';
 
 import '../login/LoginScreen.dart';
 import 'helpers/BigBellyTextField.dart';
+import 'helpers/field_regex.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -21,18 +24,10 @@ class RegisterScreen extends StatelessWidget {
     'email': null,
     'password': null
   };
+  String errorMessage = "";
 
-  // username consists of alphanumberic chars. lower or uppercase
-  // username allowed of the dot and underscore but no consecutively. e.g: flutter..regex
-  // they can't be used as first or last char.
-  // length must be between 5-20
-  final userNameRegex =
-      RegExp(r'^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$');
-  // https://www.w3resource.com/javascript/form/email-validation.php
-  final emailRegex = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
+  Response? response;
 
-  final passwordRegex =
-      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\?$&*~.]).{8,}$');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,27 +157,25 @@ class RegisterScreen extends StatelessWidget {
                       backgroundColor: Colors.red,
                       content: Text("Please enter valid inputs")));
                 } else {
-                  Response response =
-                      await dio.post('/account/register', data: fields);
+                  response = await dio.post('/account/register', data: fields);
 
-                  debugPrint(response.data.toString());
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => LoginScreen())));
+                  debugPrint(response!.data.toString());
+                  if (response!.data['success']) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => LoginScreen())));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(response!.data['message'])));
+                  }
                 }
               },
-              style: ElevatedButton.styleFrom(
-                  elevation: 5.h,
-                  minimumSize: Size.fromHeight(50.h),
-                  backgroundColor: mainThemeColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.w),
-                  )),
+              style: registerLoginButtonStyle,
               child: Text(
                 "Register",
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  color: Colors.white,
-                ),
+                style: registerLoginButtonTextStyle,
               ))
         ]),
       ),
