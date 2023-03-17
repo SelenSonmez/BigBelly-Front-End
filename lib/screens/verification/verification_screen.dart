@@ -213,7 +213,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
 
                           debugPrint("AAAAAAAAA" + response.data.toString());
                           if (currentText.length != codeLength ||
-                              currentText != "deneme") {
+                              response.data['message'] != "success") {
                             errorController.add(ErrorAnimationType
                                 .shake); // Triggering error shake animation
                             setState(() {
@@ -226,7 +226,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       backgroundColor: Colors.green,
-                                      content: Text("Password is matched")));
+                                      content: Text("Code matched")));
                             });
                           }
                         },
