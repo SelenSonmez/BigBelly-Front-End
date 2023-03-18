@@ -5,6 +5,8 @@ import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/verification/verification_screen.dart';
 
+import '../register/texts.dart';
+
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
@@ -28,11 +30,15 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.fromLTRB(15.w, 35.h, 15.w, 18.w),
                         child: BigBellyTextField(
-                            labelText: LoginUsernameLabelText,
-                            hintText: LoginUsernameHintText,
-                            icon: const Icon(Icons.account_circle_rounded),
-                            onSaved: (newValue) =>
-                                fields['username'] = newValue)),
+                          labelText: LoginUsernameLabelText,
+                          hintText: LoginUsernameHintText,
+                          icon: const Icon(Icons.account_circle_rounded),
+                          onSaved: (newValue) => fields['username'] = newValue,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return NameCantBeEmpty;
+                          },
+                        )),
                     Padding(
                         padding: EdgeInsets.fromLTRB(15.w, 0, 15.w, 20.h),
                         child: BigBellyTextField(
@@ -41,7 +47,11 @@ class LoginScreen extends StatelessWidget {
                             hintText: LoginPasswordHintText,
                             icon: const Icon(Icons.lock_open_rounded),
                             onSaved: (newValue) =>
-                                fields['password'] = newValue)),
+                                fields['password'] = newValue,
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return PasswordCantBeEmpty;
+                            })),
                     Container(
                       padding: EdgeInsets.only(bottom: 15.h),
                       child: Row(
@@ -72,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-
+                            formKey.currentState!.validate();
                             Response response =
                                 await dio.post('/account/login', data: fields);
 
@@ -90,6 +100,14 @@ class LoginScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) => MainPage())));
+                                break;
+                              default:
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content:
+                                            Text(response!.data['message'])));
+
                                 break;
                             }
 
