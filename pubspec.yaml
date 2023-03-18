@@ -45,6 +45,7 @@ dependencies:
   screen_utils: ^0.0.1
   google_fonts: ^4.0.3
   dio: ^5.0.2
+  pin_code_fields: ^7.4.0
   like_button: ^2.0.5
   get_it: ^7.2.0
   http: ^0.13.5
