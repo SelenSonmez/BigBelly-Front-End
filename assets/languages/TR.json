@@ -39,6 +39,14 @@
             "SpecialCharacter": "Özel Karakter",
             "NumericCharacter": "Numerik Karakter",
             "NormalLetter": "Normal Harf"
-        }    
+        }    ,
+
+        "UsernameNotValid": "Kullanıcı adı uygun değil",
+        "EmailNotValid": "Email uygun değil",
+        "PasswordNotValid": "Şifre uygun değil",
+
+        "AlreadyHaveAccount": "Zaten Kayıtlı mısın?",
+        "Sign In": "Giriş Yap",
+        "Register": "Kayıt Ol"
     }
 }

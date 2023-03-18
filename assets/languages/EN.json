@@ -33,7 +33,14 @@
         "SurnameNotEmpty" : "Surname can't be empty",
         "UsernameNotEmpty" : "Username can't be empty",
         "EmailNotEmpty" : "Email can't be empty",
-        "PasswordNotEmpty" : "Password can't be empty"
+        "PasswordNotEmpty" : "Password can't be empty",
+        "UsernameNotValid": "Username not valid",
+        "EmailNotValid": "Email not valid",
+        "PasswordNotValid": "Password not valid",
+
+        "AlreadyHaveAccount": "Already have an account?",
+        "SignIn": "Sign in",
+        "Register": "Register"
         
     }
 }

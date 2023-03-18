@@ -12,6 +12,7 @@ import '../../../constants/Colors.dart';
 import '../login/LoginScreen.dart';
 import 'helpers/BigBellyTextField.dart';
 import 'helpers/field_regex.dart';
+import 'texts.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -48,33 +49,17 @@ class RegisterScreen extends StatelessWidget {
                   color: textFieldGray),
               "Sign Up"),
           BigBellyTextField(
-            labelText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Name')
-                .target('LabelText')
-                .decideText(),
-            hintText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Name')
-                .target('HintText')
-                .decideText(),
+            labelText: RegisterNameLabelText,
+            hintText: RegisterNameHintText,
             icon: const Icon(Icons.account_circle_rounded),
             onSaved: (newValue) => fields['name'] = newValue,
             validator: (value) {
-              if (value == null || value.isEmpty) return "Name can't be empty";
+              if (value == null || value.isEmpty) return NameCantBeEmpty;
             },
           ),
           BigBellyTextField(
-            labelText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Surname')
-                .target('LabelText')
-                .decideText(),
-            hintText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Surname')
-                .target('HintText')
-                .decideText(),
+            labelText: RegisterSurnameLabelText,
+            hintText: RegisterSurnameHintText,
             icon: const Icon(Icons.family_restroom_rounded),
             validator: (value) {
               if (value == null || value.isEmpty)
@@ -82,71 +67,45 @@ class RegisterScreen extends StatelessWidget {
             },
           ),
           BigBellyTextField(
-            labelText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Username')
-                .target('LabelText')
-                .decideText(),
-            hintText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Username')
-                .target('HintText')
-                .decideText(),
+            labelText: RegisterUsernameLabelText,
+            hintText: RegisterUsernameHintText,
             icon: const Icon(Icons.alternate_email),
             onSaved: (newValue) => fields['username'] = newValue,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Username can't be empty";
+                return UsernameCantBeEmpty;
               } else if (!userNameRegex.hasMatch(value))
-                return "username not valid";
+                return UsernameNotValid;
             },
           ),
           BigBellyTextField(
-            labelText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Email')
-                .target('LabelText')
-                .decideText(),
-            hintText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Email')
-                .target('HintText')
-                .decideText(),
+            labelText: RegisterEmailLabelText,
+            hintText: RegisterEmailHintText,
             icon: const Icon(Icons.mail_rounded),
             onSaved: (newValue) => fields['email'] = newValue,
             validator: (value) {
               if (value == null || value.isEmpty)
-                return "Email can't be empty";
-              else if (!emailRegex.hasMatch(value)) return "Email not valid";
+                return EmailCantBeEmpty;
+              else if (!emailRegex.hasMatch(value)) return EmailNotValid;
             },
           ),
           BigBellyTextField(
-            labelText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Password')
-                .target('LabelText')
-                .decideText(),
-            hintText: TextDecider()
-                .goOnPath('RegisterScreen')
-                .goOnPath('Password')
-                .target('HintText')
-                .decideText(),
+            labelText: RegisterPasswordLabelText,
+            hintText: RegisterPasswordHintText,
             icon: const Icon(Icons.lock_open_rounded),
             isPassword: true,
             isPwValidate: true,
             onSaved: (newValue) => fields['password'] = newValue,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Password can't be empty";
+                return PasswordCantBeEmpty;
               } else if (!passwordRegex.hasMatch(value))
-                return "Password not Valid";
+                return PasswordNotValid;
             },
           ),
 
           //Sign In Text
-          PageBelowString(
-              actionString: "Sign In",
-              longString: "Already have an account?  "),
+          PageBelowString(actionString: SignIn, longString: AlreadyHaveAccount),
 
           //Register Button
           ElevatedButton(
