@@ -4,10 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../constants/Colors.dart';
+import '../../../../constants/Colors.dart';
 
 import '../login/LoginScreen.dart';
-import 'helpers/BigBellyTextField.dart';
+import '../helpers/BigBellyTextField.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);

@@ -12,20 +12,14 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider(create: (context) => LoginRepository()),
-        Provider(create: (context) => LoginFormWidget()),
-      ],
-      child: ScreenUtilInit(
-          designSize: const Size(360, 732),
-          builder: (BuildContext context, Widget? child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(primarySwatch: Colors.green),
-              home: MainPage(),
-            );
-          }),
-    );
+    return ScreenUtilInit(
+        designSize: const Size(360, 732),
+        builder: (BuildContext context, Widget? child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(primarySwatch: Colors.green),
+            home: LoginScreen(),
+          );
+        });
   }
 }
