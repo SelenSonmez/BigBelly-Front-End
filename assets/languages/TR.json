@@ -9,5 +9,44 @@
             "HintText": "Şifre",
             "LabelText": "Şifre"
         }
+    },
+    "RegisterScreen": {
+        "Name": {
+            "HintText": "İsim",
+            "LabelText": "İsim"
+        },
+        "Surname": {
+            "HintText": "Soyisim",
+            "LabelText": "Soyisim"
+        },
+        "Username": {
+            "HintText": "Kullanıcı Adı",
+            "LabelText": "Kullanıcı Adı"
+        },
+        "Email": {
+            "HintText": "Email",
+            "LabelText": "Email"
+        },
+        "Password": {
+            "HintText": "Şifre",
+            "LabelText": "Şifre"
+        },
+        "PasswordValidator": {
+            "AtLeast": "En az",
+            "Character": "Karakter",
+            "Letter": "Harf",
+            "UpperCaseLetter": "Büyük Harf",
+            "SpecialCharacter": "Özel Karakter",
+            "NumericCharacter": "Numerik Karakter",
+            "NormalLetter": "Normal Harf"
+        }    ,
+
+        "UsernameNotValid": "Kullanıcı adı uygun değil",
+        "EmailNotValid": "Email uygun değil",
+        "PasswordNotValid": "Şifre uygun değil",
+
+        "AlreadyHaveAccount": "Zaten Kayıtlı mısın?",
+        "Sign In": "Giriş Yap",
+        "Register": "Kayıt Ol"
     }
 }

@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/register/helpers/languagePasswordValidator.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
@@ -53,26 +54,17 @@ class _BigBellyTextField extends State<BigBellyTextField> {
     return Container(
       padding: EdgeInsets.only(top: 10.h),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         controller: widget.controller,
         //If the text field contains confidential information
         obscureText: widget.isPassword == true ? true : false,
 
         decoration: InputDecoration(
           suffixIcon: widget.icon,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: textFieldGray,
-              width: 1.5,
-            ),
-            borderRadius: textFieldCircleRadius,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: textFieldGray,
-              width: 2.0,
-            ),
-            borderRadius: textFieldCircleRadius,
-          ),
+          focusedBorder: textFieldDecoration,
+          enabledBorder: textFieldDecoration,
+          errorBorder: textFieldDecoration,
+          focusedErrorBorder: textFieldDecoration,
           labelText: widget.labelText,
           hintText: widget.hintText,
         ),
@@ -94,21 +86,17 @@ class _BigBellyTextField extends State<BigBellyTextField> {
                       child: placeTextField()),
                   widget.isTapped == true
                       ? FlutterPwValidator(
+                          strings: ValidatorLanguage(),
                           key: widget.validatorKey,
                           controller: widget.controller,
                           minLength: 8,
                           uppercaseCharCount: 1,
                           numericCharCount: 1,
                           specialCharCount: 1,
-                          normalCharCount: 3,
+                          // normalCharCount: 3,
                           width: 370.w,
                           height: 150.h,
-                          onSuccess: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    backgroundColor: Colors.greenAccent,
-                                    content: Text("Password is matched")));
-                          },
+                          onSuccess: () {},
                         )
                       : FlutterPwValidator(
                           width: 0,

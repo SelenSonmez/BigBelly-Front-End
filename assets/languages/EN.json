@@ -19,19 +19,26 @@
         "Password": {
             "HintText": "Password",
             "LabelText": "Password"
-        }
-    },
-    "LoginScreen": {
-        "Username": {
-            "HintText": "Name",
-            "LabelText": "Name"
         },
-        "Password": {
-            "HintText": "Password",
-            "LabelText": "Password"
+        "PasswordValidator": {
+            "AtLeast": "At least",
+            "Character": "Character",
+            "Letter": "Letter",
+            "UpperCaseLetter": "Uppercase Letter",
+            "SpecialCharacter": "Special Character",
+            "NumericCharacter": "Numeric Character",
+            "NormalLetter": "Normal Letter"
         },
-        "NoAccount" : "Don't have an account yet?",
-        "SignUp" : "Sign Up",
-        "LoginButton" : "Login"
+        "NameNotEmpty": "Name Can't be empty",
+        "SurnameNotEmpty": "Surname can't be empty",
+        "UsernameNotEmpty": "Username can't be empty",
+        "EmailNotEmpty": "Email can't be empty",
+        "PasswordNotEmpty": "Password can't be empty",
+        "UsernameNotValid": "Username not valid",
+        "EmailNotValid": "Email not valid",
+        "PasswordNotValid": "Password not valid",
+        "AlreadyHaveAccount": "Already have an account?",
+        "SignIn": "Sign in",
+        "Register": "Register"
     }
 }
