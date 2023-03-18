@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../constants/styles.dart';
+import '../texts.dart';
 
 class PostOwnerAndDate extends StatelessWidget {
   const PostOwnerAndDate({super.key});
@@ -6,29 +10,28 @@ class PostOwnerAndDate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //owner avatar and name
           Row(
-            children: const [
+            children: [
               CircleAvatar(
                 backgroundColor: Colors.grey,
-                radius: 20.0,
+                radius: 20.0.h,
                 child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/images/defaultProfilePic.jpg'),
-                  radius: 18.0,
+                  backgroundImage: AssetImage(defaultProfileImage),
+                  radius: 18.0.h,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("Somer Şef"),
+                padding: EdgeInsets.all(8.0.h),
+                child: const Text("Somer Şef"),
               ),
             ],
           ),
-          const Text("2 days ago")
+          Text("2 " + DaysAgo)
         ],
       ),
     );

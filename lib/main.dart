@@ -1,4 +1,5 @@
-import 'package:bigbelly/screens/authentication/login/LoginScreen.dart';
+import 'package:bigbelly/screens/authentication/login/login_screen.dart';
+import 'package:bigbelly/screens/verification/verification_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/screens/imports.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(primarySwatch: Colors.green),
-            home: LoginScreen(),
+            home: MainPage(),
           );
         });
   }

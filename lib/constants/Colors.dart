@@ -6,28 +6,4 @@ Color iconColor = const Color.fromRGBO(152, 227, 126, 1);
 Color greyBackground = const Color.fromARGB(255, 237, 236, 236);
 Color textFieldGray = const Color.fromRGBO(102, 94, 103, 1);
 
-BorderRadius textFieldCircleRadius =
-    const BorderRadius.all(Radius.circular(32));
-
-Image logoImage = Image.asset('assets/images/logo.png');
-
-OutlineInputBorder textFieldDecoration = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: textFieldGray,
-    width: 2.0,
-  ),
-  borderRadius: textFieldCircleRadius,
-);
-
-ButtonStyle registerLoginButtonStyle = ElevatedButton.styleFrom(
-    elevation: 5.h,
-    minimumSize: Size.fromHeight(50.h),
-    backgroundColor: mainThemeColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(25.w),
-    ));
-
-TextStyle registerLoginButtonTextStyle = TextStyle(
-  fontSize: 20.sp,
-  color: Colors.white,
-);
+BorderRadius textFieldCircleRadius = BorderRadius.all(Radius.circular(32.w));

@@ -1,5 +1,6 @@
-import 'package:bigbelly/constants/Colors.dart';
+import 'package:bigbelly/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:like_button/like_button.dart';
 
 class postReactions extends StatelessWidget {
@@ -11,17 +12,17 @@ class postReactions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         LikeButton(
-          size: 23,
+          size: 23.h,
           likeCount: 121,
           likeBuilder: (isLiked) {
             final color = isLiked ? Colors.red : Colors.green;
             return Icon(Icons.favorite, color: color);
           },
         ),
-        reactionIconAndCount(Icon(Icons.comment_rounded), true),
-        reactionIconAndCount(Icon(Icons.bookmark), false),
-        reactionIconAndCount(Icon(Icons.replay_sharp), false),
-        reactionIconAndCount(Icon(Icons.star), false),
+        reactionIconAndCount(const Icon(Icons.comment_rounded), true),
+        reactionIconAndCount(const Icon(Icons.bookmark), false),
+        reactionIconAndCount(const Icon(Icons.replay_sharp), false),
+        reactionIconAndCount(const Icon(Icons.star), false),
       ],
     );
   }
@@ -31,7 +32,7 @@ class postReactions extends StatelessWidget {
       children: [
         IconButton(
           color: mainThemeColor,
-          iconSize: 23,
+          iconSize: 23.h,
           icon: icon,
           onPressed: () {},
         ),

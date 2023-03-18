@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:bigbelly/constants/Colors.dart';
+import 'package:bigbelly/constants/colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../constants/Dio.dart';
+import '../../constants/dio.dart';
+import '../../constants/styles.dart';
 
 class PinCodeVerificationScreen extends StatefulWidget {
   final String email_address;
@@ -63,7 +64,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               SizedBox(height: 30.h),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 6,
-                child: logoImage,
+                child: Image.asset(logoImage),
               ),
               SizedBox(height: 8.h),
               Padding(
@@ -195,7 +196,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
+                    padding: EdgeInsets.fromLTRB(30.w, 90.h, 30.w, 0.h),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             elevation: 5.h,
@@ -208,12 +209,12 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                           formKey.currentState?.validate();
                           // conditions for validating
 
-                          Response response = await dio
-                              .post('/account/verificate', data: currentText);
-
-                          debugPrint("AAAAAAAAA" + response.data.toString());
+                          Response response = await dio.post(
+                              '/account/verificate',
+                              data: {'id': 14, 'code': currentText});
+                          debugPrint(response.data.toString());
                           if (currentText.length != codeLength ||
-                              response.data['message'] != "success") {
+                              !response.data['success']) {
                             errorController.add(ErrorAnimationType
                                 .shake); // Triggering error shake animation
                             setState(() {
@@ -242,10 +243,10 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     onPressed: () {
                       textEditingController.clear();
                     },
-                    child: const Text("Clear",
+                    child: Text("Clear",
                         style: TextStyle(
                             color: Colors.green,
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w400)),
                   )
                 ],

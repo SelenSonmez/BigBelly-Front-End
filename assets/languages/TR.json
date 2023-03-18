@@ -8,7 +8,11 @@
         "Password": {
             "HintText": "Şifre",
             "LabelText": "Şifre"
-        }
+        },
+        "LoginButton": "Giriş Yap",
+        "NoAccount": "Hesabın yok mu?",
+        "SignUp" : "Kayıt ol"
+
     },
     "RegisterScreen": {
         "Name": {
@@ -48,5 +52,8 @@
         "AlreadyHaveAccount": "Zaten Kayıtlı mısın?",
         "Sign In": "Giriş Yap",
         "Register": "Kayıt Ol"
+    },
+    "MainPage": {
+        "DaysAgo": "Days Ago"
     }
 }

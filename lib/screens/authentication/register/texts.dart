@@ -92,3 +92,6 @@ String AlreadyHaveAccount = TextDecider()
     .decideText();
 String SignIn =
     TextDecider().goOnPath('RegisterScreen').target('SignIn').decideText();
+
+String Register =
+    TextDecider().goOnPath('RegisterScreen').target('Register').decideText();

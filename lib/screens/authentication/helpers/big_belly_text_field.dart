@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../constants/Colors.dart';
-import 'languagePasswordValidator.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/styles.dart';
+import 'language_password_validator.dart';
 
 class BigBellyTextField extends StatefulWidget {
   BigBellyTextField(
@@ -82,7 +83,7 @@ class _BigBellyTextField extends State<BigBellyTextField> {
             ? Column(
                 children: [
                   Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 5.h),
                       child: placeTextField()),
                   widget.isTapped == true
                       ? FlutterPwValidator(

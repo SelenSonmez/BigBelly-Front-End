@@ -1,10 +1,11 @@
-import 'package:bigbelly/constants/Colors.dart';
+import 'package:bigbelly/constants/colors.dart';
 import 'package:bigbelly/screens/mainPage/main_page_imports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../screens/mainPage/home_page.dart';
+import '../mainPage/home_page.dart';
 import 'tab_items.dart';
 
 class NavBar extends StatelessWidget {
@@ -24,9 +25,9 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        height: 70,
+        height: 70.h,
         activeColor: mainThemeColor,
-        inactiveColor: Color.fromARGB(255, 140, 204, 142),
+        inactiveColor: const Color.fromARGB(255, 140, 204, 142),
         items: [
           buildNavBarItem(TabItem.home),
           buildNavBarItem(TabItem.search),
@@ -54,7 +55,7 @@ BottomNavigationBarItem buildNavBarItem(TabItem tabItem) {
   return BottomNavigationBarItem(
     icon: Icon(
       tabToBeCreated!.icon,
-      size: 35,
+      size: 35.h,
     ),
   );
 }

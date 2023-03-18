@@ -1,7 +1,7 @@
 import 'package:bigbelly/screens/add_post/add_post_screen.dart';
 import 'package:bigbelly/screens/search/search_screen.dart';
 
-import '../../helpers/navbar/tab_items.dart';
+import '../navbar/tab_items.dart';
 import '../recommendation/recommendation_screen.dart';
 import 'main_page_imports.dart';
 import 'home_page.dart';

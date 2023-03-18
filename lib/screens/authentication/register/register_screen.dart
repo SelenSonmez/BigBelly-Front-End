@@ -1,15 +1,12 @@
-import 'package:bigbelly/constants/Dio.dart';
-import 'package:bigbelly/internationalization/text_decider.dart';
-import 'package:bigbelly/screens/widgets/page_below_string.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../constants/Colors.dart';
+// ignore_for_file: curly_braces_in_flow_control_structures
 
-import '../helpers/BigBellyTextField.dart';
+import 'package:bigbelly/screens/imports.dart';
+
+import '../helpers/page_below_string.dart';
+import '../helpers/big_belly_text_field.dart';
 import '../helpers/field_regex.dart';
-import '../login/LoginScreen.dart';
+import '../login/login_screen.dart';
+import '../login/texts.dart';
 import 'texts.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -23,7 +20,6 @@ class RegisterScreen extends StatelessWidget {
     'email': null,
     'password': null
   };
-  String errorMessage = "";
 
   Response? response;
 
@@ -39,13 +35,14 @@ class RegisterScreen extends StatelessWidget {
         child: Column(children: <Widget>[
           Container(
               padding: EdgeInsets.only(top: 50.w),
-              child: Hero(tag: "logo", child: logoImage)),
+              child: Hero(tag: "logo", child: Image.asset(logoImage))),
           Text(
-              style: GoogleFonts.mulish(
-                  fontSize: 30.sp,
-                  fontWeight: FontWeight.bold,
-                  color: textFieldGray),
-              "Sign Up"),
+            SignUp,
+            style: GoogleFonts.mulish(
+                fontSize: 30.sp,
+                fontWeight: FontWeight.bold,
+                color: textFieldGray),
+          ),
           BigBellyTextField(
             labelText: RegisterNameLabelText,
             hintText: RegisterNameHintText,
@@ -131,7 +128,7 @@ class RegisterScreen extends StatelessWidget {
               },
               style: registerLoginButtonStyle,
               child: Text(
-                "Register",
+                Register,
                 style: registerLoginButtonTextStyle,
               ))
         ]),

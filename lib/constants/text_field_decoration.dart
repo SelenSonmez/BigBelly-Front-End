@@ -1,5 +1,6 @@
-import 'package:bigbelly/constants/Colors.dart';
+import 'package:bigbelly/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TextFieldDecoration {
   static InputDecoration AuthenticationTextFieldDecoration(
@@ -9,14 +10,14 @@ class TextFieldDecoration {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: mainThemeColor,
-          width: 1.5,
+          width: 1.5.w,
         ),
         borderRadius: textFieldCircleRadius,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: textFieldGray,
-          width: 2.0,
+          width: 2.0.w,
         ),
         borderRadius: textFieldCircleRadius,
       ),

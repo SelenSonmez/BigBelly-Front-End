@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../authentication/login/LoginScreen.dart';
+import '../login/login_screen.dart';
 
 class PageBelowString extends StatelessWidget {
   PageBelowString(
@@ -19,7 +16,7 @@ class PageBelowString extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+      padding: EdgeInsets.fromLTRB(0, 25.h, 0, 25.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
