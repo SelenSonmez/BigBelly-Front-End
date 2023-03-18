@@ -3,6 +3,7 @@ import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
+import 'package:bigbelly/screens/verification/verification_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.fromLTRB(15.w, 0, 15.w, 20.h),
                         child: BigBellyTextField(
+                            isPassword: true,
                             labelText: LoginPasswordLabelText,
                             hintText: LoginPasswordHintText,
                             icon: const Icon(Icons.lock_open_rounded),
@@ -66,13 +68,30 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
+                      padding: EdgeInsets.fromLTRB(8.w, 30.h, 8.w, 0),
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
 
                             Response response =
                                 await dio.post('/account/login', data: fields);
+
+                            switch (response.data['message']) {
+                              case "Account needs verification":
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            PinCodeVerificationScreen(
+                                                "username"))));
+                                break;
+                              case "Login successful":
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => MainPage())));
+                                break;
+                            }
 
                             debugPrint(response.data.toString());
                           },

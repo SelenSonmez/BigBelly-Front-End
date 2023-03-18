@@ -233,10 +233,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                         },
                         child: Text(
                           "verify".toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                          ),
+                          style: registerLoginButtonTextStyle,
                         )),
                   ),
                   TextButton(
