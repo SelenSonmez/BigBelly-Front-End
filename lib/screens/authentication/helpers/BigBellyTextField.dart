@@ -1,10 +1,10 @@
-import 'package:bigbelly/screens/register/helpers/languagePasswordValidator.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../constants/Colors.dart';
+import 'languagePasswordValidator.dart';
 
 class BigBellyTextField extends StatefulWidget {
   BigBellyTextField(

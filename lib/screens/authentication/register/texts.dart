@@ -1,4 +1,4 @@
-import '../../internationalization/text_decider.dart';
+import '../../../internationalization/text_decider.dart';
 
 String RegisterNameLabelText = TextDecider()
     .goOnPath('RegisterScreen')
