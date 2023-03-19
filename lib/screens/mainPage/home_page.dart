@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [const BigBellyAppBar()];
+          return [BigBellyAppBar()];
         },
         body: Center(
           child: Builder(

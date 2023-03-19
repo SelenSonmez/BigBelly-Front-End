@@ -3,8 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BigBellyAppBar extends StatelessWidget {
-  const BigBellyAppBar({super.key});
-
+  BigBellyAppBar(
+      {super.key,
+      this.trailingWidget = const CircleAvatar(
+        backgroundImage: AssetImage('assets/images/defaultProfilePic.jpg'),
+      )});
+  Widget? trailingWidget;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -35,12 +39,7 @@ class BigBellyAppBar extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10.0.w),
-            child: const CircleAvatar(
-              backgroundImage:
-                  AssetImage('assets/images/defaultProfilePic.jpg'),
-            ),
-          ),
+              padding: EdgeInsets.only(right: 10.0.w), child: trailingWidget),
         ]);
   }
 }
