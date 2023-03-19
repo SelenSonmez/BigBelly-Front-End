@@ -57,8 +57,7 @@ class RegisterScreen extends StatelessWidget {
             hintText: RegisterSurnameHintText,
             icon: const Icon(Icons.family_restroom_rounded),
             validator: (value) {
-              if (value == null || value.isEmpty)
-                return "Surname can't be empty";
+              if (value == null || value.isEmpty) return SurnameCantBeEmpty;
             },
           ),
           BigBellyTextField(

@@ -5,6 +5,7 @@ import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/verification/verification_screen.dart';
 
+import '../helpers/page_below_string.dart';
 import '../register/texts.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -52,66 +53,48 @@ class LoginScreen extends StatelessWidget {
                               if (value == null || value.isEmpty)
                                 return PasswordCantBeEmpty;
                             })),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 15.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            DontHaveAccount,
-                            style: TextStyle(fontSize: 16.sp),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                textStyle:
-                                    const TextStyle(color: Colors.green)),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) =>
-                                          RegisterScreen())));
-                            },
-                            child: Text(SignUp),
-                          ),
-                        ],
-                      ),
-                    ),
+                    PageBelowString(
+                        actionString: SignUp, longString: DontHaveAccount),
                     Padding(
                       padding: EdgeInsets.fromLTRB(8.w, 30.h, 8.w, 0),
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-                            formKey.currentState!.validate();
-                            Response response =
-                                await dio.post('/account/login', data: fields);
 
-                            switch (response.data['message']) {
-                              case "Account needs verification":
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            PinCodeVerificationScreen(
-                                                "username"))));
-                                break;
-                              case "Login successful":
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => MainPage())));
-                                break;
-                              default:
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content:
-                                            Text(response!.data['message'])));
+                            if (!formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(PleaseEnterValidInputs)));
+                            } else {
+                              Response response = await dio
+                                  .post('/account/login', data: fields);
 
-                                break;
+                              switch (response.data['message']) {
+                                case "Account needs verification":
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              PinCodeVerificationScreen(
+                                                  "username"))));
+                                  break;
+                                case "Login successful":
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) => MainPage())));
+                                  break;
+                                default:
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content:
+                                              Text(response.data['message'])));
+
+                                  break;
+                              }
                             }
-
-                            debugPrint(response.data.toString());
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 5.h,

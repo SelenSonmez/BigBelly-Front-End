@@ -10,7 +10,8 @@
         },
         "NoAccount" : "Don't have an account yet?",
         "SignUp" : "Sign Up",
-        "LoginButton" : "Login"
+        "LoginButton" : "Login",
+        "PleaseEnterValidInputs": "Please enter valid inputs"
     },
     "RegisterScreen": {
         "Name": {

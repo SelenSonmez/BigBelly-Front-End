@@ -16,7 +16,7 @@ class PageBelowString extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 25.h, 0, 25.h),
+      padding: EdgeInsets.fromLTRB(0, 10.h, 0, 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

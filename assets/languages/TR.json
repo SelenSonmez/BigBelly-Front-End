@@ -11,7 +11,8 @@
         },
         "LoginButton": "Giriş Yap",
         "NoAccount": "Hesabın yok mu?",
-        "SignUp" : "Kayıt ol"
+        "SignUp" : "Kayıt ol",
+        "PleaseEnterValidInputs": "Lütfen geçerli değerleri giriniz."
 
     },
     "RegisterScreen": {

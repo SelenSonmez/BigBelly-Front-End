@@ -27,3 +27,8 @@ String DontHaveAccount =
     TextDecider().goOnPath('LoginScreen').target('NoAccount').decideText();
 String SignUp =
     TextDecider().goOnPath('LoginScreen').target('SignUp').decideText();
+
+String PleaseEnterValidInputs = TextDecider()
+    .goOnPath('LoginScreen')
+    .target('PleaseEnterValidInputs')
+    .decideText();
