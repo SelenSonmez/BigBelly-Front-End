@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:bigbelly/screens/authentication/model/user_model.dart';
 import 'package:bigbelly/screens/imports.dart';
 
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
+import 'package:bigbelly/screens/verification/verification_screen.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -70,11 +75,14 @@ class LoginScreen extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-
-                            Response response =
-                                await dio.post('/account/login', data: fields);
-
-                            debugPrint(response.data.toString());
+                            try {
+                              login(context);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(e.toString())));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 5.h,
@@ -94,5 +102,26 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     ));
+  }
+
+  Future login(context) async {
+    Response response = await dio.post('/account/login', data: fields);
+
+    if (response.statusCode != 400) {
+      User user = User.fromJson(response.data['payload']);
+      await SessionManager().set('user', user);
+
+      if (response.statusCode == 200) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: ((context) => const MainPage())));
+      } else if (response.statusCode == 300) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) =>
+                    PinCodeVerificationScreen(user.username))));
+      }
+    }
+    //debugPrint(response.data.toString());
   }
 }

@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
 
   Map<TabItem, Widget> allPages() {
     return {
-      TabItem.home: const HomePage(),
+      TabItem.home: HomePage(),
       TabItem.search: const SearchScreen(),
       TabItem.post: const AddPostScreen(),
       TabItem.recommendation: const RecommendationScreen(),
