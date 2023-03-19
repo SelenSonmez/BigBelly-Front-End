@@ -76,8 +76,8 @@ class LoginScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: ((context) =>
-                                              PinCodeVerificationScreen(
-                                                  "username"))));
+                                              PinCodeVerificationScreen(response
+                                                  .data["payload"]['email']))));
                                   break;
                                 case "Login successful":
                                   Navigator.push(
