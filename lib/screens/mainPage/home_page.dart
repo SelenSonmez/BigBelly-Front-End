@@ -7,7 +7,7 @@ import 'main_page_imports.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  late final User user;
+  late final Map<String, dynamic> data;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +49,6 @@ class HomePage extends StatelessWidget {
   }
 
   _getSession() async {
-    user = User.fromJson(await SessionManager().get("user"));
+    data = await SessionManager().get("user");
   }
 }

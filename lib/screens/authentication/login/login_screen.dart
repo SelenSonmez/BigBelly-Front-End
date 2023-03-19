@@ -107,21 +107,30 @@ class LoginScreen extends StatelessWidget {
   Future login(context) async {
     Response response = await dio.post('/account/login', data: fields);
 
-    if (response.statusCode != 400) {
-      User user = User.fromJson(response.data['payload']);
-      await SessionManager().set('user', user);
-
-      if (response.statusCode == 200) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: ((context) => const MainPage())));
-      } else if (response.statusCode == 300) {
+    switch (response.data['message']) {
+      case "Account needs verification":
+        String email = response.data['payload']['email'];
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: ((context) =>
-                    PinCodeVerificationScreen(user.username))));
-      }
+                builder: ((context) => PinCodeVerificationScreen(email))));
+        break;
+      case "Login successful":
+        Map<String, dynamic> userInfo = {
+          'id': response.data['payload']['id'].toString(),
+          'username': response.data['payload']['username']
+        };
+        await SessionManager().set('user', jsonEncode(userInfo));
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: ((context) => MainPage())));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(response.data['message'])));
+
+        break;
     }
-    //debugPrint(response.data.toString());
   }
 }
