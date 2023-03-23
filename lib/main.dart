@@ -1,5 +1,4 @@
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
-import 'package:bigbelly/screens/verification/verification_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/screens/imports.dart';

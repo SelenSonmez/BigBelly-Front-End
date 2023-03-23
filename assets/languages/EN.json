@@ -57,5 +57,16 @@
     },
     "MainPage": {
         "DaysAgo": "Days Ago"
+    },
+    "VerificationScreen":{
+        "EmailVerification": "E-mail Verification",
+        "EnterCodeSentTo": "Enter the code sent to: ",
+        "DidntReceiveTheCode":"Didn't receive the code",
+        "Resend": "Resend",
+        "Verify": "Verify",
+        "Clear": "Clear",
+        "PleaseFillAllSpaces":"Please fill up all the cells properly",
+        "CodeMatched":"Code matched",
+        "WrongCode": "Code not matched"
     }
 }

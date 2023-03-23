@@ -56,5 +56,18 @@
     },
     "MainPage": {
         "DaysAgo": "Days Ago"
+    },
+    "VerificationScreen":{
+        "EmailVerification": "E-mail Verifikasyon",
+        "EnterCodeSentTo": "Bu adrese gönderilen kodu gir: ",
+        "DidntReceiveTheCode":"Kodu almadınız mı?",
+        "Resend": "Tekrar Gönder",
+        "Verify": "Doğrula",
+        "Clear": "Temizle",
+        "PleaseFillAllSpaces": "Lütfen tüm boşlukları doldurun",
+        "CodeMatched":"Kod eşleşti",
+        "WrongCode": "Yanlış kod"
+
+        
     }
 }

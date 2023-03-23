@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:bigbelly/screens/authentication/model/user_model.dart';
+import 'package:bigbelly/screens/authentication/verification/verification_screen.dart';
 import 'package:bigbelly/screens/imports.dart';
 
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
-import 'package:bigbelly/screens/verification/verification_screen.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:bigbelly/screens/verification/verification_screen.dart';
 
 import '../helpers/page_below_string.dart';
 import '../register/texts.dart';

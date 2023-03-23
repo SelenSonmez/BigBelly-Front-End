@@ -5,10 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../constants/dio.dart';
-import '../../constants/styles.dart';
+import '../../../constants/dio.dart';
+import '../../../constants/styles.dart';
+import 'texts.dart';
 
 class PinCodeVerificationScreen extends StatefulWidget {
   final String email_address;
@@ -70,7 +72,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0.h),
                 child: Text(
-                  'E-mail Verification',
+                  EmailVerification,
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 22.sp),
                   textAlign: TextAlign.center,
@@ -81,7 +83,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     EdgeInsets.symmetric(horizontal: 30.0.w, vertical: 8.h),
                 child: RichText(
                   text: TextSpan(
-                      text: "Enter the code sent to ",
+                      text: EnterCodeSentTo,
                       children: [
                         TextSpan(
                             text: widget.email_address,
@@ -115,7 +117,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                       animationType: AnimationType.fade,
                       validator: (v) {
                         if (v!.length < codeLength) {
-                          return "Please fill all the spaces";
+                          return PleaseFillAllSpaces;
                         } else {
                           return null;
                         }
@@ -170,7 +172,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0.w),
                 child: Text(
-                  hasError ? "*Please fill up all the cells properly" : "",
+                  hasError ? "*" + WrongCode : "",
                   style: TextStyle(
                       color: Colors.red,
                       fontSize: 12.sp,
@@ -180,11 +182,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    text: "Didn't receive the code? ",
+                    text: DidntReceiveTheCode,
                     style: TextStyle(color: Colors.black54, fontSize: 15.sp),
                     children: [
                       TextSpan(
-                          text: " RESEND",
+                          text: " " + Resend.toUpperCase(),
                           recognizer: onTapRecognizer,
                           style: TextStyle(
                               color: const Color(0xFF91D3B3),
@@ -209,9 +211,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                           formKey.currentState?.validate();
                           // conditions for validating
 
-                          Response response = await dio.post(
-                              '/account/verificate',
-                              data: {'id': 14, 'code': currentText});
+                          Response response = await dio
+                              .post('/account/verificate', data: {
+                            'id': SessionManager().get('id'),
+                            'code': currentText
+                          });
                           debugPrint(response.data.toString());
                           if (currentText.length != codeLength ||
                               !response.data['success']) {
@@ -225,22 +229,25 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                             setState(() {
                               hasError = false;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                       backgroundColor: Colors.green,
-                                      content: Text("Code matched")));
+                                      content: Text(CodeMatched)));
                             });
                           }
                         },
                         child: Text(
-                          "verify".toUpperCase(),
-                          style: registerLoginButtonTextStyle,
+                          Verify.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.white,
+                          ),
                         )),
                   ),
                   TextButton(
                     onPressed: () {
                       textEditingController.clear();
                     },
-                    child: Text("Clear",
+                    child: Text(Clear,
                         style: TextStyle(
                             color: Colors.green,
                             fontSize: 20.sp,
