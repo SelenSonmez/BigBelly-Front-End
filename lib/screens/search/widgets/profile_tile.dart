@@ -17,8 +17,8 @@ class ProfileTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
+    return Container(
+      child: Padding(
         padding: EdgeInsets.all(10.0.h),
         child: Card(
           shadowColor: Colors.green.shade500,
