@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,9 +37,15 @@ class BigBellyAppBar extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10.0.w),
-            child: const CircleAvatar(
-              backgroundImage:
-                  AssetImage('assets/images/defaultProfilePic.jpg'),
+            child: GestureDetector(
+              child: const CircleAvatar(
+                backgroundImage:
+                    AssetImage('assets/images/defaultProfilePic.jpg'),
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => ProfilePage())));
+              },
             ),
           ),
         ]);
