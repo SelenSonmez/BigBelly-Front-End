@@ -1,12 +1,17 @@
+import 'package:bigbelly/screens/authentication/model/user_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import 'main_page_imports.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  late final Map<String, dynamic> data;
 
   @override
   Widget build(BuildContext context) {
+    _getSession();
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -41,5 +46,9 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _getSession() async {
+    data = await SessionManager().get("user");
   }
 }

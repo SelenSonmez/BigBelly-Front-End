@@ -114,6 +114,7 @@ class RegisterScreen extends StatelessWidget {
 
                   debugPrint(response!.data.toString());
                   if (response!.data['success']) {
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
