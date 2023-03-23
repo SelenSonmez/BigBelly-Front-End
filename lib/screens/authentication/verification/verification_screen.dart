@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../constants/dio.dart';
@@ -210,9 +211,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                           formKey.currentState?.validate();
                           // conditions for validating
 
-                          Response response = await dio.post(
-                              '/account/verificate',
-                              data: {'id': 14, 'code': currentText});
+                          Response response = await dio
+                              .post('/account/verificate', data: {
+                            'id': SessionManager().get('id'),
+                            'code': currentText
+                          });
                           debugPrint(response.data.toString());
                           if (currentText.length != codeLength ||
                               !response.data['success']) {
