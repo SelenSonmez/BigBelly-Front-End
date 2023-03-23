@@ -99,7 +99,10 @@ class RegisterScreen extends StatelessWidget {
           ),
 
           //Sign In Text
-          PageBelowString(actionString: SignIn, longString: AlreadyHaveAccount),
+          PageBelowString(
+              actionString: SignIn,
+              longString: AlreadyHaveAccount,
+              type: "login"),
 
           //Register Button
           ElevatedButton(

@@ -58,7 +58,9 @@ class LoginScreen extends StatelessWidget {
                                 return PasswordCantBeEmpty;
                             })),
                     PageBelowString(
-                        actionString: SignUp, longString: DontHaveAccount),
+                        actionString: SignUp,
+                        longString: DontHaveAccount,
+                        type: "signUp"),
                     Padding(
                       padding: EdgeInsets.fromLTRB(8.w, 30.h, 8.w, 0),
                       child: ElevatedButton(

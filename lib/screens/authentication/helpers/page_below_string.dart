@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,11 +9,12 @@ class PageBelowString extends StatelessWidget {
       {super.key,
       this.fontSize = 16,
       required this.actionString,
-      required this.longString});
+      required this.longString,
+      required this.type});
   String actionString;
   int fontSize;
   String longString;
-
+  String type;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,8 +28,15 @@ class PageBelowString extends StatelessWidget {
                 textStyle:
                     const TextStyle(color: Color.fromARGB(255, 143, 160, 78))),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => LoginScreen())));
+              if (type == "login") {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => LoginScreen())));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => RegisterScreen())));
+              }
             },
             child: Text(actionString),
           ),
