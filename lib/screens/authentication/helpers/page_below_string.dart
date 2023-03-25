@@ -29,10 +29,10 @@ class PageBelowString extends StatelessWidget {
                     const TextStyle(color: Color.fromARGB(255, 143, 160, 78))),
             onPressed: () {
               if (type == "login") {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: ((context) => LoginScreen())));
               } else {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: ((context) => RegisterScreen())));

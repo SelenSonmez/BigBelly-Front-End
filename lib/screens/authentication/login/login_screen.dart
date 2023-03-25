@@ -1,12 +1,12 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:convert';
 
-import 'package:bigbelly/screens/authentication/model/user_model.dart';
 import 'package:bigbelly/screens/authentication/verification/verification_screen.dart';
 import 'package:bigbelly/screens/imports.dart';
 
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
-import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../helpers/page_below_string.dart';
@@ -101,19 +101,16 @@ class LoginScreen extends StatelessWidget {
     switch (response.data['message']) {
       case "Account needs verification":
         String email = response.data['payload']['email'];
+        setSession(response);
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: ((context) => PinCodeVerificationScreen(email))));
         break;
       case "Login successful":
-        Map<String, dynamic> userInfo = {
-          'id': response.data['payload']['id'].toString(),
-          'username': response.data['payload']['username']
-        };
-        await SessionManager().set('user', jsonEncode(userInfo));
-        Navigator.pop(context);
-        Navigator.push(
+        setSession(response);
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: ((context) => MainPage())));
         break;
       default:
@@ -123,5 +120,12 @@ class LoginScreen extends StatelessWidget {
 
         break;
     }
+  }
+
+  void setSession(Response response) async {
+    await SessionManager()
+        .set('id', jsonEncode(response.data['payload']['id'].toString()));
+    await SessionManager()
+        .set('username', jsonEncode(response.data['payload']['username']));
   }
 }
