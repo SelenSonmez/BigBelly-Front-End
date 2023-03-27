@@ -1,4 +1,5 @@
 import 'package:bigbelly/constants/colors.dart';
+import 'package:bigbelly/screens/mainPage/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:like_button/like_button.dart';
@@ -19,22 +20,39 @@ class postReactions extends StatelessWidget {
             return Icon(Icons.favorite, color: color);
           },
         ),
-        reactionIconAndCount(const Icon(Icons.comment_rounded), true),
-        reactionIconAndCount(const Icon(Icons.bookmark), false),
-        reactionIconAndCount(const Icon(Icons.replay_sharp), false),
-        reactionIconAndCount(const Icon(Icons.star), false),
+        reactionIconAndCount(
+            const Icon(Icons.comment_rounded), true, context, "comment"),
+        reactionIconAndCount(
+            const Icon(Icons.bookmark), false, context, "bookmark"),
+        reactionIconAndCount(
+            const Icon(Icons.replay_sharp), false, context, "recipe"),
+        reactionIconAndCount(const Icon(Icons.star), false, context, "star"),
       ],
     );
   }
 
-  Widget reactionIconAndCount(Icon icon, bool isCountable) {
+  Widget reactionIconAndCount(
+      Icon icon, bool isCountable, context, String type) {
     return Row(
       children: [
         IconButton(
           color: mainThemeColor,
           iconSize: 23.h,
           icon: icon,
-          onPressed: () {},
+          onPressed: () {
+            switch (type) {
+              case "comment":
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => CommentScreen())));
+                break;
+              case "bookmark":
+                break;
+              case "recipe":
+                break;
+              case "star":
+                break;
+            }
+          },
         ),
         Text(
           isCountable ? "2234" : " ",
