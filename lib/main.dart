@@ -3,6 +3,7 @@ import 'package:bigbelly/screens/verification/verification_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/screens/imports.dart';
+import 'screens/add_post/add_post_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(primarySwatch: Colors.green),
-            home: MainPage(),
+            home: AddPostScreen(),
           );
         });
   }
