@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/screens/imports.dart';
+import 'screens/add_post/add_post_screen.dart';
 import 'constants/providers/user_provider.dart';
 
 void main() async {

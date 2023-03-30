@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
     return {
       TabItem.home: HomePage(),
       TabItem.search: const SearchScreen(),
-      TabItem.post: const AddPostScreen(),
+      TabItem.post: AddPostScreen(),
       TabItem.recommendation: const RecommendationScreen(),
     };
   }

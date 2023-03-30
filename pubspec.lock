@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.2"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: "4458d81bfd24207f3d58f66f78097064e02f810f94cf1bc80bf20fe7685ebc80"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   equatable:
     dependency: "direct main"
     description:
@@ -163,6 +171,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      sha256: "959ef4add147753f990b4a7c6cccb746d5792dbdc81b1cde99e62e7edb31b206"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.4.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -200,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  im_stepper:
+    dependency: "direct main"
+    description:
+      name: im_stepper
+      sha256: "84ca411f7c4666cb8762a6dd6eec0353c96c67f674124614263875d0570ca634"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1+1"
   js:
     dependency: transitive
     description:
@@ -256,6 +280,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  number_inc_dec:
+    dependency: "direct main"
+    description:
+      name: number_inc_dec
+      sha256: af0a35f923a2e67532bc6579e8fbf0093be8ea185e48bb543db4e3e355017ec5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   path:
     dependency: transitive
     description:
