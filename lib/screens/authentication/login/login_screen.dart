@@ -1,7 +1,8 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'dart:convert';
 
-import 'package:bigbelly/screens/authentication/model/user_model.dart';
 import 'package:bigbelly/screens/authentication/verification/verification_screen.dart';
 import 'package:bigbelly/screens/imports.dart';
 
@@ -98,5 +99,39 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     ));
+  }
+
+  Future login(context) async {
+    Response response = await dio.post('/account/login', data: fields);
+
+    switch (response.data['message']) {
+      case "Account needs verification":
+        String email = response.data['payload']['email'];
+        setSession(response);
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: ((context) => PinCodeVerificationScreen(email))));
+        break;
+      case "Login successful":
+        setSession(response);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => MainPage())));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(response.data['message'])));
+
+        break;
+    }
+  }
+
+  void setSession(Response response) async {
+    await SessionManager()
+        .set('id', jsonEncode(response.data['payload']['id'].toString()));
+    await SessionManager()
+        .set('username', jsonEncode(response.data['payload']['username']));
   }
 }

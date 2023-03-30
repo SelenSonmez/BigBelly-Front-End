@@ -5,7 +5,9 @@ import 'main_page_imports.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+
   late final int id;
+
   @override
   Widget build(BuildContext context) {
     _getSession();

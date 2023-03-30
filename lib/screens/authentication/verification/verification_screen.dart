@@ -10,6 +10,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../constants/dio.dart';
 import '../../../constants/styles.dart';
+import '../../mainPage/main_page.dart';
 import 'texts.dart';
 
 class PinCodeVerificationScreen extends StatefulWidget {
@@ -172,7 +173,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0.w),
                 child: Text(
-                  hasError ? "*" + WrongCode : "",
+                  hasError ? "*$WrongCode" : "",
                   style: TextStyle(
                       color: Colors.red,
                       fontSize: 12.sp,
@@ -186,7 +187,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     style: TextStyle(color: Colors.black54, fontSize: 15.sp),
                     children: [
                       TextSpan(
-                          text: " " + Resend.toUpperCase(),
+                          text: " ${Resend.toUpperCase()}",
                           recognizer: onTapRecognizer,
                           style: TextStyle(
                               color: const Color(0xFF91D3B3),
@@ -210,12 +211,10 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                         onPressed: () async {
                           formKey.currentState?.validate();
                           // conditions for validating
-
-                          Response response = await dio
-                              .post('/account/verificate', data: {
-                            'id': SessionManager().get('id'),
-                            'code': currentText
-                          });
+                          dynamic id = await SessionManager().get('id');
+                          Response response = await dio.post(
+                              '/account/verificate',
+                              data: {'id': id, 'code': currentText});
                           debugPrint(response.data.toString());
                           if (currentText.length != codeLength ||
                               !response.data['success']) {
@@ -232,6 +231,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                                   SnackBar(
                                       backgroundColor: Colors.green,
                                       content: Text(CodeMatched)));
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => MainPage())));
                             });
                           }
                         },
