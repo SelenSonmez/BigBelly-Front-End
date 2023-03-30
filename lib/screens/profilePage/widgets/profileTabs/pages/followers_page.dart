@@ -1,10 +1,14 @@
 import 'package:bigbelly/screens/imports.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FollowersPage extends StatelessWidget {
+import '../../../../../constants/providers/user_provider.dart';
+
+class FollowersPage extends ConsumerWidget {
   const FollowersPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final valueUser = ref.watch(userProvider);
     return Scaffold(
       appBar: AppBar(toolbarHeight: 35, title: const Text("Followers")),
       body: Column(
@@ -14,15 +18,16 @@ class FollowersPage extends StatelessWidget {
             child: ListView.builder(
                 // physics: const NeverScrollableScrollPhysics(),
                 // shrinkWrap: true,
-                itemCount: 20,
+                itemCount: valueUser.getUser.followers!.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return const ListTile(
+                  return ListTile(
                       leading: CircleAvatar(
                         radius: 15,
                         backgroundImage:
                             AssetImage('assets/images/defaultProfilePic.jpg'),
                       ),
-                      title: Text("username"));
+                      title:
+                          Text(valueUser.getUser.followers![index].username!));
                 }),
           ),
         ],

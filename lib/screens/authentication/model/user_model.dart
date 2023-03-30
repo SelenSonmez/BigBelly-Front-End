@@ -5,8 +5,8 @@ class User {
   String? email;
   int? isVerified;
   PrivacySetting? privacySetting;
-  List<User>? followers;
-  List<User>? followeds;
+  List<User>? followers = [];
+  List<User>? followeds = [];
 
   User(
       {this.id,
@@ -30,13 +30,13 @@ class User {
     if (json['followers'] != null) {
       followers = <User>[];
       json['followers'].forEach((v) {
-        followers!.add(new User.fromJson(v));
+        followers!.add(new User.fromJson(v['account']));
       });
     }
     if (json['followeds'] != null) {
       followeds = <User>[];
       json['followeds'].forEach((v) {
-        followeds!.add(new User.fromJson(v));
+        followeds!.add(new User.fromJson(v['followed_account']));
       });
     }
   }
