@@ -1,13 +1,17 @@
 import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
-class BigBellyAppBar extends StatelessWidget {
+import '../../constants/providers/user_provider.dart';
+import '../authentication/model/user_model.dart';
+import '../imports.dart';
+
+class BigBellyAppBar extends ConsumerWidget {
   const BigBellyAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userValue = ref.watch(userProvider);
     return SliverAppBar(
         snap: true,
         collapsedHeight: 70.h,
@@ -42,7 +46,14 @@ class BigBellyAppBar extends StatelessWidget {
                 backgroundImage:
                     AssetImage('assets/images/defaultProfilePic.jpg'),
               ),
-              onTap: () {
+              onTap: () async {
+                dynamic id = await SessionManager().get('id');
+                Response info = await dio.get('/profile/$id/', data: id);
+                debugPrint(info.data['payload']['user'].toString());
+
+                User user = User.fromJson(info.data['payload']['user']);
+                userValue.setUser = user;
+
                 Navigator.push(context,
                     MaterialPageRoute(builder: ((context) => ProfilePage())));
               },

@@ -1,15 +1,17 @@
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
 import 'package:bigbelly/screens/verification/verification_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/screens/imports.dart';
+import 'constants/providers/user_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //Load language texts as preffed EN
   await TextDecider().setPreferredLanguage('EN').load();
 
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

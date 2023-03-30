@@ -2,17 +2,18 @@ import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/liked_pos
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/saved_posts_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/user_posts_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../constants/Colors.dart';
+import '../../../../constants/providers/user_provider.dart';
 
-class ProfileTabs extends StatefulWidget {
-  const ProfileTabs({Key? key, required this.isPrivate}) : super(key: key);
-  final bool isPrivate;
+class ProfileTabs extends ConsumerStatefulWidget {
+  const ProfileTabs({Key? key}) : super(key: key);
 
   @override
-  State<ProfileTabs> createState() => _ProfileTabsState();
+  ConsumerState<ProfileTabs> createState() => _ProfileTabsState();
 }
 
-class _ProfileTabsState extends State<ProfileTabs>
+class _ProfileTabsState extends ConsumerState<ProfileTabs>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   int activeIndex = 0;
@@ -28,6 +29,7 @@ class _ProfileTabsState extends State<ProfileTabs>
 
   @override
   Widget build(BuildContext context) {
+    final userValue = ref.watch(userProvider);
     tabController.addListener(() {
       if (tabController.indexIsChanging ||
           tabController.animation!.value == tabController.index) {
@@ -66,7 +68,8 @@ class _ProfileTabsState extends State<ProfileTabs>
         //width: 100,
         //height: 100,
         child: TabBarView(controller: tabController, children: [
-          widget.isPrivate
+          userValue.getUser.privacySetting!.isPrivate != null &&
+                  userValue.getUser.privacySetting!.isPrivate == true
               ? const Center(
                   child: Expanded(
                     child: Icon(

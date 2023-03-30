@@ -1,12 +1,16 @@
 import 'package:bigbelly/screens/profilePage/widgets/profileHeader/follow_user.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileHeader/profile_info.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../constants/providers/user_provider.dart';
 import '../../../imports.dart';
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends ConsumerWidget {
   ProfileHeader({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final userProvider = Provider.of<UserModel>(context);
+    final value = ref.watch(userProvider);
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(top: 15.0),
@@ -23,9 +27,9 @@ class ProfileHeader extends StatelessWidget {
               child: Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
-                      "name",
+                      value.getUser.name.toString(),
                       style: TextStyle(
                         fontSize: 20,
                       ),
