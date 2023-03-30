@@ -70,16 +70,7 @@ class LoginScreen extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-
-                            Response response =
-                                await dio.post('/account/login', data: fields);
-                            User user = User.fromJson(response.data);
-
-                            final userProvider =
-                                Provider.of<UserModel>(context, listen: false);
-                            userProvider.setUser = user;
-
-                            debugPrint(response.data.toString());
+                            login(context);
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 5.h,

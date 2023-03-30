@@ -1,4 +1,5 @@
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
+import 'package:bigbelly/screens/follower_request/follower_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,7 +12,7 @@ void main() async {
   //Load language texts as preffed EN
   await TextDecider().setPreferredLanguage('EN').load();
 
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
