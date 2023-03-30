@@ -1,3 +1,4 @@
+import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'dart:convert';
 
 import 'package:bigbelly/screens/authentication/model/user_model.dart';
@@ -7,6 +8,8 @@ import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
+
+import '../model/user_model.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../helpers/page_below_string.dart';
@@ -66,14 +69,16 @@ class LoginScreen extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-                            try {
-                              login(context);
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text(e.toString())));
-                            }
+
+                            Response response =
+                                await dio.post('/account/login', data: fields);
+                            User user = User.fromJson(response.data);
+
+                            final userProvider =
+                                Provider.of<UserModel>(context, listen: false);
+                            userProvider.setUser = user;
+
+                            debugPrint(response.data.toString());
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 5.h,
@@ -93,35 +98,5 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     ));
-  }
-
-  Future login(context) async {
-    Response response = await dio.post('/account/login', data: fields);
-
-    switch (response.data['message']) {
-      case "Account needs verification":
-        String email = response.data['payload']['email'];
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => PinCodeVerificationScreen(email))));
-        break;
-      case "Login successful":
-        Map<String, dynamic> userInfo = {
-          'id': response.data['payload']['id'].toString(),
-          'username': response.data['payload']['username']
-        };
-        await SessionManager().set('user', jsonEncode(userInfo));
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => MainPage())));
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(response.data['message'])));
-
-        break;
-    }
   }
 }

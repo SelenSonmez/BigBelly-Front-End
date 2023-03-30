@@ -1,14 +1,11 @@
 import 'package:bigbelly/screens/authentication/model/user_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-
 import 'main_page_imports.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-
-  late final Map<String, dynamic> data;
-
+  late final int id;
   @override
   Widget build(BuildContext context) {
     _getSession();
@@ -49,6 +46,6 @@ class HomePage extends StatelessWidget {
   }
 
   _getSession() async {
-    data = await SessionManager().get("user");
+    dynamic id = await SessionManager().get('id');
   }
 }
