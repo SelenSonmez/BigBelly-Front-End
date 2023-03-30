@@ -7,7 +7,13 @@ import '../authentication/model/user_model.dart';
 import '../imports.dart';
 
 class BigBellyAppBar extends ConsumerWidget {
-  const BigBellyAppBar({super.key});
+  BigBellyAppBar(
+      {super.key,
+      this.trailingWidget = const CircleAvatar(
+        backgroundImage: AssetImage('assets/images/defaultProfilePic.jpg'),
+      )});
+
+  Widget? trailingWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,10 +48,7 @@ class BigBellyAppBar extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.only(right: 10.0.w),
             child: GestureDetector(
-              child: const CircleAvatar(
-                backgroundImage:
-                    AssetImage('assets/images/defaultProfilePic.jpg'),
-              ),
+              child: trailingWidget,
               onTap: () async {
                 dynamic id = await SessionManager().get('id');
                 Response info = await dio.get('/profile/$id/', data: id);

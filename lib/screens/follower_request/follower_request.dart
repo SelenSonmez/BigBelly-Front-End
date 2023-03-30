@@ -1,4 +1,5 @@
 import '../imports.dart';
+import '../search/widgets/profile_tile.dart';
 
 class FollowerRequest extends StatelessWidget {
   const FollowerRequest({super.key});
