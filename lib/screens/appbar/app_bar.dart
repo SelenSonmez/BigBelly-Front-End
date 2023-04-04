@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/follower_request/follower_request.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -45,6 +46,17 @@ class BigBellyAppBar extends ConsumerWidget {
           ]),
         ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: IconButton(
+              icon: Icon(Icons.add_alert_sharp),
+              iconSize: 35,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FollowerRequest()));
+              },
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(right: 10.0.w),
             child: GestureDetector(

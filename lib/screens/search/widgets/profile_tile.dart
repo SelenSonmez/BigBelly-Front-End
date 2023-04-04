@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/styles.dart';
+import '../../imports.dart';
 
 class ProfileTile extends StatelessWidget {
   const ProfileTile(
@@ -70,6 +71,30 @@ class ProfileTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget requestAction() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.add,
+            color: Colors.green,
+          ),
+          onPressed: () async {
+            Response response =
+                await dio.post("/profile/followers/accept", data: "");
+          },
+        ),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.close,
+              color: Colors.red,
+            ))
+      ],
     );
   }
 }
