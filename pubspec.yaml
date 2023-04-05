@@ -49,6 +49,7 @@ dependencies:
   like_button: ^2.0.5
   get_it: ^7.2.0
   http: ^0.13.5
+  lite_rolling_switch: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,8 @@ flutter:
       # - assets/images/defaultProfilePic.png
       # - assets/images/defaultProfilePic.jpg
       # - assets/images/hamburger.jpg
+      # - assets/images/eggNotPrivate.png
+      # - assets/images/eggPrivate.png
       - assets/images/
       - assets/languages/EN.json
       - assets/languages/TR.json
