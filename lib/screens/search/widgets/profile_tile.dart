@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/follower_request/follower_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,11 +11,13 @@ class ProfileTile extends StatelessWidget {
       {super.key,
       required this.username,
       required this.followerCount,
-      this.isRequest = false});
+      this.requestId = -1,
+      this.updateFollowerRequests});
 
   final String username;
   final int followerCount;
-  final bool isRequest;
+  final int requestId;
+  final Function? updateFollowerRequests;
 
   @override
   Widget build(BuildContext context) {
@@ -46,26 +49,7 @@ class ProfileTile extends StatelessWidget {
               trailing: SizedBox(
                 width: 100.w,
                 height: 75.h,
-                child: isRequest
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.green,
-                            ),
-                            onPressed: () {},
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.red,
-                              ))
-                        ],
-                      )
-                    : null,
+                child: requestId != -1 ? requestAction() : null,
               ),
             ),
           ],
@@ -84,12 +68,19 @@ class ProfileTile extends StatelessWidget {
             color: Colors.green,
           ),
           onPressed: () async {
-            Response response =
-                await dio.post("/profile/followers/accept", data: "");
+            Response response = await dio.post(
+                "http://18.184.145.252/profile/followers/accept",
+                data: {"request_id": requestId});
+            updateFollowerRequests!();
           },
         ),
         IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              Response response = await dio.post(
+                  "http://18.184.145.252/profile/followers/decline",
+                  data: {"request_id": requestId});
+              updateFollowerRequests!();
+            },
             icon: const Icon(
               Icons.close,
               color: Colors.red,
