@@ -63,7 +63,7 @@ class _FollowerRequestState extends State<FollowerRequest> {
 
   Future _fetchFollowerRequests() async {
     dynamic id = await SessionManager().get('id');
-    final uri = 'http://18.184.145.252/profile/$id/requests';
+    final uri = '/profile/$id/requests';
 
     try {
       Response response = await dio.get(uri);
