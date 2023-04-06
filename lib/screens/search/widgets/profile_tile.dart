@@ -68,16 +68,14 @@ class ProfileTile extends StatelessWidget {
             color: Colors.green,
           ),
           onPressed: () async {
-            Response response = await dio.post(
-                "http://18.184.145.252/profile/followers/accept",
+            Response response = await dio.post("/profile/followers/accept",
                 data: {"request_id": requestId});
             updateFollowerRequests!();
           },
         ),
         IconButton(
             onPressed: () async {
-              Response response = await dio.post(
-                  "http://18.184.145.252/profile/followers/decline",
+              Response response = await dio.post("/profile/followers/decline",
                   data: {"request_id": requestId});
               updateFollowerRequests!();
             },
