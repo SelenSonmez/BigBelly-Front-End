@@ -1,14 +1,21 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:async';
+
+import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/main_page_imports.dart';
+import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
 import 'package:bigbelly/screens/search/widgets/profile_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as r;
+import '../authentication/model/user_model.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //final userValue = ref.watch(userProvider);
     return Scaffold(
         body: NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -18,8 +25,8 @@ class SearchScreen extends StatelessWidget {
                   onPressed: () {},
                   icon: IconButton(
                     icon: Icon(size: 30.w, Icons.search),
-                    onPressed: () {
-                      showSearch(
+                    onPressed: () async {
+                      await showSearch(
                           context: context, delegate: BigBellySearchDelegate());
                     },
                   )))
@@ -31,12 +38,7 @@ class SearchScreen extends StatelessWidget {
 }
 
 class BigBellySearchDelegate extends SearchDelegate {
-  List<String> searchResults = [
-    "Selen",
-    "Simge",
-    "Elçin",
-    "Kaan",
-  ];
+  late User searchedUser;
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -61,33 +63,53 @@ class BigBellySearchDelegate extends SearchDelegate {
   //searched and clicked profile of user will display
   @override
   Widget buildResults(BuildContext context) {
-    return Center(
-        child: Text(
-      query,
-      style: TextStyle(fontSize: 70.sp),
-    ));
+    return r.Consumer(builder: (context, ref, child) {
+      final userValue = ref.watch(userProvider);
+      userValue.setUser = searchedUser;
+      return ProfilePage();
+    });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResults.where((searchResults) {
-      final result = searchResults.toLowerCase();
-      final input = query.toLowerCase();
-      return result.contains(input);
-    }).toList();
-    return ListView.builder(
-        itemCount: suggestions.length,
-        itemBuilder: (context, index) {
-          final suggestion = suggestions[index];
-
-          return ListTile(
-            title: ProfileTile(username: suggestion, followerCount: 232323),
-            onTap: () {
-              query = suggestion;
-
-              showResults(context);
-            },
-          );
+    return FutureBuilder(
+        future: query != "" ? search() : null,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return query == ""
+                ? Container()
+                : const Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                      title: ProfileTile(
+                          username: snapshot.data!.username!,
+                          followerCount: snapshot.data!.followers!.length),
+                      onTap: () {
+                        searchedUser = snapshot.data!;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => buildResults(context)));
+                      });
+                });
+          }
         });
+  }
+
+  Future<User?> search() async {
+    User? user;
+    const uri = "/profile/search";
+    Response response = await dio.get(uri, data: {'username': query});
+    switch (response.data['message']) {
+      case 'Username could not found':
+        break;
+      case "Request has succeed!":
+        user = User.fromJson(response.data['payload']['user']);
+        break;
+    }
+    return user;
   }
 }
