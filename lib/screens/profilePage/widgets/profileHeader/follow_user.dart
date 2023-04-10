@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import '../../../../constants/providers/user_provider.dart';
+import '../../../follower_request/model/followerRequestModel.dart';
 import '../../../imports.dart';
 
 class UserFollowingStatus extends ConsumerStatefulWidget {
@@ -23,12 +24,14 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
     super.initState();
     checkSelfID();
     checkFollowingStatus();
+    isFollowerRequest();
   }
 
   @override
   void dispose() {
     isSelf;
     isFollowing;
+    isRequest;
     super.dispose();
   }
 
@@ -60,17 +63,17 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
     return isSelf;
   }
 
-  void checkFollowingStatus() async {
-    bool followerFound = false;
+  //check if the user is following the searched account
+  Future checkFollowingStatus() async {
     final userValue = ref.read(userProvider);
     final id = await SessionManager().get('id');
+
     for (var follower in userValue.getUser.followers!) {
       if (id == follower.id.toString()) {
-        followerFound = true;
+        isFollowing = true;
         break;
       }
     }
-    followerFound ? isFollowing = true : isFollowing = false;
     setState(() {});
   }
 
@@ -78,22 +81,22 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
     final userValue = ref.watch(userProvider);
     final id = await SessionManager().get('id');
 
+    final uri = isFollowing
+        ? '/profile/followers/unfollow'
+        : (isRequest
+            ? ('/profile/followers/cancel-follow-request')
+            : ('/profile/followers/follow'));
+
+    Response response = await dio.post(uri,
+        data: {'account_id': id, 'followed_account_id': userValue.getUser.id});
+
     if (!isRequest) {
-      final uri = isFollowing
-          ? '/profile/followers/unfollow'
-          : ('/profile/followers/follow');
-
-      Response response = await dio.post(uri, data: {
-        'account_id': id,
-        'followed_account_id': userValue.getUser.id
-      });
-
       switch (response.data['message']) {
         case 'Request needs to be Accepted':
           isRequest = true;
           break;
         case 'Request has succeed':
-          isFollowing = !isFollowing;
+          checkFollowingStatus();
           break;
         default:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -101,9 +104,40 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
               content: Text(response.data['message'])));
           break;
       }
+    } else {
+      switch (response.data['message']) {
+        case 'Request has succeed':
+          isFollowerRequest();
+          break;
+        default:
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(response.data['message'])));
+          break;
+      }
+    }
+    setState(() {});
+  }
 
-      //if it is request remove request
-      setState(() {});
+  //check if the user has sent a follow request to the searched account
+  Future isFollowerRequest() async {
+    isRequest = false;
+    final userValue = ref.read(userProvider);
+    dynamic id = await SessionManager().get('id');
+
+    final followedAccountID = userValue.getUser.id.toString();
+    final uri = '/profile/$followedAccountID/requests';
+    try {
+      Response response = await dio.get(uri);
+      for (var request in response.data['payload']['requests']) {
+        if (request['account_id'].toString() == id) {
+          isRequest = true;
+          setState(() {});
+          break;
+        }
+      }
+    } catch (_) {
+      rethrow;
     }
   }
 }
