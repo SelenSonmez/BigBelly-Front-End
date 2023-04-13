@@ -78,8 +78,8 @@ String UsernameNotValid = TextDecider()
     .target('UsernameNotValid')
     .decideText();
 String EmailNotValid = TextDecider()
-    .goOnPath('EmailNotValid')
-    .target('PasswordNotEmpty')
+    .goOnPath('RegisterScreen')
+    .target('EmailNotValid')
     .decideText();
 String PasswordNotValid = TextDecider()
     .goOnPath('RegisterScreen')
