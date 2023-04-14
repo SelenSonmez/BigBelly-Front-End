@@ -18,4 +18,22 @@ class UserModel extends ChangeNotifier {
     //here the model value changes. you can call 'notifyListeners' to notify all the 'Consumer<UserModel>'
     notifyListeners();
   }
+
+  void removeFollower(var userID) {
+    _user.followers!.removeWhere((item) => item.id == userID);
+
+    notifyListeners();
+  }
+
+  Future addFollower(var id) async {
+    final uri = '/profile/$id/';
+
+    try {
+      Response response = await dio.get(uri);
+      User user = User.fromJson(response.data['payload']['user']);
+      _user.followers!.add(user);
+      print(_user.followers!.length.toString());
+      notifyListeners();
+    } catch (_) {}
+  }
 }
