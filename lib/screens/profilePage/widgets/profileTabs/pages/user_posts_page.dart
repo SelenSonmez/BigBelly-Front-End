@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/mainPage/home_page.dart';
 import 'package:flutter/material.dart';
 
 class UserPosts extends StatelessWidget {
@@ -12,8 +13,16 @@ class UserPosts extends StatelessWidget {
         itemBuilder: (context, index) {
           return Container(
               margin: const EdgeInsets.only(right: 3, top: 3, left: 3),
-              child: Image.asset('assets/images/hamburger.jpg',
-                  fit: BoxFit.cover));
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(
+                          postIndexToBeShown: index, isVisible: false)),
+                ),
+                child: Image.asset('assets/images/hamburger.jpg',
+                    fit: BoxFit.cover),
+              ));
         });
   }
 }

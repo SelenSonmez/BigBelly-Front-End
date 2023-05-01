@@ -4,22 +4,36 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'main_page_imports.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  HomePage({this.postIndexToBeShown = 0, this.isVisible = true, super.key});
 
+  final ScrollController _controller = ScrollController();
   late final int id;
+  bool isVisible;
+  int postIndexToBeShown;
+
+  void _scrollDown() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.hasClients && postIndexToBeShown != 0) {
+        _controller
+            .jumpTo(postIndexToBeShown * 450 + 66 * (postIndexToBeShown - 1));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _scrollDown();
     _getSession();
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [BigBellyAppBar()];
+          return isVisible ? [BigBellyAppBar()] : [];
         },
         body: Center(
           child: Builder(
             builder: (BuildContext context) {
               return CustomScrollView(
+                controller: _controller,
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate((_, i) {
