@@ -53,6 +53,7 @@ dependencies:
   im_stepper: ^1.0.1+1
   font_awesome_flutter: ^10.4.0
   flutter_session_manager: ^1.0.3
+  lite_rolling_switch: ^1.0.1
 
 dev_dependencies:
   flutter_test:
