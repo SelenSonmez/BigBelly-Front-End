@@ -124,5 +124,7 @@ class LoginScreen extends StatelessWidget {
         .set('id', jsonEncode(response.data['payload']['id'].toString()));
     await SessionManager()
         .set('username', jsonEncode(response.data['payload']['username']));
+    await SessionManager()
+        .set('privacy', jsonEncode(response.data['payload']['privacy']));
   }
 }
