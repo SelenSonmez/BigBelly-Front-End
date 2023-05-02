@@ -30,7 +30,6 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  //return tile that consists of icon, text, iconbutton
   Widget placeTile(
       IconData icon, String text, Widget trailingWidget, bool clickable) {
     return Container(
@@ -63,28 +62,24 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Settings',
+        ),
+        centerTitle: true,
+      ),
       body: Stack(
         children: <Widget>[
           Column(
             children: <Widget>[
               Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: (MediaQuery.of(context).size.height) / 4.5,
-                  color: mainThemeColor,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Text(
-                        style: GoogleFonts.mulish(
-                            color: Colors.white,
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.bold),
-                        "Settings"),
-                  )),
+                width: MediaQuery.of(context).size.width,
+                //height: (MediaQuery.of(context).size.height) / 4.5,
+              ),
             ],
           ),
           Positioned(
-              top: ((MediaQuery.of(context).size.height) / 9.7),
+              //top: ((MediaQuery.of(context).size.height) / 9.7),
               left: 0,
               right: 0,
               child: Column(
