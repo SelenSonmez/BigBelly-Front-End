@@ -1,3 +1,5 @@
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+
 import '../imports.dart';
 
 class Setting extends StatefulWidget {
@@ -97,6 +99,8 @@ class _SettingState extends State<Setting> {
                       true),
                   placeTile(Icons.language, "Language",
                       Icon(Icons.arrow_forward_ios_rounded), true),
+                  placeTile(Icons.edit, "Edit Profile",
+                      Icon(Icons.arrow_forward_ios_rounded), true),
 
                   placeText("Privacy"),
                   Container(
@@ -119,8 +123,15 @@ class _SettingState extends State<Setting> {
                                   }
                                   light = value;
                                 });
-                                Response response =
-                                    await dio.post("/profile/1/edit");
+                                int privacyName = 0;
+                                if (privacyButtonName == "Private Account") {
+                                  privacyName = 1;
+                                }
+                                dynamic id = await SessionManager().get('id');
+                                Response response = await dio.post(
+                                    "/profile/$id/edit",
+                                    data: {"privacy_setting": privacyName});
+                                debugPrint(response.data.toString());
                               },
                             ),
                             false)
