@@ -53,6 +53,10 @@ dependencies:
   im_stepper: ^1.0.1+1
   font_awesome_flutter: ^10.4.0
   flutter_session_manager: ^1.0.3
+  image_picker: ^0.8.7+2
+  image_cropper: ^3.0.2
+  duration_picker: ^1.1.1
+  searchfield: ^0.7.5
 
 dev_dependencies:
   flutter_test:

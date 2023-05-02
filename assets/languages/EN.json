@@ -68,5 +68,43 @@
         "PleaseFillAllSpaces":"Please fill up all the cells properly",
         "CodeMatched":"Code matched",
         "WrongCode": "Code not matched"
+    },
+    "AddPostScreen": {
+        "TitleTextField":{
+            "LabelText": "Title *",
+            "HintText": "Juicy Hamburger"
+        },
+        "AddARecipePhoto": "Add a recipe photo *",
+        "StepButtons": {
+            "Next":"Next",
+            "Previous": "Prev"
+        },
+        "Difficulty":{
+            "Easy":"Easy",
+            "Medium":"Medium",
+            "Hard":"Hard"
+        },
+        "Cards":{
+            "Portion": "Portion",
+            "PortionExplanation": "Enter how much servings your recipe contains",
+            "Servings":"Servings",
+            "PreparationTime":"PreparationTime",
+            "PreparationTimeExplanation":"How much time does it take to prepare this recipe?",
+            "BakingTime":"Baking Time",
+            "BakingTimeExplanation":"How much time does it take to bake this recipe?"
+        },
+        "LetTheWorldKnow":"Let the World know your tricks!",
+        "EnterYourStep":"Enter Your Step",
+        "EnterDescription":"Enter description for your recipe",
+        "IngredientAmount":"Amount",
+        "IngredientScaleLabel":"Scale",
+        "IngredientScaleHintText": "Table Spoon",
+        "SelectIngredient":"Select Ingredient",
+        "GramsLabel":"Grams",
+        "AddIngredientButton":"Add Ingredient",
+        "EnterTheIngredients":"Enter the Ingredients",
+        "EnterTagsScreen": "Enter Tags to Categorize Your Recipe",
+        "EnterYourTag": "Enter your tag!",
+        "CreatePostButton":"Create Post"
     }
 }
