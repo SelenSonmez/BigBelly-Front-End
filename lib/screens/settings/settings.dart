@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../imports.dart';
@@ -12,7 +14,7 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   String privacyButtonName = "Inprivate Account";
   bool _click = false;
-  bool light = true;
+  bool privacy = false;
   //returns title text in above contents
   Widget placeText(String text) {
     //Content Text
@@ -28,6 +30,18 @@ class _SettingState extends State<Setting> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    getPrivacy();
+    super.initState();
+  }
+
+  Future<bool> getPrivacy() async {
+    privacy = await SessionManager().get('privacy');
+    setState(() {});
+    return privacy;
   }
 
   //return tile that consists of icon, text, iconbutton
@@ -109,28 +123,21 @@ class _SettingState extends State<Setting> {
                       children: [
                         placeTile(
                             Icons.lock,
-                            privacyButtonName,
+                            "Private Account",
                             Switch(
                               // This bool value toggles the switch.
-                              value: light,
+                              value: privacy,
                               activeColor: Colors.green,
                               onChanged: (bool value) async {
                                 setState(() {
-                                  if (value == true) {
-                                    privacyButtonName = "Private Account";
-                                  } else {
-                                    privacyButtonName = "InPrivate Account";
-                                  }
-                                  light = value;
+                                  privacy = value;
                                 });
-                                int privacyName = 0;
-                                if (privacyButtonName == "Private Account") {
-                                  privacyName = 1;
-                                }
+                                await SessionManager().set('privacy', value);
                                 dynamic id = await SessionManager().get('id');
+
                                 Response response = await dio.post(
                                     "/profile/$id/edit",
-                                    data: {"privacy_setting": privacyName});
+                                    data: {"privacy_setting": value ? 1 : 0});
                                 debugPrint(response.data.toString());
                               },
                             ),
