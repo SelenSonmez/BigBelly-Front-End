@@ -1,4 +1,5 @@
 import 'package:bigbelly/screens/authentication/model/user_model.dart';
+import 'package:bigbelly/screens/post_list_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'main_page_imports.dart';
@@ -34,25 +35,7 @@ class HomePage extends StatelessWidget {
             builder: (BuildContext context) {
               return CustomScrollView(
                 controller: _controller,
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate((_, i) {
-                      return Column(children: [
-                        Image.asset('assets/images/hamburger.jpg'),
-                        Padding(
-                            padding: const EdgeInsets.all(18),
-                            child: Column(
-                              children: const [
-                                PostitleAndTags(),
-                                PostOwnerAndDate(),
-                                postReactions(),
-                                Divider(thickness: 2)
-                              ],
-                            )),
-                      ]);
-                    }, childCount: 10),
-                  ),
-                ],
+                slivers: const [PostListView()],
               );
             },
           ),
