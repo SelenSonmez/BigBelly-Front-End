@@ -154,6 +154,29 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
             for (StepTile element in post.steps!) {
               stepsName.add(element.step);
             }
+            Map<dynamic, dynamic> ingredientName = Map<String, String>();
+            // var ingredientName = [];
+            // for (Ingredient element in post.ingredients!) {
+            // ingredientName.push("amount":element.amount);
+            // }
+
+            final steps = <String, dynamic>{
+              'post_id': 6,
+              'description': post.description,
+            };
+            final ingredients = <String, dynamic>{
+              'post_id': 6,
+              'ingredient_id': 6,
+              'amount': 1,
+              'unit': "yemek kasigi",
+              'gram': 100,
+              'ingredient_name': "sabun"
+            };
+            final tags = <String, dynamic>{
+              'post_id': 6,
+              'name': ['vegan', 'glutenfree'],
+            };
+
             Map<String, dynamic> fields = {
               "account_id": id,
               'title': post.title,
@@ -162,9 +185,9 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               'portion': post.portion,
               "preparation_time": post.preparationTime,
               "baking_time": post.bakingTime,
-              "steps": post.steps,
-              "ingredients": post.ingredients,
-              "tags": post.tags
+              "steps": steps,
+              "ingredients": ingredients,
+              "tags": tags
             };
 
             Response response = await dio.post("/post/create", data: fields);
