@@ -145,38 +145,28 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
                 backgroundColor: Colors.red,
                 content: Text("Please pick an image")));
           } else {
-            // debugPrint(post.steps.toString());
             dynamic id = await SessionManager().get('id');
 
-            // final id = SessionManager().get('id');
-            // debugPrint(id.toString());
-            var stepsName = [];
-            for (StepTile element in post.steps!) {
-              stepsName.add(element.step);
-            }
-            Map<dynamic, dynamic> ingredientName = Map<String, String>();
-            // var ingredientName = [];
-            // for (Ingredient element in post.ingredients!) {
-            // ingredientName.push("amount":element.amount);
-            // }
+            var steps = [];
+            post.steps!.forEach((element) {
+              steps.add({'description': element.step});
+            });
 
-            final steps = <String, dynamic>{
-              'post_id': 6,
-              'description': post.description,
-            };
-            final ingredients = <String, dynamic>{
-              'post_id': 6,
-              'ingredient_id': 6,
-              'amount': 1,
-              'unit': "yemek kasigi",
-              'gram': 100,
-              'ingredient_name': "sabun"
-            };
-            final tags = <String, dynamic>{
-              'post_id': 6,
-              'name': ['vegan', 'glutenfree'],
-            };
+            var ingredients = [];
 
+            post.ingredients!.forEach((e) {
+              ingredients.add({
+                'ingredient_name': e.name,
+                'amount': e.amount,
+                'unit': e.amountType,
+                'gram': e.grams
+              });
+            });
+            var tags = [];
+
+            post.tags!.forEach((e) {
+              tags.add({'name': e.tagName});
+            });
             Map<String, dynamic> fields = {
               "account_id": id,
               'title': post.title,
@@ -187,11 +177,10 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               "baking_time": post.bakingTime,
               "steps": steps,
               "ingredients": ingredients,
-              "tags": tags
+              "tags": tags,
             };
-
-            Response response = await dio.post("/post/create", data: fields);
-            debugPrint(response.data.toString());
+            Response response =
+                await dio.post("/post/create", data: jsonEncode(fields));
             navbar.setVisible = true;
 
             Navigator.pushReplacement(context,
