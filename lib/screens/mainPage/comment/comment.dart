@@ -1,5 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
+import '../../authentication/model/user_model.dart';
 import '../../imports.dart';
 
 class WriteComment extends StatelessWidget {
@@ -57,47 +59,24 @@ class _CommentScreenState extends State<CommentScreen> {
   late final TextEditingController _controller = TextEditingController();
 
   String comment = "";
-
+  String username = "";
   late Widget sentComment;
 
   List comments = [
-    const CommentTile(
-      username: "selo",
+    CommentTile(
+      username: "seloaa",
       comment: "comment1",
     ),
     CommentTile(
-      username: "selo",
+      username: "seloaaa",
       comment: "comment2",
     ),
-    CommentTile(
-      username: "selo",
-      comment: "comment3",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment4",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment5",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment6",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment7",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment8",
-    ),
-    CommentTile(
-      username: "selo",
-      comment: "comment9",
-    )
   ];
+  @override
+  void initState() {
+    getSessionUsername();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +127,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       TextButton(
                           onPressed: () {
                             sentComment = CommentTile(
-                              username: "username from session",
+                              username: username,
                               comment: comment,
                             );
                             comments.add(sentComment);
@@ -164,10 +143,15 @@ class _CommentScreenState extends State<CommentScreen> {
           ),
         )));
   }
+
+  Future<String> getSessionUsername() async {
+    username = await SessionManager().get('username');
+    return username;
+  }
 }
 
 class CommentTile extends StatelessWidget {
-  const CommentTile(
+  CommentTile(
       {super.key,
       required this.username,
       required this.comment,
@@ -176,6 +160,8 @@ class CommentTile extends StatelessWidget {
   final String username;
   final String comment;
   final bool isReply;
+
+  TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -203,11 +189,16 @@ class CommentTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(bottom: 8.0.h),
-                    child: Text(username,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  Text(comment),
+                      padding: EdgeInsets.only(bottom: 8.0.h),
+                      child: Text(username,
+                          style: const TextStyle(fontWeight: FontWeight.bold))),
+                  checkSelfUsername(username) == true
+                      ? TextFormField(
+                          controller: _controller,
+                          decoration: InputDecoration.collapsed(
+                              hintText: comment, border: InputBorder.none),
+                        )
+                      : Text("AAAAA"),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -215,7 +206,8 @@ class CommentTile extends StatelessWidget {
                         child: const Text("Like"),
                         onPressed: () {},
                       ),
-                      TextButton(onPressed: () {}, child: const Text("Reply"))
+                      TextButton(onPressed: () {}, child: const Text("Reply")),
+                      TextButton(onPressed: () {}, child: const Text("Edit"))
                     ],
                   ),
                 ],
@@ -225,5 +217,14 @@ class CommentTile extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  Future<bool> checkSelfUsername(String commentUsername) async {
+    if (username == commentUsername) {
+      debugPrint(username);
+      debugPrint(commentUsername);
+      return true;
+    }
+    return false;
   }
 }

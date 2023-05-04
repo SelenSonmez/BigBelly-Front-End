@@ -2,10 +2,36 @@ import 'package:bigbelly/constants/colors.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:like_button/like_button.dart';
 
+import '../../../constants/dio.dart';
+
 class postReactions extends StatelessWidget {
-  const postReactions({super.key});
+  postReactions({super.key});
+  int count = 1;
+
+  void like() async {
+    String id = await SessionManager().get('id');
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'post_id': 5,
+      'account_id': id,
+    };
+    //unlike
+    if (count % 2 == 0) {
+      debugPrint("unlike");
+      final response = await dio.post('/post/unlike', data: params);
+      debugPrint(response.data.toString());
+      count++;
+      return;
+    }
+    //like
+    debugPrint("like");
+    final response = await dio.post('/post/like', data: params);
+    debugPrint(response.data.toString());
+    count++;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +39,13 @@ class postReactions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         LikeButton(
-          size: 23.h,
-          likeCount: 121,
-          likeBuilder: (isLiked) {
-            final color = isLiked ? Colors.red : Colors.green;
-            return Icon(Icons.favorite, color: color);
-          },
-        ),
+            size: 23.h,
+            likeCount: 121,
+            likeBuilder: (isLiked) {
+              final color = isLiked ? Colors.red : Colors.green;
+              return Icon(Icons.favorite, color: color);
+            },
+            onTap: _onLikeButtonTapped),
         reactionIconAndCount(
             const Icon(Icons.comment_rounded), true, context, "comment"),
         reactionIconAndCount(
@@ -59,5 +85,10 @@ class postReactions extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Future<bool> _onLikeButtonTapped(bool isLiked) async {
+    like();
+    return !isLiked;
   }
 }

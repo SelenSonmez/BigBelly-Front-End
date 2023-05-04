@@ -16,7 +16,7 @@ class PostListView extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.all(18),
               child: Column(
-                children: const [
+                children: [
                   PostitleAndTags(),
                   PostOwnerAndDate(),
                   postReactions(),
