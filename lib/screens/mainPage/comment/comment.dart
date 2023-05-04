@@ -125,13 +125,21 @@ class _CommentScreenState extends State<CommentScreen> {
                         ),
                       ),
                       TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             sentComment = CommentTile(
                               username: username,
                               comment: comment,
                             );
                             comments.add(sentComment);
                             _controller.clear();
+                            dynamic id = await SessionManager().get('id');
+                            Map<String, dynamic> fields = {
+                              'post_id': 5,
+                              'account_id': id,
+                              'comment': comment
+                            };
+                            final response =
+                                await dio.post('/post/comment', data: fields);
                             setState(() {});
                           },
                           child: const Text("send"))
@@ -192,13 +200,7 @@ class CommentTile extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: 8.0.h),
                       child: Text(username,
                           style: const TextStyle(fontWeight: FontWeight.bold))),
-                  checkSelfUsername(username) == true
-                      ? TextFormField(
-                          controller: _controller,
-                          decoration: InputDecoration.collapsed(
-                              hintText: comment, border: InputBorder.none),
-                        )
-                      : Text("AAAAA"),
+                  Text(comment),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -206,7 +208,7 @@ class CommentTile extends StatelessWidget {
                         child: const Text("Like"),
                         onPressed: () {},
                       ),
-                      TextButton(onPressed: () {}, child: const Text("Reply")),
+                      // TextButton(onPressed: () {}, child: const Text("Reply")),
                       TextButton(onPressed: () {}, child: const Text("Edit"))
                     ],
                   ),
