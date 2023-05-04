@@ -167,6 +167,11 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
             post.tags!.forEach((e) {
               tags.add({'name': e.tagName});
             });
+
+            FormData image = FormData.fromMap({
+              "file": await MultipartFile.fromFile(post.imageURL!),
+            });
+
             Map<String, dynamic> fields = {
               "account_id": id,
               'title': post.title,
@@ -178,6 +183,7 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               "steps": steps,
               "ingredients": ingredients,
               "tags": tags,
+              "imageURL": image
             };
             Response response =
                 await dio.post("/post/create", data: jsonEncode(fields));
