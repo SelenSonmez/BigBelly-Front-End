@@ -8,5 +8,5 @@ export 'package:dio/dio.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:google_fonts/google_fonts.dart';
 export '../../../constants/colors.dart';
-export '../../../constants/dio.dart';
+export '../../../constants/Dio.dart';
 export '../../../constants/styles.dart';

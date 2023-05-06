@@ -9,6 +9,7 @@ import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
+import 'package:bigbelly/screens/recommendation/recommendation_screen.dart';
 
 import '../model/user_model.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -107,8 +108,8 @@ class LoginScreen extends StatelessWidget {
         break;
       case "Login successful":
         setSession(response);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: ((context) => MainPage())));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: ((context) => const MainPage())));
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

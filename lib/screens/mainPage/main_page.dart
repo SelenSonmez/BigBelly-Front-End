@@ -1,5 +1,7 @@
+import 'package:bigbelly/constants/providers/nav_bar_visible.dart';
 import 'package:bigbelly/screens/add_post/add_post_screen.dart';
 import 'package:bigbelly/screens/search/search_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../navbar/tab_items.dart';
 import '../recommendation/recommendation_screen.dart';
@@ -7,14 +9,14 @@ import 'main_page_imports.dart';
 import 'home_page.dart';
 
 //which tab to show decider class
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends ConsumerState<MainPage> {
   TabItem _currentTab = TabItem.home;
 
   //to prevent exiting the app when hitting return button
@@ -36,6 +38,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final navbar = ref.watch(navbarProvider);
     return WillPopScope(
       onWillPop: () async =>
           !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
@@ -45,6 +48,14 @@ class _MainPageState extends State<MainPage> {
         navigatorKeys: navigatorKeys,
         onSelectedTab: (selectedTab) {
           setState(() {
+            switch (selectedTab) {
+              case TabItem.post:
+                navbar.setVisible = false;
+                break;
+              default:
+                navbar.setVisible = true;
+                break;
+            }
             _currentTab = selectedTab;
           });
         },
