@@ -78,7 +78,8 @@ class Post {
       imageURL: map['imageURL'] != null ? map['imageURL'] as String : null,
       difficulty:
           map['difficulty'] != null ? map['difficulty'] as String : null,
-      portion: map['portion'] != null ? map['portion'] as String : null,
+      portion:
+          map['portion'] != null ? map['portion'].toString() as String : null,
       preparationTime: map['preparationTime'] != null
           ? map['preparationTime'] as String
           : null,

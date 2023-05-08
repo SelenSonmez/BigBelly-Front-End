@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
             builder: (BuildContext context) {
               return CustomScrollView(
                 controller: _controller,
-                slivers: const [PostListView()],
+                slivers: [PostListView()],
               );
             },
           ),
