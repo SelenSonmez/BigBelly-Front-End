@@ -183,10 +183,15 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               "steps": steps,
               "ingredients": ingredients,
               "tags": tags,
-              "imageURL": image
             };
+
             Response response =
                 await dio.post("/post/create", data: jsonEncode(fields));
+
+            await dio.post("/post/${response.data['payload']['post_id']}/image",
+                data: image);
+
+            debugPrint(response.data.toString());
             navbar.setVisible = true;
 
             Navigator.pushReplacement(context,
