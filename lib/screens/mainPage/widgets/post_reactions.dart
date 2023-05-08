@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
 import 'package:bigbelly/screens/mainPage/widgets/collection_screen.dart';
+import 'package:bigbelly/screens/post_details/post_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -141,22 +142,31 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                 },
               )
             : PopupMenuButton(
+                icon: Icon(Icons.more_vert, color: Colors.green),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
-                color: Colors.green,
                 itemBuilder: (context) {
-                  return const [
-                    PopupMenuItem<int>(
+                  return [
+                    const PopupMenuItem<int>(
                       value: 0,
                       child: Text("Archive (TODO: only self post)"),
                     ),
-                    PopupMenuItem<int>(
+                    const PopupMenuItem<int>(
                       value: 1,
                       child: Text("Report"),
                     ),
+                    PopupMenuItem<int>(value: 2, child: Text("Details")),
                   ];
                 },
-                onSelected: (value) {},
+                onSelected: (value) {
+                  if (value == 2) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostDetails(),
+                        ));
+                  }
+                },
               ),
         Text(
           widget.isCountable ? "2234" : " ",
