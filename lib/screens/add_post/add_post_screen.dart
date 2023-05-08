@@ -39,12 +39,12 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
   @override
   void initState() {
     super.initState();
-    pages.add(const _FirstPage());
-    pages.add(const _SecondPage());
-    pages.add(const _ThirdPage());
-    pages.add(const FourthPage());
-    pages.add(const FifthPage());
-    pages.add(const _SixthPage());
+    pages.add(const _TitleAndImage());
+    pages.add(const _PortionAndTimes());
+    pages.add(const _Description());
+    pages.add(const _Ingredients());
+    pages.add(const _Steps());
+    pages.add(const _Tags());
   }
 
   @override
@@ -220,14 +220,14 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
   }
 }
 
-class _FirstPage extends ConsumerStatefulWidget {
-  const _FirstPage({super.key});
+class _TitleAndImage extends ConsumerStatefulWidget {
+  const _TitleAndImage({super.key});
 
   @override
-  ConsumerState<_FirstPage> createState() => _FirstPageState();
+  ConsumerState<_TitleAndImage> createState() => _TitleAndImageState();
 }
 
-class _FirstPageState extends ConsumerState<_FirstPage> {
+class _TitleAndImageState extends ConsumerState<_TitleAndImage> {
   late FocusNode focusNode;
 
   @override
@@ -321,14 +321,14 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
   }
 }
 
-class _SecondPage extends ConsumerStatefulWidget {
-  const _SecondPage({super.key});
+class _PortionAndTimes extends ConsumerStatefulWidget {
+  const _PortionAndTimes({super.key});
 
   @override
-  ConsumerState<_SecondPage> createState() => _SecondPageState();
+  ConsumerState<_PortionAndTimes> createState() => _PortionAndTimesState();
 }
 
-class _SecondPageState extends ConsumerState<_SecondPage> {
+class _PortionAndTimesState extends ConsumerState<_PortionAndTimes> {
   final List<bool> _selectedDifficulty = <bool>[true, false, false];
   bool isSelected = false;
   static const List<Widget> difficulty = <Widget>[
@@ -397,14 +397,14 @@ class _SecondPageState extends ConsumerState<_SecondPage> {
   }
 }
 
-class _ThirdPage extends ConsumerStatefulWidget {
-  const _ThirdPage({super.key});
+class _Steps extends ConsumerStatefulWidget {
+  const _Steps({super.key});
 
   @override
-  ConsumerState<_ThirdPage> createState() => _ThirdPageState();
+  ConsumerState<_Steps> createState() => _StepsState();
 }
 
-class _ThirdPageState extends ConsumerState<_ThirdPage> {
+class _StepsState extends ConsumerState<_Steps> {
   @override
   Widget build(BuildContext context) {
     var post = ref.watch(postProvider);
@@ -500,8 +500,8 @@ class _ThirdPageState extends ConsumerState<_ThirdPage> {
   }
 }
 
-class FourthPage extends ConsumerWidget {
-  const FourthPage({super.key});
+class _Description extends ConsumerWidget {
+  const _Description({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -523,14 +523,14 @@ class FourthPage extends ConsumerWidget {
   }
 }
 
-class FifthPage extends ConsumerStatefulWidget {
-  const FifthPage({super.key});
+class _Ingredients extends ConsumerStatefulWidget {
+  const _Ingredients({super.key});
 
   @override
-  ConsumerState<FifthPage> createState() => _FifthPageState();
+  ConsumerState<_Ingredients> createState() => _IngredientsState();
 }
 
-class _FifthPageState extends ConsumerState<FifthPage> {
+class _IngredientsState extends ConsumerState<_Ingredients> {
   Ingredient? ingredient;
 
   @override
@@ -645,14 +645,14 @@ class _FifthPageState extends ConsumerState<FifthPage> {
   }
 }
 
-class _SixthPage extends ConsumerStatefulWidget {
-  const _SixthPage({super.key});
+class _Tags extends ConsumerStatefulWidget {
+  const _Tags({super.key});
 
   @override
-  ConsumerState<_SixthPage> createState() => _SixthPageState();
+  ConsumerState<_Tags> createState() => _TagsState();
 }
 
-class _SixthPageState extends ConsumerState<_SixthPage> {
+class _TagsState extends ConsumerState<_Tags> {
   void _deleteChip(String id, var postTags) {
     setState(() {
       postTags.removeWhere((element) => element.id == id);
