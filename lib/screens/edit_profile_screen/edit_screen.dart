@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../constants/Colors.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
+import '../authentication/helpers/field_regex.dart';
+import '../authentication/register/texts.dart';
+
 class EditScreen extends StatefulWidget {
   const EditScreen({Key? key}) : super(key: key);
 
@@ -12,11 +15,25 @@ class EditScreen extends StatefulWidget {
 }
 
 class _EditScreenState extends State<EditScreen> {
-  bool _isHidden = true;
-  final TextEditingController controllerOld = TextEditingController();
-  final TextEditingController controllerNew = TextEditingController();
+  bool isNewPasswordAvailable = false;
+  bool _isHiddenOld = true;
+  bool _isHiddenNew = true;
+
   final GlobalKey<FlutterPwValidatorState> validatorKey =
       GlobalKey<FlutterPwValidatorState>();
+  final TextEditingController controller = TextEditingController();
+  Map<String, dynamic> fields = {
+    'name': null,
+    'oldPassword': null,
+    'newPassword': null
+  };
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   Widget placeText(String text) {
     //Content Text
@@ -48,49 +65,26 @@ class _EditScreenState extends State<EditScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                /* Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: (MediaQuery.of(context).size.height) / 9,
-                    color: mainThemeColor,
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      padding: EdgeInsets.only(top: 40.w),
-                      child: Text(
-                          style: GoogleFonts.mulish(
-                              color: Colors.white,
-                              fontSize: 25.sp,
-                              fontWeight: FontWeight.bold),
-                          "Edit profile information"),
-                    )),*/
-                Container(
-                  //top: ((MediaQuery.of(context).size.height) / 9.7),
-                  //left: 0,
-                  //right: 0,
-                  child: Column(children: [
+            padding: const EdgeInsets.all(40.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     TextFormField(
                       decoration: const InputDecoration(
                         icon: Icon(Icons.account_circle_rounded),
                         hintText: 'Name*',
                         labelText: 'Name',
                       ),
-                      onSaved: (String? value) {},
+                      onSaved: (String? value) {
+                        fields['name'] = value;
+                        debugPrint(fields['name']);
+                      },
                     ),
-                    const SizedBox(width: 100.0, height: 20),
+                    const SizedBox(width: 100.0, height: 60),
                     TextFormField(
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.family_restroom_rounded),
-                        hintText: 'Surname*',
-                        labelText: 'Surname',
-                      ),
-                      onSaved: (String? value) {},
-                    ),
-                    const SizedBox(width: 100.0, height: 20),
-                    TextFormField(
-                      obscureText: _isHidden,
-                      controller: controllerOld,
+                      obscureText: _isHiddenOld,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.password_outlined),
                         hintText: 'Old Password*',
@@ -98,17 +92,28 @@ class _EditScreenState extends State<EditScreen> {
                         //helperText: "Password must contain special character",
                         helperStyle: const TextStyle(color: Colors.red),
                         suffix: InkWell(
-                          onTap: _togglePasswordView,
+                          onTap: _togglePasswordViewOld,
                           child: Icon(
-                            _isHidden ? Icons.visibility : Icons.visibility_off,
+                            _isHiddenOld
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                         ),
                       ),
+                      onSaved: (String? value) {
+                        fields['oldPassword'] = value;
+                        debugPrint(fields['oldPassword']);
+                      },
+                      validator: (value) {
+                        if (fields['oldPassword'] == "" &&
+                            fields['newPassword'] != "")
+                          return "Old Password can not be empty.";
+                      },
                     ),
-                    const SizedBox(width: 100.0, height: 20),
+                    const SizedBox(width: 100.0, height: 60),
                     TextFormField(
-                      obscureText: _isHidden,
-                      controller: controllerNew,
+                      obscureText: _isHiddenNew,
+                      controller: controller,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.password_outlined),
                         hintText: 'New Password*',
@@ -116,17 +121,30 @@ class _EditScreenState extends State<EditScreen> {
                         //helperText: "Password must contain special character",
                         helperStyle: const TextStyle(color: Colors.red),
                         suffix: InkWell(
-                          onTap: _togglePasswordView,
+                          onTap: _togglePasswordViewNew,
                           child: Icon(
-                            _isHidden ? Icons.visibility : Icons.visibility_off,
+                            _isHiddenNew
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                         ),
                       ),
+                      validator: (value) {
+                        if (fields['newPassword'] == "" &&
+                            fields['oldPassword'] != "")
+                          return "New Password can not be empty.";
+                        else if (!passwordRegex.hasMatch(value!))
+                          return PasswordNotValid;
+                      },
+                      onSaved: (String? value) {
+                        fields['newPassword'] = value;
+                        debugPrint(fields['newPassword']);
+                      },
                     ),
                     const SizedBox(width: 100.0, height: 10.0),
                     FlutterPwValidator(
                       key: validatorKey,
-                      controller: controllerNew,
+                      controller: controller,
                       minLength: 8,
                       uppercaseCharCount: 1,
                       numericCharCount: 1,
@@ -139,18 +157,27 @@ class _EditScreenState extends State<EditScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text("Password is matched")));
+                        setState(() {
+                          isNewPasswordAvailable = true;
+                        });
                       },
                       onFail: () {
                         print("NOT MATCHED");
+                        setState(() {
+                          isNewPasswordAvailable = false;
+                        });
                       },
                     ),
-                    const SizedBox(width: 100.0, height: 20.0),
+                    const SizedBox(width: 100.0, height: 40.0),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              formKey.currentState!.save();
+                              formKey.currentState!.validate();
+                            },
                             style: ElevatedButton.styleFrom(
                                 elevation: 5,
                                 minimumSize: Size.fromHeight(45.h),
@@ -168,8 +195,6 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                     ),
                   ]),
-                ),
-              ],
             ),
           ),
         ),
@@ -177,9 +202,15 @@ class _EditScreenState extends State<EditScreen> {
     );
   }
 
-  void _togglePasswordView() {
+  void _togglePasswordViewOld() {
     setState(() {
-      _isHidden = !_isHidden;
+      _isHiddenOld = !_isHiddenOld;
+    });
+  }
+
+  void _togglePasswordViewNew() {
+    setState(() {
+      _isHiddenNew = !_isHiddenNew;
     });
   }
 }
