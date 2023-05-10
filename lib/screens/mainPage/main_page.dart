@@ -3,6 +3,7 @@ import 'package:bigbelly/screens/add_post/add_post_screen.dart';
 import 'package:bigbelly/screens/search/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../menu_post/post_meal_for_menu.dart';
 import '../navbar/tab_items.dart';
 import '../recommendation/recommendation_screen.dart';
 import 'main_page_imports.dart';
@@ -24,6 +25,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     TabItem.home: GlobalKey<NavigatorState>(),
     TabItem.search: GlobalKey<NavigatorState>(),
     TabItem.post: GlobalKey<NavigatorState>(),
+    TabItem.menu: GlobalKey<NavigatorState>(),
     TabItem.recommendation: GlobalKey<NavigatorState>(),
   };
 
@@ -32,6 +34,7 @@ class _MainPageState extends ConsumerState<MainPage> {
       TabItem.home: HomePage(),
       TabItem.search: SearchScreen(),
       TabItem.post: AddPostScreen(),
+      TabItem.menu: MenuPosts(),
       TabItem.recommendation: const RecommendationScreen(),
     };
   }
