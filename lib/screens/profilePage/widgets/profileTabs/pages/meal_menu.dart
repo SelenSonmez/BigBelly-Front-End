@@ -73,9 +73,13 @@ class MealMenu extends ConsumerWidget {
                         height: 90,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                                image:
-                                    FileImage(File(menuIngredient.imageUrl)))),
+                            image: menuIngredient.imageUrl != null
+                                ? DecorationImage(
+                                    image: FileImage(
+                                        File(menuIngredient.imageUrl!)))
+                                : DecorationImage(
+                                    image: FileImage(
+                                        File("assets/images/hamburger.jpg.")))),
                         alignment: Alignment.bottomLeft,
                       ),
                       Row(

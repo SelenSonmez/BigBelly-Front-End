@@ -13,10 +13,10 @@ String MenuIngredientToJson(List<MenuIngredient> data) =>
 
 class MenuIngredient {
   String title;
-  String imageUrl;
+  String? imageUrl;
   List<String> ingredients;
   bool isMealHidden;
-  double price;
+  double? price;
 
   MenuIngredient({
     required this.title,
