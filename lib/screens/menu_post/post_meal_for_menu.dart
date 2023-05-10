@@ -60,8 +60,10 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                       cropStyle: CropStyle.rectangle,
                     );
                     if (croppedFile != null) {
-                      setState(() => mealIngredient.getMenuIngredient.imageUrl =
-                          croppedFile.path);
+                      if (mealIngredient.getMenuIngredient.imageUrl != null) {
+                        setState(() => mealIngredient
+                            .getMenuIngredient.imageUrl = croppedFile.path);
+                      }
                     }
                   }
                 },
@@ -70,10 +72,10 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                   height: 300,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 2)),
-                  child: mealIngredient.getMenuIngredient.imageUrl.isEmpty
+                  child: mealIngredient.getMenuIngredient.imageUrl != null
                       ? Icon(Icons.add_a_photo, size: 50, color: Colors.green)
                       : Image.file(
-                          File(mealIngredient.getMenuIngredient.imageUrl)),
+                          File(mealIngredient.getMenuIngredient.imageUrl!)),
                 ),
               ),
               Row(
@@ -107,8 +109,10 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                 padding: const EdgeInsets.symmetric(horizontal: 150.0),
                 child: TextFormField(
                   onSaved: (newValue) {
-                    mealIngredient.getMenuIngredient.price =
-                        double.parse(newValue!);
+                    if (mealIngredient.getMenuIngredient.price != 0) {
+                      mealIngredient.getMenuIngredient.price =
+                          double.parse(newValue!);
+                    }
                   },
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(labelText: "Price"),
