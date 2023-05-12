@@ -30,16 +30,7 @@ class HomePage extends StatelessWidget {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return isVisible ? [BigBellyAppBar()] : [];
         },
-        body: Center(
-          child: Builder(
-            builder: (BuildContext context) {
-              return CustomScrollView(
-                controller: _controller,
-                slivers: [PostListView()],
-              );
-            },
-          ),
-        ),
+        body: Center(child: PostListView()),
       ),
     );
   }

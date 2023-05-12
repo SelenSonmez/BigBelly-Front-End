@@ -262,7 +262,7 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
                     focusNode: focusNode,
                     onTapOutside: (event) => focusNode.unfocus(),
                     controller: TextEditingController(text: post.getPost.title),
-                    onChanged: (value) => post.setTitle = value,
+                    onChanged: (value) => post.getPost.title = value,
                     decoration:
                         postTextFieldDecoration("Title *", "Juicy Hamburger"),
                     validator: (value) =>

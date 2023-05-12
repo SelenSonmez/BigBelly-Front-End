@@ -59,6 +59,9 @@ class User {
     }
     return data;
   }
+
+  map(Function(dynamic x) param0) {}
+  toMap() {}
 }
 
 class PrivacySetting {

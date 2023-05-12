@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(primarySwatch: Colors.green),
-            home: AddPostScreen(),
+            home: LoginScreen(),
           );
         });
   }

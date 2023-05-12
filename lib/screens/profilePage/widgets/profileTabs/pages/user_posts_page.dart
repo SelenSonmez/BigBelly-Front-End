@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
-import '../../../../../constants/dio.dart';
 import '../../../../model/post.dart';
 
 class UserPosts extends StatefulWidget {
@@ -18,8 +19,10 @@ Future<List<Post>> getPosts() async {
   dynamic id = await SessionManager().get('id');
   final response = await dio.get('/profile/$id/posts');
   var postsJson = response.data['payload']['posts'];
+  // List<Post> itemsList = postFromJson(postsJson);
   List<Post> itemsList =
       List.from(postsJson.map((i) => Post.fromJson(jsonEncode(i))));
+  print(itemsList);
   return itemsList;
 }
 
@@ -39,18 +42,21 @@ class _UserPostsState extends State<UserPosts> {
                   return Container(
                       margin: const EdgeInsets.fromLTRB(3, 3, 3, 0),
                       child: GestureDetector(
-                          onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => HomePage(
-                                          postIndexToBeShown: index,
-                                          isVisible: false,
-                                        ))),
-                              ),
-                          // child: Image.file(
-                          //     File(snapshot.data![index].imageURL!),
-                          //     fit: BoxFit.cover),
-                          child: Text(snapshot.data![index].title!)));
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => MainPage(
+                                  // postIndexToBeShown: index,
+                                  // isVisible: false,
+                                  ))),
+                        ),
+                        child: Image.network(
+                          "http://18.184.145.252/post/${snapshot.data![index].id!}/image",
+                          fit: BoxFit.contain,
+                        ),
+
+                        // child: Text(snapshot.data![index].title!))
+                      ));
                 },
               );
             } else {

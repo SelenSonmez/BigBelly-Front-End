@@ -12,7 +12,7 @@ class PostModel extends ChangeNotifier {
 
   Post get getPost => _post;
 
-  set setPost(Post post) {
+  void setPost(Post post) {
     _post = post;
 
     notifyListeners();
