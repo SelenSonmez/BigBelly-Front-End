@@ -30,7 +30,7 @@ class PostOwnerAndDate extends ConsumerWidget {
               ),
               Padding(
                 padding: EdgeInsets.all(8.0.h),
-                child: const Text("Somer Şef"),
+                child: Text(post.account!.username!),
               ),
             ],
           ),

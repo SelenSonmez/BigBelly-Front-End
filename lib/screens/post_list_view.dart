@@ -18,10 +18,15 @@ class PostListView extends ConsumerWidget {
     dynamic id = await SessionManager().get('id');
     final response = await dio.get('/profile/$id/posts');
     var postsJson = response.data['payload']['posts'];
-    // var dene = response.data['payload']['posts']['account']['username'];
-    // print("AAAAA" + dene);
+    // var dene = response.data['payload']['posts'][1]['account']['username'];
+    // print(postsJson);
     List<Post> itemsList =
         List.from(postsJson.map((i) => Post.fromJson(jsonEncode(i))));
+
+    print("-------------------------");
+    print(postsJson);
+    print("-------------------------");
+
     return itemsList;
   }
 

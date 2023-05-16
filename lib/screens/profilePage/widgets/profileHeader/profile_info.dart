@@ -4,6 +4,7 @@ import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/following
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/providers/user_provider.dart';
+import '../profileTabs/pages/user_posts_page.dart';
 
 class ProfileInfo extends ConsumerStatefulWidget {
   const ProfileInfo({super.key});
@@ -13,8 +14,16 @@ class ProfileInfo extends ConsumerStatefulWidget {
 }
 
 class _ProfileInfoState extends ConsumerState<ProfileInfo> {
+  late int postCount;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => UserPosts());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    debugPrint("profile info geldi");
     final userValue = ref.watch(userProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -24,8 +33,9 @@ class _ProfileInfoState extends ConsumerState<ProfileInfo> {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text("10", style: TextStyle(fontSize: 17)),
+              children: [
+                Text(userValue.getUser.postCount.toString(),
+                    style: TextStyle(fontSize: 17)),
                 Text("Posts", style: TextStyle(fontSize: 15))
               ]),
         ),

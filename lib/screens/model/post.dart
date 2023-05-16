@@ -27,7 +27,7 @@ class Post {
   String? description;
   List<Ingredient>? ingredients;
   List<BigBellyPostTag>? tags;
-  User? owner;
+  User? account;
   Post({
     this.id,
     this.title,
@@ -40,7 +40,7 @@ class Post {
     this.description,
     this.ingredients,
     this.tags,
-    this.owner,
+    this.account,
   });
 
   Post copyWith(
@@ -55,7 +55,7 @@ class Post {
       String? description,
       List<Ingredient>? ingredients,
       List<BigBellyPostTag>? tags,
-      User? owner}) {
+      User? account}) {
     return Post(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -68,7 +68,7 @@ class Post {
       description: description ?? this.description,
       ingredients: ingredients ?? this.ingredients,
       tags: tags ?? this.tags,
-      owner: owner ?? this.owner,
+      account: account ?? this.account,
     );
   }
 
@@ -85,7 +85,7 @@ class Post {
       'description': description,
       'ingredients': ingredients!.map((x) => x.toMap()).toList(),
       'tags': tags!.map((x) => x.toMap()).toList(),
-      'owner': owner!.map((x) => x.toMap()).toList(),
+      'account': account!.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -126,7 +126,7 @@ class Post {
               ),
             )
           : null,
-      owner: map["owner"] == null ? null : User.fromJson(map["owner"]),
+      account: map["account"] == null ? null : User.fromJson(map["account"]),
     );
   }
 
@@ -137,7 +137,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id,title: $title, imageURL: $imageURL, difficulty: $difficulty, portion: $portion, preparationTime: $preparationTime, bakingTime: $bakingTime, steps: $steps, description: $description, ingredients: $ingredients, tags: $tags)';
+    return 'Post(id: $id,title: $title, imageURL: $imageURL, difficulty: $difficulty, portion: $portion, preparationTime: $preparationTime, bakingTime: $bakingTime, steps: $steps, description: $description, ingredients: $ingredients, tags: $tags, account: $account)';
   }
 
   @override
@@ -191,7 +191,7 @@ class Post {
 //   List<Ingredient>? ingredients;
 //   String? description;
 //   List<BigBellyPostTag>? tags;
-//   User? owner;
+//   User? account;
 
 //   Post({
 //     this.id,
@@ -205,7 +205,7 @@ class Post {
 //     this.ingredients,
 //     this.description,
 //     this.tags,
-//     this.owner,
+//     this.account,
 //   });
 
 //   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -226,7 +226,7 @@ class Post {
 //         tags: json["tags"] == null
 //             ? []
 //             : List<BigBellyPostTag>.from(json["tags"]!.map((x) => x)),
-//         owner: json["owner"] == null ? null : User.fromJson(json["owner"]),
+//         account: json["account"] == null ? null : User.fromJson(json["account"]),
 //       );
 
 //   Map<String, dynamic> toJson() => {
@@ -243,7 +243,7 @@ class Post {
 //             : List<dynamic>.from(ingredients!.map((x) => x)),
 //         "description": description,
 //         "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x)),
-//         "owner": owner?.toJson(),
+//         "account": account?.toJson(),
 //       };
 // }
 
