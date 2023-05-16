@@ -252,11 +252,8 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
                                   size: 30,
                                 ),
                                 onPressed: () {
-                                  debugPrint("LEEEEEEEEEE" +
-                                      collections.length.toString());
                                   _formKey.currentState!.save();
-                                  collections.add(
-                                      CollectionRow(title: collectionName));
+                                  createCollection();
                                   _controller.clear();
                                   setState(() {});
                                 },
@@ -266,16 +263,69 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
                     )
                   : Container(),
               Expanded(
-                child: ListView.builder(
-                  itemCount: collections.length,
-                  itemBuilder: (context, index) {
-                    debugPrint("geldi");
-                    return CollectionRow(title: collections[index].title);
-                  },
-                ),
+                child: FutureBuilder(
+                    future: getCollections(),
+                    builder: (context, snapshot) {
+                      if (collections.isEmpty) {
+                        return const Center(
+                            child: Text('You have no collections.'));
+                      } else {
+                        return ListView.builder(
+                          itemCount: collections.length,
+                          itemBuilder: (context, index) {
+                            return CollectionRow(
+                              id: collections[index].id,
+                              title: collections[index].title,
+                              updateCollections: () => setState(() {}),
+                            );
+                          },
+                        );
+                      }
+                    }),
               ),
             ],
           ),
         ));
+  }
+
+  Future createCollection() async {
+    final id = await SessionManager().get('id');
+    const uri = '/collection/create';
+    Response response =
+        await dio.post(uri, data: {'name': collectionName, 'account_id': id});
+
+    switch (response.data['message']) {
+      case 'Request has succeed':
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Collection created!")));
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(response.data['message'])));
+        break;
+    }
+  }
+
+  Future getCollections() async {
+    List<CollectionRow> collection = [];
+    final id = await SessionManager().get('id');
+    const uri = '/collection/get';
+    Response response = await dio.get(uri, data: {'account_id': id});
+
+    switch (response.data['message']) {
+      case 'Request has succeed':
+        response.data['payload']['collections'].forEach((v) {
+          collection.add(CollectionRow(id: v['id'], title: v['name']));
+        });
+        collections = collection;
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(response.data['message'])));
+        break;
+    }
   }
 }

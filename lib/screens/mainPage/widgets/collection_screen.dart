@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import '../../imports.dart';
 
 class CollectionRow extends StatelessWidget {
-  const CollectionRow({super.key, required this.title});
+  const CollectionRow(
+      {super.key,
+      required this.id,
+      required this.title,
+      this.updateCollections});
+  final Function? updateCollections;
   final String title;
+  final int id;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,22 +48,75 @@ class CollectionRow extends StatelessWidget {
                   ),
                   onPressed: () {},
                 ),
-                // IconButton(
-                //   icon: Icon(
-                //     Icons.delete,
-                //     color: Colors.red,
-                //     size: 25,
-                //   ),
-                //   onPressed: () {},
-                // )
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 25,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            deleteCollectionDialog(context));
+                  },
+                )
               ],
             )),
           ],
         ),
-        Divider(
+        const Divider(
           thickness: 2,
         )
       ],
     );
+  }
+
+  Widget deleteCollectionDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Warning!'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Are you sure to delete collection $title ?'),
+        ],
+      ),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            deleteCollection();
+            Navigator.of(context).pop();
+            updateCollections!();
+          },
+          child: const Text('Yes'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Future deleteCollection() async {
+    final uri = '/collection/$id/delete';
+    Response response = await dio.post(uri);
+
+    switch (response.data['message']) {
+      case 'Request has succeed':
+        print("deleted");
+        /* ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Collection deleted!")));*/
+        break;
+      default:
+        /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(response.data['message'])));*/
+        break;
+    }
   }
 }

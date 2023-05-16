@@ -39,6 +39,7 @@ class NavBar extends ConsumerWidget {
           buildNavBarItem(TabItem.home),
           buildNavBarItem(TabItem.search),
           buildNavBarItem(TabItem.post),
+          buildNavBarItem(TabItem.menu),
           buildNavBarItem(TabItem.recommendation),
         ],
         onTap: (index) {

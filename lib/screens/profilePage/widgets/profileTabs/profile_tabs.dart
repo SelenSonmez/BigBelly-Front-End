@@ -1,4 +1,6 @@
+import 'package:bigbelly/screens/menu_post/post_meal_for_menu.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/liked_posts_page.dart';
+import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/meal_menu.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/saved_posts_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/user_posts_page.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
     super.initState();
     checkSelfID();
 
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -65,11 +67,16 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
                   color: activeIndex == 2
                       ? mainThemeColor
                       : const Color.fromARGB(255, 140, 204, 142))),
+          Tab(
+              icon: Icon(Icons.menu_book,
+                  color: activeIndex == 3
+                      ? mainThemeColor
+                      : const Color.fromARGB(255, 140, 204, 142))),
         ],
       ),
       Expanded(
-        //width: 100,
-        //height: 100,
+        // width: 100,
+        // height: 100,
         child: TabBarView(controller: tabController, children: [
           userValue.getUser.privacySetting!.isPrivate != null &&
                   (userValue.getUser.privacySetting!.isPrivate == true &&
@@ -84,7 +91,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
                 )
               : const UserPosts(),
           const LikedPosts(),
-          const SavedPosts()
+          const SavedPosts(),
+          MealMenu()
         ]),
       )
     ]);
