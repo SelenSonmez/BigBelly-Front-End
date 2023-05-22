@@ -155,17 +155,17 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                       value: 1,
                       child: Text("Report"),
                     ),
-                    PopupMenuItem<int>(value: 2, child: Text("Details")),
+                    // PopupMenuItem<int>(value: 2, child: Text("Details")),
                   ];
                 },
                 onSelected: (value) {
-                  if (value == 2) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetails(),
-                        ));
-                  }
+                  // if (value == 2) {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => PostDetails(),
+                  //       ));
+                  // }
                 },
               ),
         Text(
