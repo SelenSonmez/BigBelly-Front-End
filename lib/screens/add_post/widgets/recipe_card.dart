@@ -86,9 +86,10 @@ class _RecipeCardState extends ConsumerState<RecipeCard> {
                                   : "";
 
                               widget.title == "Preparation Time"
-                                  ? post.getPost.preparationTime =
+                                  ? post.getPost.preparation_time =
                                       resultingDuration
-                                  : post.getPost.bakingTime = resultingDuration;
+                                  : post.getPost.baking_time =
+                                      resultingDuration;
 
                               debugPrint(resultingDuration);
                               setState(() {});
@@ -113,11 +114,11 @@ class _RecipeCardState extends ConsumerState<RecipeCard> {
                         ),
                   Text(
                     widget.title == "Baking Time" &&
-                            post.getPost.bakingTime != null
-                        ? post.getPost.bakingTime.toString()
+                            post.getPost.baking_time != null
+                        ? post.getPost.baking_time.toString()
                         : widget.title == "Preparation Time" &&
-                                post.getPost.preparationTime != null
-                            ? post.getPost.preparationTime.toString()
+                                post.getPost.preparation_time != null
+                            ? post.getPost.preparation_time.toString()
                             : "",
                     style: GoogleFonts.orbitron(
                         fontSize: 15.sp,
