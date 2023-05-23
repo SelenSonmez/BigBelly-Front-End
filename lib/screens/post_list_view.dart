@@ -10,6 +10,7 @@ import 'authentication/model/user_model.dart';
 import 'imports.dart';
 import 'mainPage/main_page_imports.dart';
 import 'model/post.dart';
+import 'post_details/post_details.dart';
 
 class PostListView extends ConsumerWidget {
   PostListView({super.key});
@@ -47,24 +48,35 @@ class PostListView extends ConsumerWidget {
               itemBuilder: (context, index) {
                 var postTemp = snapshot.data![index];
                 post.setPost(postTemp);
-                print(post.getPost.tags);
+                post.getPost.imageURL =
+                    "http://18.184.145.252/post/${post.getPost.id!}/image";
                 return Column(mainAxisSize: MainAxisSize.min, children: [
-                  Image.network(
-                    "http://18.184.145.252/post/${post.getPost.id!}/image",
-                    fit: BoxFit.contain,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PostDetails(postID: post.getPost.id!),
+                          ));
                     },
+                    child: Image.network(
+                      post.getPost.imageURL!,
+                      fit: BoxFit.contain,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   Padding(
                       padding: const EdgeInsets.all(18),
@@ -76,6 +88,11 @@ class PostListView extends ConsumerWidget {
                           Divider(thickness: 2)
                         ],
                       )),
+                  index == snapshot.data!.length - 1
+                      ? const SizedBox(
+                          height: 55,
+                        )
+                      : const SizedBox()
                 ]);
               },
             );
@@ -85,22 +102,5 @@ class PostListView extends ConsumerWidget {
         },
       )),
     );
-    // return SliverList(
-    //   delegate: SliverChildBuilderDelegate((_, i) {
-    //     return Column(children: [
-    //       Image.asset('assets/images/hamburger.jpg'),
-    //       Padding(
-    //           padding: const EdgeInsets.all(18),
-    //           child: Column(
-    //             children: [
-    //               PostitleAndTags(),
-    //               PostOwnerAndDate(),
-    //               postReactions(),
-    //               Divider(thickness: 2)
-    //             ],
-    //           )),
-    //     ]);
-    //   }, childCount: 10),
-    // );
   }
 }
