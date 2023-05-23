@@ -14,6 +14,7 @@ import '../imports.dart';
 
 import '../model/bigbelly_post_tag.dart';
 import '../model/ingredient.dart';
+import '../model/post.dart';
 import 'helpers/decoration.dart';
 import 'helpers/image_helper.dart';
 import 'ingredient_screen.dart';
@@ -35,7 +36,6 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
 
   int upperBound = 5; // upperBound MUST BE total number of icons minus 1.
   List pages = [];
-
   @override
   void initState() {
     super.initState();
@@ -132,7 +132,7 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
   Widget createPostButton(title, image) {
     final navbar = ref.watch(navbarProvider);
     return Builder(builder: (context) {
-      var post = ref.watch(postProvider).getPost;
+      var post = ref.watch(postProvider);
       return ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: mainThemeColor),
         onPressed: () async {
@@ -148,14 +148,14 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
             dynamic id = await SessionManager().get('id');
 
             var steps = [];
-            post.steps!.forEach((element) {
+            post.getPost.steps!.forEach((element) {
               steps.add({'description': element.step});
             });
-
             var ingredients = [];
 
-            post.ingredients!.forEach((e) {
+            post.getPost.ingredients!.forEach((e) {
               ingredients.add({
+                'ingredient_id': e.id,
                 'ingredient_name': e.name,
                 'amount': e.amount,
                 'unit': e.amountType,
@@ -164,22 +164,22 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
             });
             var tags = [];
 
-            post.tags!.forEach((e) {
+            post.getPost.tags!.forEach((e) {
               tags.add({'name': e.tagName});
             });
 
             FormData image = FormData.fromMap({
-              "file": await MultipartFile.fromFile(post.imageURL!),
+              "file": await MultipartFile.fromFile(post.getPost.imageURL!),
             });
 
             Map<String, dynamic> fields = {
               "account_id": id,
-              'title': post.title,
-              'description': post.description,
-              'difficulty': post.difficulty,
-              'portion': post.portion,
-              "preparation_time": post.preparationTime,
-              "baking_time": post.bakingTime,
+              'title': post.getPost.title,
+              'description': post.getPost.description,
+              'difficulty': post.getPost.difficulty,
+              'portion': post.getPost.portion,
+              "preparation_time": post.getPost.preparation_time,
+              "baking_time": post.getPost.baking_time,
               "steps": steps,
               "ingredients": ingredients,
               "tags": tags,
@@ -187,7 +187,6 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
 
             Response response =
                 await dio.post("/post/create", data: jsonEncode(fields));
-
             await dio.post("/post/${response.data['payload']['post_id']}/image",
                 data: image);
 
