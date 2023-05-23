@@ -35,7 +35,12 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
   late FocusNode focusNode2;
   late FocusNode focusNode3;
 
-  late String selectedIngredient = "Select Ingredient";
+  late Ingredient selectedIngredient = Ingredient(
+      name: "Select Ingredient",
+      amount: "0",
+      amountType: "null",
+      grams: 100,
+      id: null);
 
   late Ingredient ingredient;
 
@@ -53,7 +58,11 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
     // _ingredients = getIngredientList();
     databaseIngredients = getIngredientList();
     ingredient = Ingredient(
-        id: 0, name: "Select Ingredient", amount: "", amountType: "", grams: 0);
+        id: null,
+        name: "Select Ingredient",
+        amount: "",
+        amountType: "",
+        grams: 0);
     focusNode1 = FocusNode();
     focusNode2 = FocusNode();
     focusNode3 = FocusNode();
@@ -132,7 +141,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                               borderRadius: BorderRadius.circular(25.h)),
                           side: BorderSide(width: 2.w, color: mainThemeColor)),
                       child: Text(
-                        selectedIngredient,
+                        selectedIngredient.name,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16, color: mainThemeColor),
                       ),
@@ -151,13 +160,13 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                                                 child: Align(
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                      e.name,
+                                                      e.name!,
                                                       style: const TextStyle(
                                                           wordSpacing: 5,
                                                           color: Colors.green,
                                                           fontSize: 18),
                                                     )),
-                                                e.name))
+                                                e.name!))
                                             .toList(),
                                         suggestionState: Suggestion.expand,
                                         textInputAction: TextInputAction.next,
@@ -168,8 +177,18 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                                           color: Colors.black.withOpacity(0.8),
                                         ),
                                         validator: (x) {
+                                          // print("GELDİİİİİ" + x!);
                                           if (x!.isNotEmpty) {
-                                            selectedIngredient = x;
+                                            selectedIngredient.name = x;
+                                            ingredients.forEach(
+                                              (element) {
+                                                if (element.name ==
+                                                    selectedIngredient.name) {
+                                                  selectedIngredient.id =
+                                                      element.id;
+                                                }
+                                              },
+                                            );
                                             setState(() {});
                                             Navigator.pop(context);
                                           } else {
@@ -285,14 +304,15 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                         borderRadius: BorderRadius.circular(25.h))),
                 onPressed: () {
                   _formKey.currentState!.save();
-                  if (selectedIngredient == "Select Ingredient" ||
-                      selectedIngredient.trim().isEmpty) {
+                  if (selectedIngredient.name == "Select Ingredient" ||
+                      selectedIngredient.name.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.red.shade400,
                       content: const Text('Please enter an ingredient name'),
                     ));
                   } else {
-                    ingredient.name = selectedIngredient;
+                    ingredient.name = selectedIngredient.name;
+                    ingredient.id = selectedIngredient.id;
                     post.getPost.ingredients!.add(ingredient);
                     Navigator.pop(context, ingredient);
                   }
@@ -305,31 +325,5 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
         ),
       ),
     );
-  }
-}
-
-class SearchIngredient extends SearchDelegate {
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
   }
 }
