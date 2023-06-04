@@ -13,15 +13,16 @@ class CollectionRow extends ConsumerStatefulWidget {
     super.key,
     required this.id,
     required this.title,
+    this.post,
     this.isProfileCollections = false,
   });
   final String title;
   final int id;
-  final bool isProfileCollections;
+  bool isProfileCollections;
   late bool isPostInCollection = false;
   late bool isDeleted = false;
   Map<int, List<Post>?> collectionPosts = {};
-
+  Post? post;
   @override
   ConsumerState<CollectionRow> createState() => _CollectionRowState();
 }
@@ -35,7 +36,9 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
 
   @override
   Widget build(BuildContext context) {
-    var post = ref.watch(postProvider);
+    print("AAAAAAAAAAAAAAAAAA");
+    print(widget.isProfileCollections);
+    // var post = ref.watch(postProvider);
     return widget.isDeleted
         ? Container()
         : Column(
@@ -62,48 +65,49 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
                     ),
                   ),
                   Expanded(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      !widget.isProfileCollections &&
-                              widget.isPostInCollection != null &&
-                              widget.isPostInCollection == false
-                          ? IconButton(
-                              icon: const Icon(
-                                Icons.add_circle_outlined,
-                                size: 33,
-                                color: Colors.green,
-                              ),
-                              onPressed: () {
-                                addPostToCollection(post.getPost.id!);
-                              },
+                      child: !widget.isProfileCollections
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                widget.isPostInCollection == false
+                                    ? IconButton(
+                                        icon: const Icon(
+                                          Icons.add_circle_outlined,
+                                          size: 33,
+                                          color: Colors.green,
+                                        ),
+                                        onPressed: () {
+                                          addPostToCollection(widget.post!.id!);
+                                        },
+                                      )
+                                    : IconButton(
+                                        icon: const Icon(
+                                          Icons.check_circle_outline_outlined,
+                                          color: Colors.green,
+                                          size: 25,
+                                        ),
+                                        onPressed: () {
+                                          deletePostFromCollection(
+                                              widget.post!.id!);
+                                        },
+                                      ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 25,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            deleteCollectionDialog(context));
+                                    setState(() {});
+                                  },
+                                )
+                              ],
                             )
-                          : IconButton(
-                              icon: const Icon(
-                                Icons.check_circle_outline_outlined,
-                                color: Colors.green,
-                                size: 25,
-                              ),
-                              onPressed: () {
-                                deletePostFromCollection(post.getPost.id!);
-                              },
-                            ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 25,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  deleteCollectionDialog(context));
-                          setState(() {});
-                        },
-                      )
-                    ],
-                  )),
+                          : const SizedBox()),
                 ],
               ),
               const Divider(

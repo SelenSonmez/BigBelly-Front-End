@@ -135,7 +135,7 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                       showModalBottomSheet<void>(
                           context: context,
                           builder: (BuildContext context) {
-                            return const _CollectionModalBottom();
+                            return _CollectionModalBottom(post: widget.post);
                           });
                       break;
                     case "recipe":
@@ -251,7 +251,8 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
 }
 
 class _CollectionModalBottom extends ConsumerStatefulWidget {
-  const _CollectionModalBottom({super.key});
+  _CollectionModalBottom({super.key, this.post});
+  Post? post;
 
   @override
   ConsumerState<_CollectionModalBottom> createState() =>
@@ -355,6 +356,7 @@ class _CollectionModalBottomState
                           itemCount: collections.length,
                           itemBuilder: (context, index) {
                             return CollectionRow(
+                              post: widget.post,
                               id: collections[index].id,
                               title: collections[index].title,
                             );

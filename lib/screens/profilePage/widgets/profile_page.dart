@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/providers/user_provider.dart';
 import '../../authentication/model/user_model.dart';
+import '../../settings/settings.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
@@ -33,7 +34,13 @@ class ProfilePage extends ConsumerWidget {
               Icons.settings,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Setting(),
+                  ));
+            },
           )
         ],
         backgroundColor: Colors.green,
