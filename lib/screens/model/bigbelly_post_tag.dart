@@ -3,7 +3,10 @@ class BigBellyPostTag {
   int id;
   String tagName;
 
-  static fromMap(Map<String, dynamic> x) {}
-
+  factory BigBellyPostTag.fromMap(Map<String, dynamic> map) {
+    return BigBellyPostTag(tagName: map['name'], id: map["id"]);
+  }
+  @override
+  String toString() => tagName;
   toMap() {}
 }
