@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:bigbelly/constants/providers/currentUser_provider.dart';
+import 'package:bigbelly/constants/providers/postList_provider.dart';
 import 'package:bigbelly/constants/providers/post_provider.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
@@ -12,95 +12,272 @@ import 'mainPage/main_page_imports.dart';
 import 'model/post.dart';
 import 'post_details/post_details.dart';
 
-class PostListView extends ConsumerWidget {
+class PostListView extends ConsumerStatefulWidget {
   PostListView({super.key});
 
-  Future<List<Post>> getPosts() async {
+  // Future<List<Post>> getPosts() async {
+  //   dynamic id = await SessionManager().get('id');
+  //   final response = await dio.get('/profile/$id/posts');
+  //   var postsJson = response.data['payload']['posts'];
+  //   List<Post> itemsList = List.from(postsJson.map((i) {
+  //     Post post = Post.fromJson(jsonEncode(i));
+  //     post.account = User.fromJson(response.data['payload']['account']);
+  //     return post;
+  //   }));
+
+  //   print("-------------------------");
+  //   print(itemsList);
+  //   print("-------------------------");
+
+  //   return itemsList;
+  // }
+  @override
+  ConsumerState<PostListView> createState() => _PostListViewState();
+}
+
+class _PostListViewState extends ConsumerState<PostListView> {
+  // List<Post> posts = [];
+  int postCount = 0;
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  Future<void> fetchPosts() async {
+    var posts = ref.read(postListProvider);
     dynamic id = await SessionManager().get('id');
-    final response = await dio.get('/profile/$id/posts');
+    final response =
+        await dio.get('/profile/$id/home-page-posts?take=1&skip=$postCount');
+
     var postsJson = response.data['payload']['posts'];
-    // var dene = response.data['payload']['posts'][1]['account']['username'];
-    // print(postsJson);
-    List<Post> itemsList =
-        List.from(postsJson.map((i) => Post.fromJson(jsonEncode(i))));
+    List<Post> itemsList = List.from(postsJson.map((i) {
+      Post post = Post.fromJson(jsonEncode(i));
+      // post.account = User.fromJson(response.data['payload']['account']);
+      return post;
+    }));
+    // setState(() {
+    for (var element in itemsList) {
+      posts.addPost(element);
+    }
+    setState(() {});
+    // posts.addPost(itemsList) = posts + itemsList;
+    // });
 
     print("-------------------------");
-    print(postsJson);
+    print(itemsList);
     print("-------------------------");
-
-    return itemsList;
+    // print("COUNTTT" + posts.length.toString());
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var post = ref.watch(postProvider);
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    fetchPosts();
+  }
+
+  getID() async {
+    dynamic id = await SessionManager().get("id");
+    return id;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var posts = ref.watch(postListProvider);
+    // var post = ref.watch(postProvider);
+    var userID = ref.watch(userIDProvider);
+    var id = getID();
     return Scaffold(
-      body: Center(
-          child: FutureBuilder<List<Post>>(
-        future: getPosts(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                var postTemp = snapshot.data![index];
-                post.setPost(postTemp);
-                post.getPost.imageURL =
-                    "http://18.184.145.252/post/${post.getPost.id!}/image";
-                return Column(mainAxisSize: MainAxisSize.min, children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PostDetails(postID: post.getPost.id!),
-                          ));
-                    },
-                    child: Image.network(
-                      post.getPost.imageURL!,
-                      fit: BoxFit.contain,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Column(
-                        children: [
-                          PostitleAndTags(),
-                          PostOwnerAndDate(),
-                          postReactions(),
-                          Divider(thickness: 2)
-                        ],
-                      )),
-                  index == snapshot.data!.length - 1
-                      ? const SizedBox(
-                          height: 55,
-                        )
-                      : const SizedBox()
-                ]);
+        body: Center(
+            child: ListView.builder(
+      controller: _scrollController,
+      itemCount:
+          _isLoadingMore ? posts.getPost.length + 1 : posts.getPost.length,
+      itemBuilder: (context, index) {
+        if (index < posts.getPost.length) {
+          Post post = posts.getPost[index];
+          post.likes!.forEach((element) {
+            if (element["account_id"] == userID.getUserID) {
+              post.isLiked = true;
+              posts.editPost(post, index);
+            }
+          });
+
+          print("NNNNNNNNNNNNNNNNN");
+          print(posts);
+          post.imageURL = "http://18.184.145.252/post/${post.id!}/image";
+          return Column(mainAxisSize: MainAxisSize.min, children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostDetails(
+                        post: post,
+                        index: index,
+                      ),
+                    ));
               },
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      )),
-    );
+              child: Image.network(
+                post.imageURL!,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  children: [
+                    PostitleAndTags(post: post),
+                    PostOwnerAndDate(post: post),
+                    postReactions(post: post, index: index),
+                    Divider(thickness: 2)
+                  ],
+                )),
+            index == posts.getPost.length - 1
+                ? const SizedBox(
+                    height: 30,
+                  )
+                : const SizedBox()
+          ]);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    )));
+  }
+
+  Future<void> _scrollListener() async {
+    if (_isLoadingMore) return;
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      setState(() {
+        _isLoadingMore = true;
+      });
+      postCount = postCount + 1;
+
+      await fetchPosts();
+      setState(() {
+        _isLoadingMore = false;
+      });
+    } else {}
   }
 }
+// class PostListView extends ConsumerWidget {
+  // const PostListView({super.key});
+  // Future<List<Post>> getPosts() async {
+  //   dynamic id = await SessionManager().get('id');
+  //   final response = await dio.get('/profile/$id/posts');
+  //   var postsJson = response.data['payload']['posts'];
+  //   List<Post> itemsList = List.from(postsJson.map((i) {
+  //     Post post = Post.fromJson(jsonEncode(i));
+  //     post.account = User.fromJson(response.data['payload']['account']);
+  //     return post;
+  //   }));
+
+  //   print("-------------------------");
+  //   print(itemsList);
+  //   print("-------------------------");
+
+  //   return itemsList;
+  // }
+  // Future<List<Post>> getPosts() async {
+  //   dynamic id = await SessionManager().get('id');
+  //   final response =
+  //       await dio.get('/profile/$id/home-page-posts?take=10&skip=0');
+  //   var postsJson = response.data['payload']['posts'];
+  //   List<Post> itemsList = List.from(postsJson.map((i) {
+  //     Post post = Post.fromJson(jsonEncode(i));
+  //     // post.account = User.fromJson(response.data['payload']['account']);
+  //     return post;
+  //   }));
+
+  //   print("-------------------------");
+  //   print(itemsList);
+  //   print("-------------------------");
+
+  //   return itemsList;
+  // }
+
+  // @override
+  // Widget build(BuildContext context, WidgetRef ref) {
+  //   var post = ref.watch(postProvider);
+  //   return Scaffold(
+  //     body: Center(
+  //         child: FutureBuilder<List<Post>>(
+  //       future: getPosts(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasData) {
+  //           return ListView.builder(
+  //             padding: EdgeInsets.zero,
+  //             scrollDirection: Axis.vertical,
+  //             shrinkWrap: true,
+  //             itemCount: snapshot.data!.length,
+  //             itemBuilder: (context, index) {
+  //               Post post = snapshot.data![index];
+  //               post.imageURL = "http://18.184.145.252/post/${post.id!}/image";
+  //               return Column(mainAxisSize: MainAxisSize.min, children: [
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => PostDetails(post: post),
+  //                         ));
+  //                   },
+  //                   child: Image.network(
+  //                     post.imageURL!,
+  //                     fit: BoxFit.contain,
+  //                     loadingBuilder: (context, child, loadingProgress) {
+  //                       if (loadingProgress == null) {
+  //                         return child;
+  //                       }
+  //                       return Center(
+  //                         child: CircularProgressIndicator(
+  //                           value: loadingProgress.expectedTotalBytes != null
+  //                               ? loadingProgress.cumulativeBytesLoaded /
+  //                                   loadingProgress.expectedTotalBytes!
+  //                               : null,
+  //                         ),
+  //                       );
+  //                     },
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                     padding: const EdgeInsets.all(18),
+  //                     child: Column(
+  //                       children: [
+  //                         PostitleAndTags(post: post),
+  //                         PostOwnerAndDate(post: post),
+  //                         postReactions(post: post),
+  //                         Divider(thickness: 2)
+  //                       ],
+  //                     )),
+  //                 index == snapshot.data!.length - 1
+  //                     ? const SizedBox(
+  //                         height: 55,
+  //                       )
+  //                     : const SizedBox()
+  //               ]);
+  //             },
+  //           );
+  //         } else {
+  //           return const CircularProgressIndicator();
+  //         }
+  //       },
+  //     )),
+  //   );
+  // }
+

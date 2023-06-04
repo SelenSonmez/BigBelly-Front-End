@@ -1,9 +1,11 @@
 import 'package:bigbelly/constants/providers/nav_bar_visible.dart';
+import 'package:bigbelly/constants/providers/post_provider.dart';
 import 'package:bigbelly/screens/add_post/add_post_screen.dart';
 import 'package:bigbelly/screens/search/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../menu_post/post_meal_for_menu.dart';
+import '../model/post.dart';
 import '../navbar/tab_items.dart';
 import '../recommendation/recommendation_screen.dart';
 import 'main_page_imports.dart';
@@ -41,6 +43,9 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final post = ref.watch(postProvider);
+    post.setPost(Post(steps: [], ingredients: [], tags: []));
+
     final navbar = ref.watch(navbarProvider);
     return WillPopScope(
       onWillPop: () async =>

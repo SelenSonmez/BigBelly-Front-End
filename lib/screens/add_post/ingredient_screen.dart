@@ -270,7 +270,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                       focusNode: focusNode3,
                       onTapOutside: (event) => focusNode3.unfocus(),
                       onChanged: (value) {
-                        ingredient.grams = double.tryParse(value);
+                        ingredient.grams = int.parse(value);
                       },
                       cursorColor: Colors.green,
                       keyboardType: TextInputType.number,

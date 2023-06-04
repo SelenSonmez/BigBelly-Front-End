@@ -1,18 +1,19 @@
+import 'package:bigbelly/constants/providers/post_provider.dart';
 import 'package:bigbelly/screens/add_post/widgets/step_tile.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/model/bigbelly_post_tag.dart';
 import 'package:bigbelly/screens/model/ingredient.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../mainPage/main_page_imports.dart';
+import '../model/post.dart';
 
-class PostDetails extends StatelessWidget {
-  PostDetails({super.key});
-
+class PostDetails extends ConsumerWidget {
+  PostDetails({super.key, required this.post, required this.index});
+  Post post;
+  int index;
   final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
-
-  final List<Ingredient> ingredients = [
+  List<Ingredient> ingredients = [
     Ingredient(
         id: 1,
         name: "Agara",
@@ -64,19 +65,39 @@ class PostDetails extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    print(post.tags);
+    String difficulty = "none";
+    if (post.difficulty != null) {
+      switch (post.difficulty) {
+        case "0":
+          difficulty = "Easy";
+          break;
+        case "1":
+          difficulty = "Medium";
+          break;
+        case "2":
+          difficulty = "Hard";
+      }
+    }
+    // List<Ingredient> ingredients = post.ingredients!;
+    // List<StepTile> steps = post.steps!;
+    // List<BigBellyPostTag> tags = post.tags!;
     return Scaffold(
       appBar: AppBar(title: const Text("Details")),
       body: SingleChildScrollView(
           child: Column(children: [
-        Image.asset('assets/images/hamburger.jpg'),
+        Image.network(post.imageURL!),
         Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
               children: [
-                PostitleAndTags(),
-                PostOwnerAndDate(),
-                postReactions(),
+                PostitleAndTags(post: post),
+                PostOwnerAndDate(post: post),
+                postReactions(
+                  post: post,
+                  index: index,
+                ),
                 const Divider(
                   thickness: 2,
                 ),
@@ -84,7 +105,7 @@ class PostDetails extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
                       style: GoogleFonts.slabo27px(fontSize: 17),
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                      post.description != null ? post.description! : ""),
                 ),
                 const Divider(thickness: 2),
                 Padding(
@@ -97,7 +118,7 @@ class PostDetails extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                                 letterSpacing: 3)),
-                        Text("Easy",
+                        Text(difficulty,
                             style: GoogleFonts.slabo27px(
                               fontSize: 19,
                               letterSpacing: 1.5,
@@ -111,13 +132,16 @@ class PostDetails extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
+                    children: [
                       _RecipeTimerIndicator(
-                        time: "12 min",
+                        time: post.preparation_time != null
+                            ? post.preparation_time!
+                            : "00",
                         title: "Preparation Time",
                       ),
                       _RecipeTimerIndicator(
-                        time: "14 min",
+                        time:
+                            post.baking_time != null ? post.baking_time! : "00",
                         title: "Baking Time",
                       )
                     ],
@@ -126,7 +150,8 @@ class PostDetails extends StatelessWidget {
                 title("ingredients"),
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("2 Servings",
+                    child: Text(
+                        post.portion != null ? post.portion! + " servings" : "",
                         style: GoogleFonts.slabo27px(
                             fontSize: 19, color: mainThemeColor))),
                 ListView.builder(
@@ -141,20 +166,20 @@ class PostDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "${ingredients[index].amount} (${ingredients[index].grams} g)   ${ingredients[index].amountType}",
+                            "${post.ingredients![index].amount} (${post.ingredients![index].grams} g)   ${ingredients[index].amountType}",
                             style: GoogleFonts.slabo27px(
                               fontSize: 20,
                             ),
                           ),
                           Text(
-                            ingredients[index].name,
+                            post.ingredients![index].name,
                             style: GoogleFonts.slabo27px(fontSize: 20),
                           )
                         ],
                       ),
                     );
                   },
-                  itemCount: ingredients.length,
+                  itemCount: post.ingredients!.length,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -209,24 +234,24 @@ class PostDetails extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              "${steps[index].stepIndex}- ",
+                              "${index + 1}- ",
                               style: GoogleFonts.slabo27px(fontSize: 20),
                             ),
                           ),
                           Text(
-                            steps[index].step,
+                            post.steps![index].step,
                             style: GoogleFonts.slabo27px(fontSize: 20),
                           ),
                         ],
                       ),
                     );
                   },
-                  itemCount: steps.length,
+                  itemCount: post.steps!.length,
                 ),
                 title("tags"),
                 Wrap(
                   spacing: 10.w,
-                  children: tags
+                  children: post.tags!
                       .map((chip) => Chip(
                             avatar: const Icon(
                               Icons.flag_rounded,
@@ -234,7 +259,7 @@ class PostDetails extends StatelessWidget {
                             ),
                             labelStyle: TextStyle(fontSize: 15.sp),
                             key: ValueKey(chip.id),
-                            label: Text(tags[chip.id].tagName),
+                            label: Text(chip.tagName),
                             backgroundColor: chip.id % 2 == 0
                                 ? const Color.fromARGB(255, 159, 205, 164)
                                 : const Color.fromARGB(255, 213, 232, 214),
@@ -243,9 +268,9 @@ class PostDetails extends StatelessWidget {
                           ))
                       .toList(),
                 ),
-                Text("Ingredients".toUpperCase()),
-                Text("Ingredients".toUpperCase()),
-                Text("Ingredients".toUpperCase()),
+                const SizedBox(
+                  height: 60,
+                )
               ],
             )),
       ])),
@@ -278,9 +303,9 @@ class PostDetails extends StatelessWidget {
 }
 
 class _RecipeTimerIndicator extends StatelessWidget {
-  const _RecipeTimerIndicator({required this.time, required this.title});
-  final String time;
-  final String title;
+  _RecipeTimerIndicator({required this.time, required this.title});
+  String time;
+  String title;
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -1,66 +1,91 @@
 import 'dart:convert';
 
+import 'package:bigbelly/constants/providers/postList_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
 import 'package:bigbelly/screens/mainPage/widgets/collection_screen.dart';
 import 'package:bigbelly/screens/post_details/post_details.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../model/post.dart';
 
-class postReactions extends StatelessWidget {
-  postReactions({super.key});
-
-  int count = 1;
-
+class postReactions extends ConsumerWidget {
+  postReactions({super.key, required this.post, required this.index});
+  Post post;
+  int index;
   void like() async {
     String id = await SessionManager().get('id');
 
     Map<String, dynamic> params = <String, dynamic>{
-      'post_id': 5,
+      'post_id': post.id,
       'account_id': id,
     };
     //unlike
-    if (count % 2 == 0) {
+    if (post.isLiked!) {
       debugPrint("unlike");
       final response = await dio.post('/post/unlike', data: params);
-      debugPrint(response.data.toString());
-      count++;
+
+      post.isLiked = false;
       return;
     }
     //like
     debugPrint("like");
     final response = await dio.post('/post/like', data: params);
-    debugPrint(response.data.toString());
-    count++;
+    post.isLiked = true;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         LikeButton(
+            isLiked: post.isLiked,
             size: 23.h,
-            likeCount: 121,
+            likeCount: post.likes!.length,
             likeBuilder: (isLiked) {
               final color = isLiked ? Colors.red : Colors.green;
               return Icon(Icons.favorite, color: color);
             },
-            onTap: _onLikeButtonTapped),
-        const ReactionIconAndCount(
+            onTap: (isLiked) async {
+              String id = await SessionManager().get('id');
+
+              Map<String, dynamic> params = <String, dynamic>{
+                'post_id': post.id,
+                'account_id': id,
+              };
+              //unlike
+              if (post.isLiked!) {
+                debugPrint("unlike");
+                final response = await dio.post('/post/unlike', data: params);
+
+                post.isLiked = false;
+                ref.watch(postListProvider).editPost(post, index);
+                return !isLiked;
+              }
+              //like
+              debugPrint("like");
+              final response = await dio.post('/post/like', data: params);
+              post.isLiked = true;
+              ref.watch(postListProvider).editPost(post, index);
+
+              return !isLiked;
+            }),
+        ReactionIconAndCount(
             icon: Icon(Icons.comment_rounded),
             isCountable: true,
-            type: "comment"),
-        const ReactionIconAndCount(
-            icon: Icon(Icons.bookmark), type: "bookmark"),
-        const ReactionIconAndCount(
-            icon: Icon(Icons.replay_sharp), type: "recipe"),
-        const ReactionIconAndCount(icon: Icon(Icons.star), type: "star"),
-        const ReactionIconAndCount(icon: Icon(Icons.more_vert), type: "more"),
+            type: "comment",
+            post: post),
+        ReactionIconAndCount(
+            icon: Icon(Icons.bookmark), type: "bookmark", post: post),
+        ReactionIconAndCount(
+            icon: Icon(Icons.replay_sharp), type: "recipe", post: post),
+        ReactionIconAndCount(icon: Icon(Icons.star), type: "star", post: post),
+        ReactionIconAndCount(
+            icon: Icon(Icons.more_vert), type: "more", post: post),
       ],
     );
   }
@@ -72,14 +97,16 @@ class postReactions extends StatelessWidget {
 }
 
 class ReactionIconAndCount extends StatefulWidget {
-  const ReactionIconAndCount(
+  ReactionIconAndCount(
       {super.key,
       required this.icon,
       this.isCountable = false,
-      required this.type});
+      required this.type,
+      this.post});
   final Icon icon;
   final bool isCountable;
   final String type;
+  Post? post;
 
   @override
   State<ReactionIconAndCount> createState() => _ReactionIconAndCountState();
@@ -101,7 +128,8 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => CommentScreen())));
+                              builder: ((context) =>
+                                  CommentScreen(post: widget.post!))));
                       break;
                     case "bookmark":
                       showModalBottomSheet<void>(
@@ -159,13 +187,59 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                   ];
                 },
                 onSelected: (value) {
-                  // if (value == 2) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => PostDetails(),
-                  //       ));
-                  // }
+                  if (value == 1) {
+                    String reportMessage = "";
+
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Report"),
+                          content: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text("Why do you want to report this post?"),
+                                TextField(
+                                  maxLength: 50,
+                                  onChanged: (value) {
+                                    reportMessage = value;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: Text("Send"),
+                              onPressed: () async {
+                                final id = await SessionManager().get("id");
+                                Map<String, dynamic> params = {
+                                  'reason': reportMessage,
+                                  'post_id': widget.post!.id,
+                                  'account_id': id,
+                                };
+                                final response = await dio.post('/report/post',
+                                    data: params);
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: const Text('Report has send'),
+                                ));
+                              },
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Cancel"))
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
               ),
         Text(
@@ -176,14 +250,16 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
   }
 }
 
-class _CollectionModalBottom extends StatefulWidget {
+class _CollectionModalBottom extends ConsumerStatefulWidget {
   const _CollectionModalBottom({super.key});
 
   @override
-  State<_CollectionModalBottom> createState() => _CollectionModalBottomState();
+  ConsumerState<_CollectionModalBottom> createState() =>
+      _CollectionModalBottomState();
 }
 
-class _CollectionModalBottomState extends State<_CollectionModalBottom> {
+class _CollectionModalBottomState
+    extends ConsumerState<_CollectionModalBottom> {
   bool isNewCollectionClicked = false;
 
   final TextEditingController _controller = TextEditingController();
@@ -193,6 +269,11 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
   final _formKey = GlobalKey<FormState>();
 
   List<CollectionRow> collections = [];
+
+  Map<int, List<Post>?> collectionPosts = {};
+
+  Map<int, bool> isPostInCollection = {};
+
   @override
   void dispose() {
     _controller.dispose();
@@ -266,7 +347,7 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
                 child: FutureBuilder(
                     future: getCollections(),
                     builder: (context, snapshot) {
-                      if (collections.isEmpty) {
+                      if (collections.isEmpty && isPostInCollection.isEmpty) {
                         return const Center(
                             child: Text('You have no collections.'));
                       } else {
@@ -276,7 +357,6 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
                             return CollectionRow(
                               id: collections[index].id,
                               title: collections[index].title,
-                              updateCollections: () => setState(() {}),
                             );
                           },
                         );
@@ -313,10 +393,9 @@ class _CollectionModalBottomState extends State<_CollectionModalBottom> {
     final id = await SessionManager().get('id');
     const uri = '/collection/get';
     Response response = await dio.get(uri, data: {'account_id': id});
-
     switch (response.data['message']) {
       case 'Request has succeed':
-        response.data['payload']['collections'].forEach((v) {
+        response.data['payload']['collections'].forEach((v) async {
           collection.add(CollectionRow(id: v['id'], title: v['name']));
         });
         collections = collection;
