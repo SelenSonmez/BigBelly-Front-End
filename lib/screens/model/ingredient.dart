@@ -2,13 +2,13 @@
 import 'dart:convert';
 
 class Ingredient {
-  int id;
+  int? id;
   String? amount;
   String? amountType;
   String name;
-  double? grams;
+  int? grams;
   Ingredient({
-    required this.id,
+    this.id,
     this.amount,
     this.amountType,
     required this.name,
@@ -20,7 +20,7 @@ class Ingredient {
     String? amount,
     String? amountType,
     String? name,
-    double? grams,
+    int? grams,
   }) {
     return Ingredient(
       id: id ?? this.id,
@@ -31,6 +31,13 @@ class Ingredient {
     );
   }
 
+  factory Ingredient.fromMap(Map<String, dynamic> map) {
+    return Ingredient(
+        amount: map["amount"],
+        amountType: map["unit"],
+        grams: map["gram"],
+        name: map["ingredient_name"]);
+  }
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -41,16 +48,16 @@ class Ingredient {
     };
   }
 
-  factory Ingredient.fromMap(Map<String, dynamic> map) {
-    return Ingredient(
-      id: map['id'] as int,
-      amount: map['amount'] != null ? map['amount'] as String : null,
-      amountType:
-          map['amountType'] != null ? map['amountType'] as String : null,
-      name: map['name'] as String,
-      grams: map['grams'] != null ? map['grams'] as double : null,
-    );
-  }
+  // factory Ingredient.fromMap(Map<String, dynamic> map) {
+  //   return Ingredient(
+  //     id: map['id'] as int,
+  //     amount: map['amount'] != null ? map['amount'] as String : null,
+  //     amountType:
+  //         map['amountType'] != null ? map['amountType'] as String : null,
+  //     name: map['name'] as String,
+  //     grams: map['grams'] != null ? map['grams'] as double : null,
+  //   );
+  // }
 
   String toJson() => json.encode(toMap());
 
