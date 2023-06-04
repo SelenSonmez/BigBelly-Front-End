@@ -1,9 +1,10 @@
-import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/followers_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/following_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/providers/user_provider.dart';
+import '../../../mainPage/main_page_imports.dart';
+import '../profileTabs/pages/user_posts_page.dart';
 
 class ProfileInfo extends ConsumerStatefulWidget {
   const ProfileInfo({super.key});
@@ -13,22 +14,32 @@ class ProfileInfo extends ConsumerStatefulWidget {
 }
 
 class _ProfileInfoState extends ConsumerState<ProfileInfo> {
+  late int postCount;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userValue = ref.watch(userProvider);
+    updatePostCount(userValue);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MaterialButton(
-          onPressed: () {},
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text("10", style: TextStyle(fontSize: 17)),
-                Text("Posts", style: TextStyle(fontSize: 15))
-              ]),
-        ),
+            onPressed: () {},
+            child: Consumer(builder: (context, ref, child) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(userValue.getUser.postCount.toString(),
+                        style: TextStyle(fontSize: 17)),
+                    Text("Posts", style: TextStyle(fontSize: 15))
+                  ]);
+            })),
         divider(),
         MaterialButton(
           onPressed: () {
@@ -69,4 +80,12 @@ class _ProfileInfoState extends ConsumerState<ProfileInfo> {
           thickness: 1,
         ),
       );
+
+  void updatePostCount(UserModel userValue) {
+    userValue.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 }

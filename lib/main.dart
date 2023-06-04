@@ -1,4 +1,6 @@
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
+import 'package:bigbelly/screens/authentication/login/texts.dart';
+import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/follower_request/follower_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

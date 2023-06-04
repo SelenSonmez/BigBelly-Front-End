@@ -36,7 +36,7 @@ class ProfilePage extends ConsumerWidget {
             onPressed: () {},
           )
         ],
-        //backgroundColor: const Color.fromARGB(255, 140, 204, 142),
+        backgroundColor: Colors.green,
       ),
       body: SafeArea(
         child: NestedScrollView(
