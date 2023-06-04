@@ -4,14 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../constants/providers/post_provider.dart';
 import '../../../constants/styles.dart';
+import '../../model/post.dart';
 import '../texts.dart';
 
 class PostOwnerAndDate extends ConsumerWidget {
-  const PostOwnerAndDate({super.key});
-
+  PostOwnerAndDate({super.key, required this.post});
+  Post post;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var post = ref.watch(postProvider).getPost;
+    // Post post = ref.watch(postProvider).getPost;
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: Row(
@@ -34,9 +35,22 @@ class PostOwnerAndDate extends ConsumerWidget {
               ),
             ],
           ),
-          Text("2 " + DaysAgo)
+          Text(calculateDays(post))
         ],
       ),
     );
+  }
+
+  String calculateDays(Post post) {
+    String date = post.dateCreated!.split("T")[0];
+    var dateParsed = date.split("-");
+    DateTime dateTime = DateTime(int.parse(dateParsed[0]),
+        int.parse(dateParsed[1]), int.parse(dateParsed[2]));
+    DateTime now = DateTime.now();
+    Duration diff = now.difference(dateTime);
+    if (diff.inDays != 0) {
+      return "${diff.inDays} Days Ago";
+    }
+    return "Today";
   }
 }
