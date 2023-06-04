@@ -1,6 +1,7 @@
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileHeader/profile_header.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/profile_tabs.dart';
+import 'package:bigbelly/screens/settings/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/providers/user_provider.dart';

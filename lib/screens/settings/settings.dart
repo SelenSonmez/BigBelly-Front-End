@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+
 import '../imports.dart';
 
 class Setting extends StatefulWidget {
@@ -10,7 +14,7 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   String privacyButtonName = "Inprivate Account";
   bool _click = false;
-  bool light = true;
+  bool privacy = false;
   //returns title text in above contents
   Widget placeText(String text) {
     //Content Text
@@ -26,6 +30,18 @@ class _SettingState extends State<Setting> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    getPrivacy();
+    super.initState();
+  }
+
+  Future<bool> getPrivacy() async {
+    privacy = await SessionManager().get('privacy');
+    setState(() {});
+    return privacy;
   }
 
   //return tile that consists of icon, text, iconbutton
@@ -61,28 +77,24 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Settings',
+        ),
+        centerTitle: true,
+      ),
       body: Stack(
         children: <Widget>[
           Column(
             children: <Widget>[
               Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: (MediaQuery.of(context).size.height) / 4.5,
-                  color: mainThemeColor,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Text(
-                        style: GoogleFonts.mulish(
-                            color: Colors.white,
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.bold),
-                        "Settings"),
-                  )),
+                width: MediaQuery.of(context).size.width,
+                //height: (MediaQuery.of(context).size.height) / 4.5,
+              ),
             ],
           ),
           Positioned(
-              top: ((MediaQuery.of(context).size.height) / 9.7),
+              //top: ((MediaQuery.of(context).size.height) / 9.7),
               left: 0,
               right: 0,
               child: Column(
@@ -97,6 +109,8 @@ class _SettingState extends State<Setting> {
                       true),
                   placeTile(Icons.language, "Language",
                       Icon(Icons.arrow_forward_ios_rounded), true),
+                  placeTile(Icons.edit, "Edit Profile",
+                      Icon(Icons.arrow_forward_ios_rounded), true),
 
                   placeText("Privacy"),
                   Container(
@@ -105,22 +119,22 @@ class _SettingState extends State<Setting> {
                       children: [
                         placeTile(
                             Icons.lock,
-                            privacyButtonName,
+                            "Private Account",
                             Switch(
                               // This bool value toggles the switch.
-                              value: light,
+                              value: privacy,
                               activeColor: Colors.green,
                               onChanged: (bool value) async {
                                 setState(() {
-                                  if (value == true) {
-                                    privacyButtonName = "Private Account";
-                                  } else {
-                                    privacyButtonName = "InPrivate Account";
-                                  }
-                                  light = value;
+                                  privacy = value;
                                 });
-                                Response response =
-                                    await dio.post("/profile/1/edit");
+                                await SessionManager().set('privacy', value);
+                                dynamic id = await SessionManager().get('id');
+
+                                Response response = await dio.post(
+                                    "/profile/$id/edit",
+                                    data: {"privacy_setting": value ? 1 : 0});
+                                debugPrint(response.data.toString());
                               },
                             ),
                             false)
