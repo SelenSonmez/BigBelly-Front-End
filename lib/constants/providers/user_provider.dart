@@ -18,4 +18,10 @@ class UserModel extends ChangeNotifier {
     //here the model value changes. you can call 'notifyListeners' to notify all the 'Consumer<UserModel>'
     notifyListeners();
   }
+
+  void setPostCount(int count) {
+    _user.postCount = count;
+
+    notifyListeners();
+  }
 }
