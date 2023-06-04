@@ -10,14 +10,16 @@ import 'package:bigbelly/screens/authentication/helpers/big_belly_text_field.dar
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/recommendation/recommendation_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../constants/providers/currentUser_provider.dart';
 import '../model/user_model.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../helpers/page_below_string.dart';
 import '../register/texts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final formKey = GlobalKey<FormState>();
@@ -25,7 +27,7 @@ class LoginScreen extends StatelessWidget {
   Map<String, dynamic> fields = {'username': null, 'password': null};
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         body: Center(
       child: SingleChildScrollView(
@@ -71,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                       child: ElevatedButton(
                           onPressed: () async {
                             formKey.currentState!.save();
-                            login(context);
+                            login(context, ref);
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 5.h,
@@ -93,7 +95,7 @@ class LoginScreen extends StatelessWidget {
     ));
   }
 
-  Future login(context) async {
+  Future login(context, ref) async {
     Response response = await dio.post('/account/login', data: fields);
 
     switch (response.data['message']) {
@@ -107,6 +109,8 @@ class LoginScreen extends StatelessWidget {
                 builder: ((context) => PinCodeVerificationScreen(email))));
         break;
       case "Login successful":
+        var userID = ref.watch(userIDProvider);
+        userID.setUserID = response.data['payload']['id'];
         setSession(response);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: ((context) => const MainPage())));
