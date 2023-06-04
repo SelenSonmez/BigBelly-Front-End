@@ -9,6 +9,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../add_post/widgets/step_tile.dart';
 import '../authentication/model/user_model.dart';
@@ -21,26 +22,32 @@ class Post {
   String? imageURL;
   String? difficulty;
   String? portion;
-  String? preparationTime;
-  String? bakingTime;
+  String? preparation_time;
+  String? baking_time;
   List<StepTile>? steps;
   String? description;
   List<Ingredient>? ingredients;
   List<BigBellyPostTag>? tags;
   User? account;
+  List<dynamic>? likes;
+  bool? isLiked;
+  String? dateCreated;
   Post({
     this.id,
     this.title,
     this.imageURL,
     this.difficulty,
     this.portion,
-    this.preparationTime,
-    this.bakingTime,
+    this.preparation_time,
+    this.baking_time,
     this.steps,
     this.description,
     this.ingredients,
     this.tags,
     this.account,
+    this.likes,
+    this.dateCreated,
+    this.isLiked,
   });
 
   Post copyWith(
@@ -49,26 +56,29 @@ class Post {
       String? imageURL,
       String? difficulty,
       String? portion,
-      String? preparationTime,
-      String? bakingTime,
+      String? preparation_time,
+      String? baking_time,
       List<StepTile>? steps,
       String? description,
       List<Ingredient>? ingredients,
       List<BigBellyPostTag>? tags,
-      User? account}) {
+      User? account,
+      String? dateCreated}) {
     return Post(
       id: id ?? this.id,
       title: title ?? this.title,
       imageURL: imageURL ?? this.imageURL,
       difficulty: difficulty ?? this.difficulty,
       portion: portion ?? this.portion,
-      preparationTime: preparationTime ?? this.preparationTime,
-      bakingTime: bakingTime ?? this.bakingTime,
+      preparation_time: preparation_time ?? this.preparation_time,
+      baking_time: baking_time ?? this.baking_time,
       steps: steps ?? this.steps,
       description: description ?? this.description,
       ingredients: ingredients ?? this.ingredients,
       tags: tags ?? this.tags,
       account: account ?? this.account,
+      likes: likes ?? this.likes,
+      dateCreated: dateCreated ?? this.dateCreated,
     );
   }
 
@@ -79,13 +89,15 @@ class Post {
       'imageURL': imageURL,
       'difficulty': difficulty,
       'portion': portion,
-      'preparationTime': preparationTime,
-      'bakingTime': bakingTime,
+      'preparation_time': preparation_time,
+      'baking_time': baking_time,
       'steps': steps!.map((x) => x.toMap()).toList(),
       'description': description,
       'ingredients': ingredients!.map((x) => x.toMap()).toList(),
       'tags': tags!.map((x) => x.toMap()).toList(),
+      'likes': likes!.map((x) => x.toMap()).toList(),
       'account': account!.map((x) => x.toMap()).toList(),
+      'dateCreated': dateCreated
     };
   }
 
@@ -98,14 +110,14 @@ class Post {
           map['difficulty'] != null ? map['difficulty'] as String : null,
       portion:
           map['portion'] != null ? map['portion'].toString() as String : null,
-      preparationTime: map['preparationTime'] != null
-          ? map['preparationTime'] as String
+      preparation_time: map['preparation_time'] != null
+          ? map['preparation_time'] as String
           : null,
-      bakingTime:
-          map['bakingTime'] != null ? map['bakingTime'] as String : null,
+      baking_time:
+          map['baking_time'] != null ? map['baking_time'] as String : null,
       steps: map['steps'] != null
           ? List<StepTile>.from(
-              (map['steps'] as List<int>).map<StepTile?>(
+              (map['steps'] as List<dynamic>).map<StepTile?>(
                 (x) => StepTile.fromMap(x as Map<String, dynamic>),
               ),
             )
@@ -114,19 +126,23 @@ class Post {
           map['description'] != null ? map['description'] as String : null,
       ingredients: map['ingredients'] != null
           ? List<Ingredient>.from(
-              (map['ingredients'] as List<int>).map<Ingredient?>(
+              (map['ingredients'] as List<dynamic>).map<Ingredient?>(
                 (x) => Ingredient.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
       tags: map['tags'] != null
           ? List<BigBellyPostTag>.from(
-              (map['tags'] as List<int>).map<BigBellyPostTag?>(
+              (map['tags'] as List<dynamic>).map<BigBellyPostTag?>(
                 (x) => BigBellyPostTag.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
       account: map["account"] == null ? null : User.fromJson(map["account"]),
+      likes: map["likes"] == null ? null : map['likes'],
+      isLiked: false,
+      dateCreated:
+          map['created_at'] != null ? map['created_at'] as String : null,
     );
   }
 
@@ -137,7 +153,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id,title: $title, imageURL: $imageURL, difficulty: $difficulty, portion: $portion, preparationTime: $preparationTime, bakingTime: $bakingTime, steps: $steps, description: $description, ingredients: $ingredients, tags: $tags, account: $account)';
+    return 'Post(id: $id,title: $title, imageURL: $imageURL, difficulty: $difficulty, portion: $portion, preparation_time: $preparation_time, baking_time: $baking_time, steps: $steps, description: $description, ingredients: $ingredients, tags: $tags, account: $account, created_at:$dateCreated, likes: $likes, isLiked: $isLiked)';
   }
 
   @override
@@ -149,8 +165,8 @@ class Post {
         other.imageURL == imageURL &&
         other.difficulty == difficulty &&
         other.portion == portion &&
-        other.preparationTime == preparationTime &&
-        other.bakingTime == bakingTime &&
+        other.preparation_time == preparation_time &&
+        other.baking_time == baking_time &&
         listEquals(other.steps, steps) &&
         other.description == description &&
         listEquals(other.ingredients, ingredients) &&
@@ -164,8 +180,8 @@ class Post {
         imageURL.hashCode ^
         difficulty.hashCode ^
         portion.hashCode ^
-        preparationTime.hashCode ^
-        bakingTime.hashCode ^
+        preparation_time.hashCode ^
+        baking_time.hashCode ^
         steps.hashCode ^
         description.hashCode ^
         ingredients.hashCode ^
@@ -185,8 +201,8 @@ class Post {
 //   String? imageURL;
 //   String? difficulty;
 //   String? portion;
-//   String? preparationTime;
-//   String? bakingTime;
+//   String? preparation_time;
+//   String? baking_time;
 //   List<StepTile>? steps;
 //   List<Ingredient>? ingredients;
 //   String? description;
@@ -199,8 +215,8 @@ class Post {
 //     this.imageURL,
 //     this.difficulty,
 //     this.portion,
-//     this.preparationTime,
-//     this.bakingTime,
+//     this.preparation_time,
+//     this.baking_time,
 //     this.steps,
 //     this.ingredients,
 //     this.description,
@@ -214,8 +230,8 @@ class Post {
 //         imageURL: json["imageURL"],
 //         difficulty: json["difficulty"],
 //         portion: json["portion"],
-//         preparationTime: json["preparationTime"],
-//         bakingTime: json["bakingTime"],
+//         preparation_time: json["preparation_time"],
+//         baking_time: json["baking_time"],
 //         steps: json["steps"] == null
 //             ? []
 //             : List<StepTile>.from(json["steps"]!.map((x) => x)),
@@ -235,8 +251,8 @@ class Post {
 //         "imageURL": imageURL,
 //         "difficulty": difficulty,
 //         "portion": portion,
-//         "preparationTime": preparationTime,
-//         "bakingTime": bakingTime,
+//         "preparation_time": preparation_time,
+//         "baking_time": baking_time,
 //         "steps": steps == null ? [] : List<dynamic>.from(steps!.map((x) => x)),
 //         "ingredients": ingredients == null
 //             ? []

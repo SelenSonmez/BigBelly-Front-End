@@ -1,15 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../../authentication/model/user_model.dart';
 import '../../imports.dart';
+import '../../model/post.dart';
 
 class WriteComment extends StatelessWidget {
   WriteComment({super.key});
 
   late final TextEditingController _controller = TextEditingController();
+
   String comment = "";
+
   late Widget sentComment;
+
   late List comments;
 
   @override
@@ -37,9 +44,7 @@ class WriteComment extends StatelessWidget {
           TextButton(
               onPressed: () {
                 sentComment = CommentTile(
-                  username: "username from session",
-                  comment: comment,
-                );
+                    comment: Comment(username: "aaa", comment: comment));
               },
               child: const Text("send"))
         ],
@@ -48,8 +53,40 @@ class WriteComment extends StatelessWidget {
   }
 }
 
+class Comment {
+  String username;
+  String comment;
+
+  Comment({
+    required this.username,
+    required this.comment,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'username': username,
+      'comment': comment,
+    };
+  }
+
+  factory Comment.fromMap(Map<String, dynamic> map) {
+    return Comment(
+      username: map['account']['username'] as String,
+      comment: map['comment'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  @override
+  String toString() => "username: $username, comment: $comment";
+  factory Comment.fromJson(String source) =>
+      Comment.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
 class CommentScreen extends StatefulWidget {
-  CommentScreen({super.key});
+  CommentScreen({super.key, required this.post});
+  Post post;
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
@@ -60,20 +97,34 @@ class _CommentScreenState extends State<CommentScreen> {
 
   String comment = "";
   String username = "";
-  late Widget sentComment;
+  late CommentTile sentComment;
+  late List<CommentTile> comments = [];
 
-  List comments = [
-    CommentTile(
-      username: "seloaa",
-      comment: "comment1",
-    ),
-    CommentTile(
-      username: "seloaaa",
-      comment: "comment2",
-    ),
-  ];
+  Future getComments() async {
+    final response = await dio.get('/post/${widget.post.id}/comments');
+    var json = response.data['payload']['comments'];
+    List<Comment> commentsDatabase = List.from(json.map((i) {
+      Comment comment = Comment.fromJson(jsonEncode(i));
+      return comment;
+    }));
+
+    commentsDatabase.forEach(
+      (element) {
+        comments.add(CommentTile(
+            comment:
+                Comment(comment: element.comment, username: element.username)));
+      },
+    );
+
+    setState(() {});
+    print("******************");
+    print(comments);
+    print("******************");
+  }
+
   @override
   void initState() {
+    getComments();
     getSessionUsername();
     super.initState();
   }
@@ -127,14 +178,13 @@ class _CommentScreenState extends State<CommentScreen> {
                       TextButton(
                           onPressed: () async {
                             sentComment = CommentTile(
-                              username: username,
-                              comment: comment,
-                            );
+                                comment: Comment(
+                                    comment: comment, username: username));
                             comments.add(sentComment);
                             _controller.clear();
                             dynamic id = await SessionManager().get('id');
                             Map<String, dynamic> fields = {
-                              'post_id': 5,
+                              'post_id': widget.post.id,
                               'account_id': id,
                               'comment': comment
                             };
@@ -159,15 +209,10 @@ class _CommentScreenState extends State<CommentScreen> {
 }
 
 class CommentTile extends StatelessWidget {
-  CommentTile(
-      {super.key,
-      required this.username,
-      required this.comment,
-      this.isReply = false});
+  CommentTile({super.key, required this.comment, this.isReply = false});
 
-  final String username;
-  final String comment;
-  final bool isReply;
+  Comment comment;
+  bool isReply;
 
   TextEditingController _controller = TextEditingController();
 
@@ -198,20 +243,25 @@ class CommentTile extends StatelessWidget {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 8.0.h),
-                      child: Text(username,
-                          style: const TextStyle(fontWeight: FontWeight.bold))),
-                  Text(comment),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      TextButton(
-                        child: const Text("Like"),
-                        onPressed: () {},
-                      ),
-                      // TextButton(onPressed: () {}, child: const Text("Reply")),
-                      TextButton(onPressed: () {}, child: const Text("Edit"))
-                    ],
+                      child: Text(comment.username,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16))),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 18.0),
+                    child:
+                        Text(comment.comment, style: TextStyle(fontSize: 16)),
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     TextButton(
+                  //       child: const Text("Like"),
+                  //       onPressed: () {},
+                  //     ),
+                  //     // TextButton(onPressed: () {}, child: const Text("Reply")),
+                  //     TextButton(onPressed: () {}, child: const Text("Edit"))
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -222,8 +272,8 @@ class CommentTile extends StatelessWidget {
   }
 
   Future<bool> checkSelfUsername(String commentUsername) async {
-    if (username == commentUsername) {
-      debugPrint(username);
+    if (comment.username == commentUsername) {
+      debugPrint(comment.username);
       debugPrint(commentUsername);
       return true;
     }
