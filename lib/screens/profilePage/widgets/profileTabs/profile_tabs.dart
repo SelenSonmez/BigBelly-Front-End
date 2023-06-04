@@ -1,4 +1,5 @@
 import 'package:bigbelly/screens/menu_post/post_meal_for_menu.dart';
+import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/collections/collections_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/liked_posts_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/meal_menu.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/saved_posts_page.dart';
@@ -92,7 +93,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
               : const UserPosts(),
           const LikedPosts(),
           const SavedPosts(),
-          MealMenu()
+          CollectionsTab()
         ]),
       )
     ]);
