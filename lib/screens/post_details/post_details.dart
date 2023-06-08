@@ -1,4 +1,3 @@
-import 'package:bigbelly/constants/providers/post_provider.dart';
 import 'package:bigbelly/screens/add_post/widgets/step_tile.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/model/bigbelly_post_tag.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../mainPage/main_page_imports.dart';
 import '../model/post.dart';
+import 'texts.dart';
 
 class PostDetails extends ConsumerWidget {
   PostDetails({super.key, required this.post, required this.index});
@@ -66,25 +66,21 @@ class PostDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(post.tags);
-    String difficulty = "none";
+    String difficulty = None;
     if (post.difficulty != null) {
       switch (post.difficulty) {
         case "0":
-          difficulty = "Easy";
+          difficulty = Easy;
           break;
         case "1":
-          difficulty = "Medium";
+          difficulty = Medium;
           break;
         case "2":
-          difficulty = "Hard";
+          difficulty = Hard;
       }
     }
-    // List<Ingredient> ingredients = post.ingredients!;
-    // List<StepTile> steps = post.steps!;
-    // List<BigBellyPostTag> tags = post.tags!;
     return Scaffold(
-      appBar: AppBar(title: const Text("Details")),
+      appBar: AppBar(title: Text(Details)),
       body: SingleChildScrollView(
           child: Column(children: [
         Image.network(post.imageURL!),
@@ -113,7 +109,7 @@ class PostDetails extends ConsumerWidget {
                   child: Align(
                       alignment: Alignment.topLeft,
                       child: Row(children: [
-                        Text("difficulty: ".toUpperCase(),
+                        Text("$Difficulty ".toUpperCase(),
                             style: GoogleFonts.slabo27px(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -137,21 +133,23 @@ class PostDetails extends ConsumerWidget {
                         time: post.preparation_time != null
                             ? post.preparation_time!
                             : "00",
-                        title: "Preparation Time",
+                        title: PreparationTime,
                       ),
                       _RecipeTimerIndicator(
                         time:
                             post.baking_time != null ? post.baking_time! : "00",
-                        title: "Baking Time",
+                        title: BakingTime,
                       )
                     ],
                   ),
                 ),
-                title("ingredients"),
+                title(Ingredients),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                        post.portion != null ? post.portion! + " servings" : "",
+                        post.portion != null
+                            ? "${post.portion!} $Servings"
+                            : "",
                         style: GoogleFonts.slabo27px(
                             fontSize: 19, color: mainThemeColor))),
                 ListView.builder(
@@ -186,7 +184,7 @@ class PostDetails extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("100 Calories",
+                      Text("100 $Calories",
                           style: GoogleFonts.slabo27px(fontSize: 20)),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -199,7 +197,7 @@ class PostDetails extends ConsumerWidget {
                           child: Tooltip(
                             key: tooltipkey,
                             triggerMode: TooltipTriggerMode.tap,
-                            message: "Estimated value. Not scientific measures",
+                            message: EstimatedValue,
                             child: ClipOval(
                               child: IconButton(
                                 padding: EdgeInsets.all(1),
@@ -220,7 +218,7 @@ class PostDetails extends ConsumerWidget {
                     ],
                   ),
                 ),
-                title("steps"),
+                title(Steps),
                 ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   primary: false,
@@ -248,7 +246,7 @@ class PostDetails extends ConsumerWidget {
                   },
                   itemCount: post.steps!.length,
                 ),
-                title("tags"),
+                title(Tags),
                 Wrap(
                   spacing: 10.w,
                   children: post.tags!

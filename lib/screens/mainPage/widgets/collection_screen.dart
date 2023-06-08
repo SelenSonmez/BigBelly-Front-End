@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bigbelly/screens/mainPage/texts.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/collections/collection_posts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,9 +37,6 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
 
   @override
   Widget build(BuildContext context) {
-    print("AAAAAAAAAAAAAAAAAA");
-    print(widget.isProfileCollections);
-    // var post = ref.watch(postProvider);
     return widget.isDeleted
         ? Container()
         : Column(
@@ -60,7 +58,8 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(widget.title,
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -119,12 +118,12 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
 
   Widget deleteCollectionDialog(BuildContext context) {
     return AlertDialog(
-      title: const Text('Warning!'),
+      title: Text(Warning),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Are you sure to delete collection ${widget.title} ?'),
+          Text('$AreYouSureToDeleteCollection ${widget.title} ?'),
         ],
       ),
       actions: <Widget>[
@@ -133,13 +132,13 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
             deleteCollection();
             Navigator.of(context).pop();
           },
-          child: const Text('Yes'),
+          child: Text(Yes),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Close'),
+          child: Text(Close),
         ),
       ],
     );
@@ -153,9 +152,8 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
       case 'Request has succeed':
         widget.isDeleted = true;
         setState(() {});
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text("Collection deleted!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green, content: Text(CollectionDeleted)));
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -176,7 +174,7 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text("Post added to collection ${widget.title}!")));
+            content: Text("${PostAddedToCollection} ${widget.title}!")));
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -193,15 +191,13 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
 
     switch (response.data['message']) {
       case 'Request has succeed':
-        print("post deleted from collection");
         widget.isPostInCollection = false;
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text("Post deleted from collection ${widget.title}!")));
+            content: Text("${PostDeletedFromCollection} ${widget.title}!")));
         break;
       default:
-        print("Post deletion failed");
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
             content: Text(response.data['message'])));
@@ -210,7 +206,6 @@ class _CollectionRowState extends ConsumerState<CollectionRow> {
   }
 
   void doesCollectionContainPost() async {
-    bool doesCollectionContainPost = false;
     var post = ref.watch(postProvider);
 
     for (Post p in widget.collectionPosts![widget.id]!) {

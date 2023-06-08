@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bigbelly/constants/providers/post_provider.dart';
 import 'package:bigbelly/screens/mainPage/home_page.dart';
+import 'package:bigbelly/screens/mainPage/texts.dart';
 import 'package:bigbelly/screens/model/post.dart';
 import 'package:bigbelly/screens/mainPage/widgets/collection_screen.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/collections/collection_posts_page.dart';
@@ -38,8 +39,7 @@ class _CollectionsTabState extends ConsumerState<CollectionsTab> {
                 future: getCollections(),
                 builder: (context, snapshot) {
                   if (collections.isEmpty) {
-                    return const Center(
-                        child: Text('You have no collections.'));
+                    return Center(child: Text(YouHaveNoCollections));
                   } else {
                     return ListView.builder(
                       itemCount: collections.length,

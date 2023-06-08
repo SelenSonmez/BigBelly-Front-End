@@ -39,7 +39,7 @@ class ProfilePage extends ConsumerWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Setting(),
+                    builder: (context) => const Setting(),
                   ));
             },
           )
@@ -57,8 +57,8 @@ class ProfilePage extends ConsumerWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 15),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 15),
                 child: ProfileTabs(),
               ),
             ),

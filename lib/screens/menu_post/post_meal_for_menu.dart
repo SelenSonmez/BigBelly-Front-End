@@ -10,6 +10,7 @@ import 'package:image_cropper/image_cropper.dart';
 
 import '../add_post/add_post_screen.dart';
 import '../imports.dart';
+import 'texts.dart';
 
 class MenuPosts extends ConsumerStatefulWidget {
   MenuPosts({super.key});
@@ -35,7 +36,7 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
   Widget build(BuildContext context) {
     var mealIngredient = ref.watch(mealPostProvider);
     return Scaffold(
-      appBar: AppBar(title: Text("Create Menu Item")),
+      appBar: AppBar(title: Text(CreateMenuItem)),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -48,7 +49,7 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                   onSaved: (newValue) {
                     mealIngredient.getMenuIngredient.title = newValue!;
                   },
-                  decoration: InputDecoration(labelText: "Meal Name"),
+                  decoration: InputDecoration(labelText: MealName),
                 ),
               ),
               GestureDetector(
@@ -73,7 +74,8 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 2)),
                   child: mealIngredient.getMenuIngredient.imageUrl != null
-                      ? Icon(Icons.add_a_photo, size: 50, color: Colors.green)
+                      ? const Icon(Icons.add_a_photo,
+                          size: 50, color: Colors.green)
                       : Image.file(
                           File(mealIngredient.getMenuIngredient.imageUrl!)),
                 ),
@@ -87,7 +89,7 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                             .add(_controller.text);
                         setState(() {});
                       },
-                      child: Icon(Icons.add)),
+                      child: const Icon(Icons.add)),
                   ElevatedButton(
                       onPressed: () {
                         _formKey.currentState!.save();
@@ -115,7 +117,7 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                     }
                   },
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: "Price"),
+                  decoration: InputDecoration(labelText: Price),
                 ),
               ),
               Row(
@@ -129,14 +131,13 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                       setState(() {});
                     },
                   ),
-                  const Text("Hide ingredients from users"),
+                  Text(HideIngredients),
                   Tooltip(
                     key: tooltipkey,
                     showDuration: const Duration(seconds: 2),
-                    message:
-                        "Ingredients are necessary for system to recommend users your menu. However you can hide it from users",
+                    message: IngredientsAreNecc,
                     child: IconButton(
-                      icon: Icon(Icons.question_mark),
+                      icon: const Icon(Icons.question_mark),
                       onPressed: () {
                         tooltipkey.currentState?.ensureTooltipVisible();
                       },
@@ -163,8 +164,8 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
                                   // _controller.text = newValue!;
                                 },
                                 keyboardType: TextInputType.text,
-                                decoration: const InputDecoration(
-                                    labelText: "Ingredient")),
+                                decoration:
+                                    InputDecoration(labelText: Ingredient)),
                           ),
                           Expanded(
                             child: IconButton(

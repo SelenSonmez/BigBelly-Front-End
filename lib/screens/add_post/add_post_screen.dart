@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bigbelly/constants/providers/nav_bar_visible.dart';
+import 'package:bigbelly/screens/add_post/translate.dart';
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
 import 'package:bigbelly/screens/recommendation/recommendation_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -125,7 +126,7 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
           });
         }
       },
-      child: const Text('Next'),
+      child: Text(Next),
     );
   }
 
@@ -197,7 +198,7 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
                 MaterialPageRoute(builder: (context) => const MainPage()));
           }
         },
-        child: const Text('Create Post'),
+        child: Text(CreatePostButton),
       );
     });
   }
@@ -219,7 +220,7 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               MaterialPageRoute(builder: (context) => const MainPage()));
         }
       },
-      child: const Text('Prev'),
+      child: Text(Prev),
     );
   }
 }
@@ -262,10 +263,10 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
                     onTapOutside: (event) => focusNode.unfocus(),
                     controller: TextEditingController(text: post.getPost.title),
                     onChanged: (value) => post.getPost.title = value,
-                    decoration:
-                        postTextFieldDecoration("Title *", "Juicy Hamburger"),
+                    decoration: postTextFieldDecoration(
+                        "$TitleTextField *", "Hamburger"),
                     validator: (value) =>
-                        (value == "") ? "Please enter a title" : ""),
+                        (value == "") ? PleaseEnterATitle : ""),
               ),
             ),
             SizedBox(
@@ -276,7 +277,7 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 10.0.h),
-                  child: Text("Add a Recipe Photo *".toUpperCase(),
+                  child: Text(AddARecipePhoto.toUpperCase(),
                       style: TextStyle(
                           fontSize: 18.sp,
                           color: Colors.black,
@@ -335,10 +336,10 @@ class _SecondPage extends ConsumerStatefulWidget {
 class _SecondPageState extends ConsumerState<_SecondPage> {
   final List<bool> _selectedDifficulty = <bool>[true, false, false];
   bool isSelected = false;
-  static const List<Widget> difficulty = <Widget>[
-    Text('Easy'),
-    Text('Medium'),
-    Text('Hard')
+  static List<Widget> difficulty = <Widget>[
+    Text(Easy),
+    Text(Medium),
+    Text(Hard)
   ];
 
   @override
@@ -377,22 +378,21 @@ class _SecondPageState extends ConsumerState<_SecondPage> {
             children: difficulty,
           ),
           RecipeCard(
-            title: "Portion",
-            explanation: "Enter how much servings your recipe consists",
-            textFieldLabel: "Servings",
-          ),
+              title: Portion,
+              explanation: PortionExplanation,
+              textFieldLabel: Servings),
           RecipeCard(
-            title: "Preparation Time",
-            explanation: "How much it takes to prepare this recipe?",
-            textFieldLabel: "hour",
-            secondTextFieldLabel: "min",
+            title: PreparationTime,
+            explanation: PreparationTimeExplanation,
+            textFieldLabel: Hour,
+            secondTextFieldLabel: Min,
             isDoubleField: true,
           ),
           RecipeCard(
-            title: "Baking Time",
-            explanation: "How much it takes to bake this recipe?",
-            textFieldLabel: "hour",
-            secondTextFieldLabel: "min",
+            title: BakingTime,
+            explanation: BakingTimeExplanation,
+            textFieldLabel: Hour,
+            secondTextFieldLabel: Min,
             isDoubleField: true,
           ),
         ]),
@@ -439,11 +439,11 @@ class _ThirdPageState extends ConsumerState<_ThirdPage> {
                                         borderRadius:
                                             BorderRadius.circular(12.h)),
                                     color: Colors.red.shade400,
-                                    child: const ListTile(
-                                      leading: Icon(Icons.delete),
-                                      title: Text("Removing Step",
-                                          style:
-                                              TextStyle(color: Colors.black)),
+                                    child: ListTile(
+                                      leading: const Icon(Icons.delete),
+                                      title: Text(RemovingStep,
+                                          style: const TextStyle(
+                                              color: Colors.black)),
                                     ),
                                   ),
                                 ),
@@ -469,8 +469,7 @@ class _ThirdPageState extends ConsumerState<_ThirdPage> {
                     ],
                   ),
                 )
-              : Text("Let the world know your tricks!",
-                  style: TextStyle(fontSize: 18.sp))),
+              : Text(LetTheWorldKnow, style: TextStyle(fontSize: 18.sp))),
     );
   }
 
@@ -489,8 +488,8 @@ class _ThirdPageState extends ConsumerState<_ThirdPage> {
             title: TextField(
               autofocus: true,
               style: TextStyle(fontSize: 20.sp),
-              decoration: const InputDecoration(
-                  hintText: "Enter your step!", border: InputBorder.none),
+              decoration: InputDecoration(
+                  hintText: EnterYourStep, border: InputBorder.none),
               onSubmitted: (value) {
                 Navigator.of(context).pop();
                 steps.add(StepTile(step: value, stepIndex: steps.length + 1));
@@ -519,8 +518,7 @@ class FourthPage extends ConsumerWidget {
               maxLines: 8,
               cursorColor: Colors.green,
               onChanged: (value) => post.getPost.description = value,
-              decoration: postTextFieldDecoration(
-                  "Enter description to your recipe", "")),
+              decoration: postTextFieldDecoration(EnterDescription, "")),
         )
       ]),
     );
@@ -552,8 +550,7 @@ class _FifthPageState extends ConsumerState<FifthPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           post.getPost.ingredients!.isEmpty
-              ? Text("Enter the Ingredients!",
-                  style: TextStyle(fontSize: 20.sp))
+              ? Text(EnterTheIngredients, style: TextStyle(fontSize: 20.sp))
               : Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {
@@ -565,10 +562,10 @@ class _FifthPageState extends ConsumerState<FifthPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.h)),
                             color: Colors.red.shade400,
-                            child: const ListTile(
-                              leading: Icon(Icons.delete),
-                              title: Text("Removing Step",
-                                  style: TextStyle(color: Colors.black)),
+                            child: ListTile(
+                              leading: const Icon(Icons.delete),
+                              title: Text(RemovingStep,
+                                  style: const TextStyle(color: Colors.black)),
                             ),
                           ),
                         ),
@@ -638,7 +635,7 @@ class _FifthPageState extends ConsumerState<FifthPage> {
             Padding(
               padding: EdgeInsets.all(8.0.h),
               child: Text(
-                "Enter Ingredient",
+                AddIngredientButton,
                 style: TextStyle(fontSize: 20.sp),
               ),
             ),
@@ -674,7 +671,7 @@ class _SixthPageState extends ConsumerState<_SixthPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Enter Tags to Categorize Your Recipe!",
+                    EnterTagsScreen,
                     style: TextStyle(fontSize: 18.sp),
                   ),
                 ],
@@ -733,8 +730,8 @@ class _SixthPageState extends ConsumerState<_SixthPage> {
             title: TextField(
               autofocus: true,
               style: const TextStyle(fontSize: 20),
-              decoration: const InputDecoration(
-                  hintText: "Enter your tag!", border: InputBorder.none),
+              decoration: InputDecoration(
+                  hintText: EnterYourTag, border: InputBorder.none),
               onSubmitted: (value) {
                 Navigator.of(context).pop();
                 post.getPost.tags!.add(BigBellyPostTag(
@@ -756,19 +753,19 @@ class _SixthPageState extends ConsumerState<_SixthPage> {
       barrierDismissible: false, // user must tap the button to proceed
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Tag Limit Reached'),
+          title: Text(TagLimitReached),
           content: SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
-                Text('The maximum tag limit is 10'),
-                Text('No more can be added'),
+              children: <Widget>[
+                Text(MaximumTagLimit),
+                Text(Nomorecanbeadded),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text(
-                'OK',
+                Ok,
                 style: TextStyle(color: mainThemeColor),
               ),
               onPressed: () {
@@ -785,18 +782,18 @@ class _SixthPageState extends ConsumerState<_SixthPage> {
 String _changeAppBarTitle(int pageIndex) {
   switch (pageIndex) {
     case 0:
-      return "Create Recipe";
+      return CreateRecipe;
     case 1:
-      return "Enter Timings";
+      return EnterTimings;
     case 2:
-      return "Enter Steps";
+      return EnterSteps;
     case 3:
-      return "Enter Description";
+      return EnterDescription;
     case 4:
-      return "Enter Ingredients";
+      return EnterIngredients;
     case 5:
-      return "Enter Tags";
+      return EnterTags;
     default:
-      return "Page Title Not Entered";
+      return PageTitleNotEntered;
   }
 }

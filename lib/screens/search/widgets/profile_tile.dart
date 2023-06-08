@@ -1,4 +1,5 @@
 import 'package:bigbelly/screens/follower_request/follower_request.dart';
+import 'package:bigbelly/screens/profilePage/widgets/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -45,7 +46,7 @@ class ProfileTile extends StatelessWidget {
                 username,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: Text("$followerCount Followers"),
+              subtitle: Text("$followerCount $Followers"),
               trailing: SizedBox(
                 width: 100.w,
                 height: 75.h,

@@ -1,8 +1,8 @@
 {
     "LoginScreen": {
         "Username": {
-            "HintText": "Name",
-            "LabelText": "Name"
+            "HintText": "Username",
+            "LabelText": "Username"
         },
         "Password": {
             "HintText": "Password",
@@ -11,9 +11,12 @@
         "NoAccount" : "Don't have an account yet?",
         "SignUp" : "Sign Up",
         "LoginButton" : "Login",
-        "PleaseEnterValidInputs": "Please enter valid inputs"
+        "PleaseEnterValidInputs": "Please enter valid inputs",
+        "UsernameDoesNotExists": "Username does not exists",
+        "PasswordIsNotCorrect": "Password is not correct!"
     },
     "RegisterScreen": {
+        "SignUp": "Sign Up",
         "Name": {
             "HintText": "Name",
             "LabelText": "Name"
@@ -56,7 +59,56 @@
         "Register": "Register"
     },
     "MainPage": {
-        "DaysAgo": "Days Ago"
+        "DaysAgo": "Days Ago",
+        "Comments": "Comments",
+        "WriteYourComment": "Write Your Comment...",
+        "Send": "Send",
+        "Collections":"Collections",
+        "NewCollection": "+ New Collection",
+        "PostAddedToCollection":"Post added to collection",
+        "PostDeletedFromCollection": "Post deleted from collection",
+        "Warning": "Warning",
+        "AreYouSureToDeleteCollection": "Are you sure to delete collection",
+        "Yes": "Yes",
+        "Close": "Close",
+        "ThisPostWillBeRepublished": "This post will be republished on your feed",
+        "Accept": "Accept",
+        "Cancel": "Cancel",
+        "Report": "Report",
+        "WhyReport": "Why do you want to report this post?",
+        "ReportHasSend":"Report has send",
+        "CollectionDeleted": "Collection Deleted!",
+        "CollectionCreated":"CollectionCreated!",
+        "YouHaveNoCollections":"You have no collections",
+        "EnterCollectionName": "Enter Collection Name",
+        "Today":"Today",
+        "Archive":"Archive",
+        "PostArchived":"Post Archived"
+    },
+    "ProfileScreen":{
+        "Posts":"Posts",
+        "Followers": "Followers",
+        "Following":"Following"
+    },
+    "FollowerScreen":{
+        "FollowerRequests":"Follower Requests"
+    },
+    
+    "PostDetailsScreen":{
+        "Details":"Details",
+        "Difficulty":"Difficulty",
+        "Easy":"Easy",
+        "Medium":"Medium",
+        "Hard":"Hard",
+        "PreparationTime":"PreparationTime",
+        "BakingTime":"Baking Time",
+        "Ingredients":"Ingredients",
+        "Servings":"Servings",
+        "Calories":"Calories",
+        "EstimatedValue":"Estimated value. Not scientific measures",
+        "Steps":"Steps",
+        "Tags":"Tags",
+        "None":"None"
     },
     "VerificationScreen":{
         "EmailVerification": "E-mail Verification",
@@ -69,30 +121,36 @@
         "CodeMatched":"Code matched",
         "WrongCode": "Code not matched"
     },
+    "MealMenuScreen":{
+        "MealName":"Meal Name",
+        "Price":"Price",
+        "HideIngredients":"Hide ingredients from users",
+        "CreateMenuItem":"Create Menu Item",
+        "Ingredient":"Ingredient",
+        "IngredientsAreNecc":"Ingredients are necessary for system to recommend users your menu. However you can hide it from users"
+        
+    },
     "AddPostScreen": {
-        "TitleTextField":{
-            "LabelText": "Title *",
-            "HintText": "Juicy Hamburger"
-        },
+        "LabelText": "Title",
+        "HintText": "Juicy Hamburger",
+        "PleaseEnterATitle":"Please enter a title",
         "AddARecipePhoto": "Add a recipe photo *",
         "StepButtons": {
             "Next":"Next",
             "Previous": "Prev"
         },
-        "Difficulty":{
-            "Easy":"Easy",
-            "Medium":"Medium",
-            "Hard":"Hard"
-        },
-        "Cards":{
-            "Portion": "Portion",
-            "PortionExplanation": "Enter how much servings your recipe contains",
-            "Servings":"Servings",
-            "PreparationTime":"PreparationTime",
-            "PreparationTimeExplanation":"How much time does it take to prepare this recipe?",
-            "BakingTime":"Baking Time",
-            "BakingTimeExplanation":"How much time does it take to bake this recipe?"
-        },
+        "Easy":"Easy",
+        "Medium":"Medium",
+        "Hard":"Hard",
+        "Portion": "Portion",
+        "PortionExplanation": "Enter how much servings your recipe contains",
+        "Servings":"Servings",
+        "PreparationTime":"PreparationTime",
+        "Hour":"hour",
+        "Min":"min",
+        "PreparationTimeExplanation":"How much time does it take to prepare this recipe?",
+        "BakingTime":"Baking Time",
+        "BakingTimeExplanation":"How much time does it take to bake this recipe?",
         "LetTheWorldKnow":"Let the World know your tricks!",
         "EnterYourStep":"Enter Your Step",
         "EnterDescription":"Enter description for your recipe",
@@ -105,6 +163,42 @@
         "EnterTheIngredients":"Enter the Ingredients",
         "EnterTagsScreen": "Enter Tags to Categorize Your Recipe",
         "EnterYourTag": "Enter your tag!",
-        "CreatePostButton":"Create Post"
+        "CreatePostButton":"Create Post",
+        "RemovingStep":"Removing Step",
+        "TagLimitReached":"Tag Limit Reached!",
+        "MaximumTagLimit": "The maximum tag limit is 10",
+        "Nomorecanbeadded":"No more can be added",
+        "Ok":"OK",
+        "CreateRecipe":"Create Recipe",
+        "EnterTimings":"Enter Timings",
+        "EnterSteps":"Enter Steps",
+        "EnterIngredients":"Enter Ingredients",
+        "EnterTags":"Enter Tags",
+        "TypeAnIngredient":"Type an Ingredient",
+        "PageTitleNotEntered":"Page Title Not Entered",
+        "EnterAValidInput":"Enter a valid input",
+        "PleaseEnterIngredientName": "Please enter an ingredient name",
+        "Grams":"Grams",
+        "Amount":"Amount",
+        "Scale":"Scale",
+        "TableSpoon":"Table Spoon",
+        "Prev":"Prev",
+        "Next":"Next",
+        "IfItemIsPicked": "If item is picked from the list enter grams for calorie calculation"
+    },
+    "SettingsScreen":{
+        "Settings":"Settings",
+        "Account":"Account",
+        "ArchivedRecipe":"Archived Recipe",
+        "Langugae":"Language",
+        "EditProfile":"Edit Profile",
+        "Privacy":"Privacy",
+        "Content":"Content",
+        "Collections":"Collections",
+        "Recipes":"Re-cipes",
+        "Help":"Help",
+        "Report":"Report",
+        "PrivateAccount":"Private Account",
+        "AboutBigBelly":"About Bigbelly"
     }
 }

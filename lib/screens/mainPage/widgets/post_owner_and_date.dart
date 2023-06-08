@@ -11,7 +11,6 @@ class PostOwnerAndDate extends ConsumerWidget {
   Post post;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Post post = ref.watch(postProvider).getPost;
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: Row(
@@ -48,8 +47,8 @@ class PostOwnerAndDate extends ConsumerWidget {
     DateTime now = DateTime.now();
     Duration diff = now.difference(dateTime);
     if (diff.inDays != 0) {
-      return "${diff.inDays} Days Ago";
+      return "${diff.inDays} $DaysAgo";
     }
-    return "Today";
+    return Today;
   }
 }

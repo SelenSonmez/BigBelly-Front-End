@@ -91,7 +91,6 @@ class _RecipeCardState extends ConsumerState<RecipeCard> {
                                   : post.getPost.baking_time =
                                       resultingDuration;
 
-                              debugPrint(resultingDuration);
                               setState(() {});
                             },
                             tooltip: 'Popup Duration Picker',

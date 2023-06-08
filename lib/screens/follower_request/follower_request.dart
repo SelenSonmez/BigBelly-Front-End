@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bigbelly/screens/follower_request/model/followerRequestModel.dart';
+import 'package:bigbelly/screens/follower_request/texts.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../imports.dart';
@@ -23,7 +24,7 @@ class _FollowerRequestState extends State<FollowerRequest> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Follower Requests",
+              Text(FollowerRequests,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.sp,

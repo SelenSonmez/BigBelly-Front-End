@@ -9,7 +9,6 @@ class PostitleAndTags extends ConsumerWidget {
   Post post;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // var post = ref.watch(postProvider).getPost;
     return Center(
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(

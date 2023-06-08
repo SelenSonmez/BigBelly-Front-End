@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:bigbelly/screens/mainPage/texts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
@@ -33,8 +34,7 @@ class WriteComment extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
-              decoration:
-                  const InputDecoration(labelText: "Write your comment..."),
+              decoration: InputDecoration(labelText: WriteYourComment),
               controller: _controller,
               onChanged: (String value) {
                 comment = value;
@@ -46,7 +46,7 @@ class WriteComment extends StatelessWidget {
                 sentComment = CommentTile(
                     comment: Comment(username: "aaa", comment: comment));
               },
-              child: const Text("send"))
+              child: Text(Send))
         ],
       ),
     );
@@ -117,9 +117,6 @@ class _CommentScreenState extends State<CommentScreen> {
     );
 
     setState(() {});
-    print("******************");
-    print(comments);
-    print("******************");
   }
 
   @override
@@ -132,7 +129,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Comments"), actions: [
+        appBar: AppBar(title: Text(Comments), actions: [
           Padding(
               padding: EdgeInsets.all(15.h), child: const Icon(Icons.comment))
         ]),
@@ -167,8 +164,8 @@ class _CommentScreenState extends State<CommentScreen> {
                       ),
                       Expanded(
                         child: TextField(
-                          decoration: const InputDecoration(
-                              labelText: "Write your comment..."),
+                          decoration:
+                              InputDecoration(labelText: WriteYourComment),
                           controller: _controller,
                           onChanged: (String value) {
                             comment = value;
@@ -192,7 +189,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 await dio.post('/post/comment', data: fields);
                             setState(() {});
                           },
-                          child: const Text("send"))
+                          child: Text(Send))
                     ],
                   ),
                 ),

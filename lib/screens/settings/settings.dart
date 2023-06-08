@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bigbelly/screens/settings/texts.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../imports.dart';
@@ -46,7 +47,11 @@ class _SettingState extends State<Setting> {
 
   //return tile that consists of icon, text, iconbutton
   Widget placeTile(
-      IconData icon, String text, Widget trailingWidget, bool clickable) {
+    IconData icon,
+    String text,
+    bool clickable,
+    Widget trailingWidget,
+  ) {
     return Container(
       width: 500,
       height: 45,
@@ -69,8 +74,7 @@ class _SettingState extends State<Setting> {
                 text,
                 style: TextStyle(fontSize: 13.sp),
               ),
-              trailing: trailingWidget,
-            ),
+              trailing: trailingWidget),
     );
   }
 
@@ -78,8 +82,8 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Settings',
+        title: Text(
+          Settings,
         ),
         centerTitle: true,
       ),
@@ -100,77 +104,139 @@ class _SettingState extends State<Setting> {
               child: Column(
                 children: [
                   //Hello Text
-                  placeText("Account"),
+                  placeText(Account),
 
                   placeTile(
-                      Icons.restore_from_trash_rounded,
-                      "Archived Recipes",
-                      Icon(Icons.arrow_forward_ios_rounded),
-                      true),
-                  placeTile(Icons.language, "Language",
-                      Icon(Icons.arrow_forward_ios_rounded), true),
-                  placeTile(Icons.edit, "Edit Profile",
-                      Icon(Icons.arrow_forward_ios_rounded), true),
+                    Icons.restore_from_trash_rounded,
+                    ArchivedRecipe,
+                    true,
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ),
+                  placeTile(
+                      Icons.language,
+                      Langugae,
+                      true,
+                      SizedBox(
+                        width: 130,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                                onTap: () async {
+                                  Feedback.forTap(context);
+                                  await TextDecider()
+                                      .setPreferredLanguage('TR')
+                                      .load();
+                                  if (TextDecider()
+                                          .goOnPath('MainPage')
+                                          .target('Report')
+                                          .decideText() ==
+                                      "Raporla") {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            backgroundColor:
+                                                Colors.red.shade400,
+                                            content: const Text(
+                                                "Dil Türkçeye Çevrildi")));
+                                    setState(() {});
+                                  }
+                                },
+                                child: Image.asset(
+                                    height: 35,
+                                    "assets/images/turkish_flag.png")),
+                            GestureDetector(
+                              onTap: () async {
+                                Feedback.forTap(context);
+                                await TextDecider()
+                                    .setPreferredLanguage('EN')
+                                    .load();
+                                if (TextDecider()
+                                        .goOnPath('MainPage')
+                                        .target('Report')
+                                        .decideText() ==
+                                    "Report") {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          backgroundColor:
+                                              Colors.blueAccent.shade400,
+                                          content: Text(
+                                              "Language Has Changed To English")));
+                                  setState(() {});
+                                }
+                              },
+                              child: Image.asset(
+                                  height: 35, "assets/images/USA.png"),
+                            ),
+                          ],
+                        ),
+                      )),
+                  placeTile(Icons.edit, EditProfile, true,
+                      Icon(Icons.arrow_forward_ios_rounded)),
 
-                  placeText("Privacy"),
+                  placeText(Privacy),
                   Container(
                     color: Colors.white,
                     child: Column(
                       children: [
                         placeTile(
-                            Icons.lock,
-                            "Private Account",
-                            Switch(
-                              // This bool value toggles the switch.
-                              value: privacy,
-                              activeColor: Colors.green,
-                              onChanged: (bool value) async {
-                                setState(() {
-                                  privacy = value;
-                                });
-                                await SessionManager().set('privacy', value);
-                                dynamic id = await SessionManager().get('id');
+                          Icons.lock,
+                          PrivateAccount,
+                          false,
+                          Switch(
+                            // This bool value toggles the switch.
+                            value: privacy,
+                            activeColor: Colors.green,
+                            onChanged: (bool value) async {
+                              setState(() {
+                                privacy = value;
+                              });
+                              await SessionManager().set('privacy', value);
+                              dynamic id = await SessionManager().get('id');
 
-                                Response response = await dio.post(
-                                    "/profile/$id/edit",
-                                    data: {"privacy_setting": value ? 1 : 0});
-                                debugPrint(response.data.toString());
-                              },
-                            ),
-                            false)
+                              Response response = await dio.post(
+                                  "/profile/$id/edit",
+                                  data: {"privacy_setting": value ? 1 : 0});
+                              debugPrint(response.data.toString());
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),
 
                   // //Content Text Title
-                  placeText("Content"),
+                  placeText(Content),
 
                   //Content
                   Container(
                     color: Colors.white,
                     child: Column(
                       children: [
-                        placeTile(Icons.favorite, "Favorites",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
-                        placeTile(Icons.star, "Collections",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
-                        placeTile(Icons.replay, "Re-cipes",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
-                        placeTile(Icons.bookmark_rounded, "Saved",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
+                        placeTile(Icons.favorite, "Favorites", true,
+                            Icon(Icons.arrow_forward_ios_rounded)),
+                        placeTile(Icons.star, "Collections", true,
+                            Icon(Icons.arrow_forward_ios_rounded)),
+                        placeTile(Icons.replay, "Re-cipes", true,
+                            Icon(Icons.arrow_forward_ios_rounded)),
+                        placeTile(Icons.bookmark_rounded, "Saved", true,
+                            Icon(Icons.arrow_forward_ios_rounded)),
                       ],
                     ),
                   ),
-                  placeText("Help"),
+                  placeText(Help),
 
                   Container(
                     color: Colors.white,
                     child: Column(
                       children: [
-                        placeTile(Icons.help_outline, "Report",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
-                        placeTile(Icons.live_help_rounded, "About BigBelly",
-                            Icon(Icons.arrow_forward_ios_rounded), true),
+                        placeTile(Icons.help_outline, Report, true,
+                            Icon(Icons.arrow_forward_ios_rounded)),
+                        placeTile(
+                          Icons.live_help_rounded,
+                          AboutBigBelly,
+                          true,
+                          Icon(Icons.arrow_forward_ios_rounded),
+                        ),
                       ],
                     ),
                   ),

@@ -4,6 +4,7 @@ import 'package:bigbelly/constants/providers/postList_provider.dart';
 import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
+import 'package:bigbelly/screens/mainPage/texts.dart';
 import 'package:bigbelly/screens/mainPage/widgets/collection_screen.dart';
 import 'package:bigbelly/screens/post_details/post_details.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,28 +77,23 @@ class postReactions extends ConsumerWidget {
               return !isLiked;
             }),
         ReactionIconAndCount(
-            icon: Icon(Icons.comment_rounded),
+            icon: const Icon(Icons.comment_rounded),
             isCountable: true,
             type: "comment",
             post: post),
         ReactionIconAndCount(
-            icon: Icon(Icons.bookmark), type: "bookmark", post: post),
+            icon: const Icon(Icons.bookmark), type: "bookmark", post: post),
         ReactionIconAndCount(
-            icon: Icon(Icons.replay_sharp), type: "recipe", post: post),
+            icon: const Icon(Icons.replay_sharp), type: "recipe", post: post),
         // ReactionIconAndCount(icon: Icon(Icons.star), type: "star", post: post),
         ReactionIconAndCount(
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
           type: "more",
           post: post,
           isUserSelf: isUserSelf,
         ),
       ],
     );
-  }
-
-  Future<bool> _onLikeButtonTapped(bool isLiked) async {
-    like();
-    return !isLiked;
   }
 }
 
@@ -122,7 +118,6 @@ class ReactionIconAndCount extends StatefulWidget {
 class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
   @override
   void initState() {
-    // isSelf();
     super.initState();
   }
 
@@ -156,18 +151,18 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Re-cipe"),
+                              title: const Text("Re-cipe"),
                               content: Text(
-                                "This post will be republished on your feed",
+                                ThisPostWillBeRepublished,
                               ),
                               actions: [
                                 TextButton(
-                                  child: const Text('Accept',
+                                  child: Text(Accept,
                                       style: TextStyle(fontSize: 18)),
                                   onPressed: () {},
                                 ),
                                 TextButton(
-                                  child: const Text('Cancel',
+                                  child: Text(Cancel,
                                       style: TextStyle(fontSize: 18)),
                                   onPressed: () {
                                     Navigator.of(context).pop();
@@ -181,27 +176,27 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                 },
               )
             : PopupMenuButton(
-                icon: Icon(Icons.more_vert, color: Colors.green),
+                icon: const Icon(Icons.more_vert, color: Colors.green),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
                 itemBuilder: (context) {
                   List<PopupMenuEntry<Object?>> list = [];
                   if (widget.isUserSelf) {
                     list = [
-                      const PopupMenuItem<int>(
+                      PopupMenuItem<int>(
                         value: 0,
-                        child: Text("Archive"),
+                        child: Text(Archive),
                       ),
-                      const PopupMenuItem<int>(
+                      PopupMenuItem<int>(
                         value: 1,
-                        child: Text("Report"),
+                        child: Text(Report),
                       ),
                     ];
                   } else {
                     list = [
-                      const PopupMenuItem<int>(
+                      PopupMenuItem<int>(
                         value: 1,
-                        child: Text("Report"),
+                        child: Text(Report),
                       ),
                     ];
                   }
@@ -215,12 +210,12 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                     if (response.data['success'] == true) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.brown.shade400,
-                        content: const Text('Post Archived'),
+                        content: Text(PostArchived),
                       ));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.brown.shade400,
-                        content: const Text("Post can't be archived right now"),
+                        content: Text("Post can't be archived right now"),
                       ));
                     }
                   }
@@ -231,13 +226,13 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text("Report"),
+                          title: Text(Report),
                           content: Container(
                             height: 100,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text("Why do you want to report this post?"),
+                                Text(WhyReport),
                                 TextField(
                                   maxLength: 50,
                                   onChanged: (value) {
@@ -249,7 +244,7 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                           ),
                           actions: [
                             TextButton(
-                              child: Text("Send"),
+                              child: Text(Send),
                               onPressed: () async {
                                 final id = await SessionManager().get("id");
                                 Map<String, dynamic> params = {
@@ -263,7 +258,7 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Colors.green,
-                                  content: const Text('Report has send'),
+                                  content: Text(ReportHasSend),
                                 ));
                               },
                             ),
@@ -271,7 +266,7 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text("Cancel"))
+                                child: Text(Cancel))
                           ],
                         );
                       },
@@ -333,16 +328,16 @@ class _CollectionModalBottomState
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mainThemeColor,
-          title: Text("Collections"),
+          title: Text(Collections),
           actions: [
             TextButton(
                 onPressed: () {
                   isNewCollectionClicked = true;
                   setState(() {});
                 },
-                child: const Text(
-                  "+ New Collection",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+                child: Text(
+                  NewCollection,
+                  style: const TextStyle(color: Colors.white, fontSize: 17),
                 ))
           ],
         ),
@@ -362,8 +357,8 @@ class _CollectionModalBottomState
                               key: _formKey,
                               child: TextFormField(
                                 controller: _controller,
-                                decoration: const InputDecoration(
-                                    hintText: "Enter Collection Name"),
+                                decoration: InputDecoration(
+                                    hintText: EnterCollectionName),
                                 onSaved: (newValue) {
                                   if (newValue != null) {
                                     collectionName = newValue;
@@ -396,8 +391,7 @@ class _CollectionModalBottomState
                     future: getCollections(),
                     builder: (context, snapshot) {
                       if (collections.isEmpty && isPostInCollection.isEmpty) {
-                        return const Center(
-                            child: Text('You have no collections.'));
+                        return Center(child: Text(YouHaveNoCollections));
                       } else {
                         return ListView.builder(
                           itemCount: collections.length,
@@ -425,9 +419,8 @@ class _CollectionModalBottomState
 
     switch (response.data['message']) {
       case 'Request has succeed':
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text("Collection created!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green, content: Text(CollectionCreated)));
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

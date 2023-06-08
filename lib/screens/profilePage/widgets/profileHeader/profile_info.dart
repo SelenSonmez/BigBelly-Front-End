@@ -1,10 +1,10 @@
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/followers_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/following_page.dart';
+import 'package:bigbelly/screens/profilePage/widgets/texts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../constants/providers/user_provider.dart';
 import '../../../mainPage/main_page_imports.dart';
-import '../profileTabs/pages/user_posts_page.dart';
 
 class ProfileInfo extends ConsumerStatefulWidget {
   const ProfileInfo({super.key});
@@ -36,8 +36,8 @@ class _ProfileInfoState extends ConsumerState<ProfileInfo> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(userValue.getUser.postCount.toString(),
-                        style: TextStyle(fontSize: 17)),
-                    Text("Posts", style: TextStyle(fontSize: 15))
+                        style: const TextStyle(fontSize: 17)),
+                    Text(Posts, style: const TextStyle(fontSize: 15))
                   ]);
             })),
         divider(),
@@ -51,8 +51,8 @@ class _ProfileInfoState extends ConsumerState<ProfileInfo> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(userValue.getUser.followers!.length.toString(),
-                    style: TextStyle(fontSize: 17)),
-                Text("Followers", style: TextStyle(fontSize: 15))
+                    style: const TextStyle(fontSize: 17)),
+                Text(Followers, style: const TextStyle(fontSize: 15))
               ]),
         ),
         divider(),
@@ -66,8 +66,8 @@ class _ProfileInfoState extends ConsumerState<ProfileInfo> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(userValue.getUser.followeds!.length.toString(),
-                    style: TextStyle(fontSize: 17)),
-                Text("Following", style: TextStyle(fontSize: 15))
+                    style: const TextStyle(fontSize: 17)),
+                Text(Following, style: const TextStyle(fontSize: 15))
               ]),
         )
       ],

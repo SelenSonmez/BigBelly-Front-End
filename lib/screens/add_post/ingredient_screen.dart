@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/add_post/translate.dart';
 import 'package:bigbelly/screens/model/database_ingredient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:searchfield/searchfield.dart';
@@ -36,7 +37,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
   late FocusNode focusNode3;
 
   late Ingredient selectedIngredient = Ingredient(
-      name: "Select Ingredient",
+      name: SelectIngredient,
       amount: "0",
       amountType: "null",
       grams: 100,
@@ -58,11 +59,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
     // _ingredients = getIngredientList();
     databaseIngredients = getIngredientList();
     ingredient = Ingredient(
-        id: null,
-        name: "Select Ingredient",
-        amount: "",
-        amountType: "",
-        grams: 0);
+        id: null, name: SelectIngredient, amount: "", amountType: "", grams: 0);
     focusNode1 = FocusNode();
     focusNode2 = FocusNode();
     focusNode3 = FocusNode();
@@ -85,7 +82,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: mainThemeColor,
-          title: const Text("Enter Ingredient"),
+          title: Text(AddIngredientButton),
           actions: const [
             Padding(
               padding: EdgeInsets.all(10.0),
@@ -115,7 +112,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                         onSaved: (newValue) {
                           ingredient.amount = newValue;
                         },
-                        decoration: postTextFieldDecoration("Amount", "1")),
+                        decoration: postTextFieldDecoration(Amount, "1")),
                   ),
                   const SizedBox(
                     width: 15,
@@ -129,8 +126,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                       onSaved: (value) {
                         ingredient.amountType = value;
                       },
-                      decoration:
-                          postTextFieldDecoration("Scale", "Table Spoon"),
+                      decoration: postTextFieldDecoration(Scale, TableSpoon),
                     ),
                   ),
                   Expanded(
@@ -170,14 +166,13 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                                             .toList(),
                                         suggestionState: Suggestion.expand,
                                         textInputAction: TextInputAction.next,
-                                        hint: "Type an Ingredient",
+                                        hint: TypeAnIngredient,
                                         hasOverlay: true,
                                         searchStyle: TextStyle(
                                           fontSize: 18,
                                           color: Colors.black.withOpacity(0.8),
                                         ),
                                         validator: (x) {
-                                          // print("GELDİİİİİ" + x!);
                                           if (x!.isNotEmpty) {
                                             selectedIngredient.name = x;
                                             ingredients.forEach(
@@ -192,7 +187,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                                             setState(() {});
                                             Navigator.pop(context);
                                           } else {
-                                            return "Enter a valid input";
+                                            return EnterAValidInput;
                                           }
                                           // if (!ingredients.contains(x) ||
                                           //     x!.isEmpty) {
@@ -237,7 +232,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                                                   .validate()
                                                   .toString();
                                             },
-                                            child: Icon(
+                                            child: const Icon(
                                               Icons.add,
                                               size: 35,
                                             )),
@@ -262,8 +257,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                   showDuration: const Duration(seconds: 2),
                   key: tooltipkey,
                   triggerMode: TooltipTriggerMode.manual,
-                  message:
-                      "If item is picked from the list enter grams for calorie calculation",
+                  message: IfItemIsPicked,
                   child: SizedBox(
                     width: 70.w,
                     child: TextFormField(
@@ -274,7 +268,7 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                       },
                       cursorColor: Colors.green,
                       keyboardType: TextInputType.number,
-                      decoration: postTextFieldDecoration("Grams", "100"),
+                      decoration: postTextFieldDecoration(Grams, "100"),
                     ),
                   ),
                 ),
@@ -304,11 +298,11 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                         borderRadius: BorderRadius.circular(25.h))),
                 onPressed: () {
                   _formKey.currentState!.save();
-                  if (selectedIngredient.name == "Select Ingredient" ||
+                  if (selectedIngredient.name == SelectIngredient ||
                       selectedIngredient.name.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.red.shade400,
-                      content: const Text('Please enter an ingredient name'),
+                      content: Text(PleaseEnterIngredientName),
                     ));
                   } else {
                     ingredient.name = selectedIngredient.name;
@@ -317,8 +311,8 @@ class _IngredientScreenState extends ConsumerState<IngredientScreen> {
                     Navigator.pop(context, ingredient);
                   }
                 },
-                child: const Text("Add Ingredient",
-                    style: TextStyle(fontSize: 24)),
+                child:
+                    Text(AddIngredientButton, style: TextStyle(fontSize: 24)),
               ),
             )
           ],

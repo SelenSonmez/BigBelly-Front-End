@@ -1,21 +1,22 @@
 {
     "LoginScreen": {
-      
         "Username": {
-            "HintText": "Kullanici adi",
-            "LabelText": "Kullanici adi"
+            "HintText": "Kullanıcı adi",
+            "LabelText": "Kullanıcı adi"
         },
         "Password": {
             "HintText": "Şifre",
             "LabelText": "Şifre"
         },
-        "LoginButton": "Giriş Yap",
-        "NoAccount": "Hesabın yok mu?",
-        "SignUp" : "Kayıt ol",
-        "PleaseEnterValidInputs": "Lütfen geçerli değerleri giriniz."
-
+        "NoAccount" : "Henüz bir hesabın yok mu?",
+        "SignUp" : "Kayıt Ol",
+        "LoginButton" : "Giriş Yap",
+        "PleaseEnterValidInputs": "Lütfen geçerli bilgi gir",
+        "UsernameDoesNotExists": "Bu kullanıcı adı yok",
+        "PasswordIsNotCorrect": "Şifre doğru değil!"
     },
     "RegisterScreen": {
+        "SignUp": "Kayıt Ol",
         "Name": {
             "HintText": "İsim",
             "LabelText": "İsim"
@@ -25,8 +26,8 @@
             "LabelText": "Soyisim"
         },
         "Username": {
-            "HintText": "Kullanıcı Adı",
-            "LabelText": "Kullanıcı Adı"
+            "HintText": "Kullanıcı adi",
+            "LabelText": "Kullanıcı adi"
         },
         "Email": {
             "HintText": "Email",
@@ -39,35 +40,164 @@
         "PasswordValidator": {
             "AtLeast": "En az",
             "Character": "Karakter",
-            "Letter": "Harf",
-            "UpperCaseLetter": "Büyük Harf",
+            "Letter": "Harfli",
+            "UpperCaseLetter": "Büyük Harfli",
             "SpecialCharacter": "Özel Karakter",
             "NumericCharacter": "Numerik Karakter",
             "NormalLetter": "Normal Harf"
-        }    ,
-
-        "UsernameNotValid": "Kullanıcı adı uygun değil",
-        "EmailNotValid": "Email uygun değil",
-        "PasswordNotValid": "Şifre uygun değil",
-
-        "AlreadyHaveAccount": "Zaten Kayıtlı mısın?",
-        "Sign In": "Giriş Yap",
+        },
+        "NameNotEmpty": "İsim boş olamaz",
+        "SurnameNotEmpty": "Soyisim boş olamaz",
+        "UsernameNotEmpty": "Kullanıcı adı boş olamaz",
+        "EmailNotEmpty": "Email boş olamaz",
+        "PasswordNotEmpty": "Şifre boş olamaz",
+        "UsernameNotValid": "Kullanıcı adı geçerli değil",
+        "EmailNotValid": "Email geçerli değil",
+        "PasswordNotValid": "Şifre geçerli değil",
+        "AlreadyHaveAccount": "Zaten hesabın var mı?",
+        "SignIn": "Giriş Yap",
         "Register": "Kayıt Ol"
     },
     "MainPage": {
-        "DaysAgo": "Days Ago"
+        "DaysAgo": "Gün önce",
+        "Comments": "Yorumlar",
+        "WriteYourComment": "Yorum yaz...",
+        "Send": "Gönder",
+        "Collections":"Koleksiyonlar",
+        "NewCollection": "+ Yeni koleksiyon",
+        "PostAddedToCollection":"Gönderi koleksiyona eklendi",
+        "PostDeletedFromCollection": "Gönderi koleksiyondan silindi",
+        "Warning": "Uyarı",
+        "AreYouSureToDeleteCollection": "Koleksiyonu silmek istediğinden emin misin?",
+        "Yes": "Evet",
+        "Close": "Kapat",
+        "ThisPostWillBeRepublished": "Bu gönderi akışında yayınlanacaktır. ",
+        "Accept": "Onayla",
+        "Cancel": "Kapat",
+        "Report": "Raporla",
+        "WhyReport": "Neden bu postu rapor etmek istiyorsun?",
+        "ReportHasSend":"Rapor Gönderildi",
+        "CollectionDeleted": "Koleksiyon silindi!",
+        "CollectionCreated":"Koleksiyon Yaratıldı!",
+        "YouHaveNoCollections":"Henüz koleksiyonun yok",
+        "EnterCollectionName": "Koleksiyon adı gir",
+        "Today":"Bugün",
+        "Archive":"Arşivle",
+        "PostArchived":"Gönderi Arşivlendi"
+    },
+    "ProfileScreen":{
+        "Posts":"Gönderiler",
+        "Followers": "Takipçiler",
+        "Following":"Takip Edilenler"
+    },
+    "FollowerScreen":{
+        "FollowerRequests":"Takip İstekleri"
+    },
+    
+    "PostDetailsScreen":{
+        "Details":"Detaylar",
+        "Difficulty":"Zorluk",
+        "Easy":"Kolay",
+        "Medium":"Orta",
+        "Hard":"Zor",
+        "PreparationTime":"Hazırlama Süresi",
+        "BakingTime":"Pişirme Süresi",
+        "Ingredients":"Malzemeler",
+        "Servings":"Kişilik",
+        "Calories":"Kalori",
+        "EstimatedValue":"Tahmini değer. Bilimsel değildir",
+        "Steps":"Adımlar",
+        "Tags":"Etiketler",
+        "None":"Hiçbiri"
     },
     "VerificationScreen":{
-        "EmailVerification": "E-mail Verifikasyon",
-        "EnterCodeSentTo": "Bu adrese gönderilen kodu gir: ",
-        "DidntReceiveTheCode":"Kodu almadınız mı?",
+        "EmailVerification": "E-mail Doğrulama",
+        "EnterCodeSentTo": "Şu adrese giden kodu gir: ",
+        "DidntReceiveTheCode":"Kod gelmedi mi",
         "Resend": "Tekrar Gönder",
-        "Verify": "Doğrula",
+        "Verify": "Kontrol Et",
         "Clear": "Temizle",
-        "PleaseFillAllSpaces": "Lütfen tüm boşlukları doldurun",
+        "PleaseFillAllSpaces":"Lütfen tüm boşlukları doldurun",
         "CodeMatched":"Kod eşleşti",
-        "WrongCode": "Yanlış kod"
-
-        
+        "WrongCode": "Kod eşleşmedi"
+    },
+    "MealMenuScreen":{
+        "MealName":"Yemek ismi",
+        "Price":"Fiyat",
+        "HideIngredients":"Kullanıcılardan malzemeleri gizle",
+        "CreateMenuItem":"Menu malzemesi ekle",
+        "Ingredient":"Malzeme",
+        "IngredientsAreNecc":"Malzemeler kullanıcılara menünü önermek için gereklidir fakat kullanıcılardan gizleyebilirsin"        
+    },
+    "AddPostScreen": {
+        "LabelText": "Başlık",
+        "HintText": "Lahmacun",
+        "PleaseEnterATitle":"Lütfen bir başlık girin",
+        "AddARecipePhoto": "Tarif fotoğrafı ekle *",
+        "StepButtons": {
+            "Next":"Sonraki",
+            "Previous": "Önceki"
+        },
+        "Easy":"Kolay",
+        "Medium":"Orta",
+        "Hard":"Zor",
+        "Portion": "Porsiyon",
+        "PortionExplanation": "Tarifin kaç porsiyonluk olduğunu gir",
+        "Servings":"Kişilik",
+        "PreparationTime":"Hazırlama Süresi",
+        "Hour":"saat",
+        "Min":"dakika",
+        "PreparationTimeExplanation":"Bu tarifi hazırlamak için ne kadar süre gerekli?",
+        "BakingTime":"Pişirme Süresi",
+        "BakingTimeExplanation":"Bu tarifi pişirmek için ne kadar süre gerekli?",
+        "LetTheWorldKnow":"İnsanlara püf noktalarını anlat!",
+        "EnterYourStep":"Adımları gir",
+        "EnterDescription":"Tarifin için açıklama gir",
+        "IngredientAmount":"Miktar",
+        "IngredientScaleLabel":"Ölçek",
+        "IngredientScaleHintText": "Yemek Kaşığı",
+        "SelectIngredient":"Malzeme Seç",
+        "GramsLabel":"Gram",
+        "AddIngredientButton":"Malzeme ekle",
+        "EnterTheIngredients":"Malzemeyi gir",
+        "EnterTagsScreen": "Tarifini kategorize etmek için etiket gir",
+        "EnterYourTag": "Etiket Gir!",
+        "CreatePostButton":"Gönderi Paylaş",
+        "RemovingStep":"Adım Siliniyor",
+        "TagLimitReached":"Etiket Sınırı Aşıldı!",
+        "MaximumTagLimit": "Maksimum etiket limiti 10",
+        "Nomorecanbeadded":"Daha fazla eklenemez",
+        "Ok":"Tamam",
+        "CreateRecipe":"Gönderi Yarat",
+        "EnterTimings":"Süreleri Gir",
+        "EnterSteps":"Adımları Gir",
+        "EnterIngredients":"Malzemeleri Gir",
+        "EnterTags":"Etiketleri Gir",
+        "TypeAnIngredient":"Malzeme gir",
+        "PageTitleNotEntered":"Böyle bir gönderi sayfası yok",
+        "EnterAValidInput":"Geçerli bilgi girin",
+        "PleaseEnterIngredientName": "Lütfen bir malzeme girin",
+        "Grams":"Gram",
+        "Amount":"Miktar",
+        "Scale":"Ölçek",
+        "TableSpoon":"Yemek Kaşığı",
+        "Prev":"Önceki",
+        "Next":"Sonraki",
+        "IfItemIsPicked": "Eğer malzemeyi listeden seçtiysen, kaç gram olduğunu gir"
+    },
+    "SettingsScreen":{
+        "Settings":"Ayarlar",
+        "Account":"Hesap",
+        "ArchivedRecipe":"Arşivlenen Tarifler",
+        "Langugae":"Dil",
+        "EditProfile":"Profili Editle",
+        "Privacy":"Gizlilik",
+        "Content":"İçerik",
+        "Collections":"Koleksiyonlar",
+        "Recipes":"Re-cipe'ler",
+        "Help":"Yardım",
+        "PrivateAccount": "Gizli Hesap",
+        "Report":"Raporla",
+        "AboutBigBelly":"BigBelly Hakkında"
     }
 }
