@@ -15,8 +15,7 @@ class HomePage extends StatelessWidget {
   void _scrollDown() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_controller.hasClients && postIndexToBeShown != 0) {
-        _controller
-            .jumpTo(postIndexToBeShown * 450 + 66 * (postIndexToBeShown - 1));
+        _controller.jumpTo(postIndexToBeShown * 662.7.h);
       }
     });
   }

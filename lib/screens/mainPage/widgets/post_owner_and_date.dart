@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../constants/providers/post_provider.dart';
 import '../../../constants/styles.dart';
 import '../../model/post.dart';
 import '../texts.dart';

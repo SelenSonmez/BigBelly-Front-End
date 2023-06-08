@@ -7,45 +7,47 @@ import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/home_page.dart';
 import 'package:bigbelly/screens/post_list_view.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileHeader/profile_info.dart';
+import 'package:bigbelly/screens/profile_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
+import '../../../../authentication/model/user_model.dart';
 import '../../../../model/post.dart';
 
 class UserPosts extends ConsumerStatefulWidget {
-  const UserPosts({super.key});
-
+  UserPosts({super.key, this.isUserSelf = false});
+  bool isUserSelf;
   @override
   ConsumerState<UserPosts> createState() => _UserPostsState();
 }
 
 class _UserPostsState extends ConsumerState<UserPosts> {
   late List<Post> itemsList;
+
   @override
   void initState() {
     super.initState();
   }
 
   Future<List<Post>> getPosts([UserModel? user]) async {
-    debugPrint("user posts metot geldi");
-
     dynamic id = await SessionManager().get('id');
-    final response = await dio.get('/profile/$id/posts');
+    final response = await dio.get('/profile/${user!.getUser.id}/posts');
     var postsJson = response.data['payload']['posts'];
-    // List<Post> itemsList = postFromJson(postsJson);
-    itemsList = List.from(postsJson.map((i) => Post.fromJson(jsonEncode(i))));
+    itemsList = List.from(postsJson.map((i) {
+      Post post = Post.fromJson(jsonEncode(i));
+      post.account = User.fromJson(response.data['payload']['account']);
+      return post;
+    }));
+    user.setPostCount(itemsList.length);
+    const ProfileInfo();
 
-    user!.setPostCount(itemsList.length);
-    ProfileInfo();
-    //debugPrint(postsJson);
     return itemsList;
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("user posts geldi");
-    UserModel user = ref.watch(userProvider);
+    var user = ref.watch(userProvider);
     return Center(
       child: FutureBuilder<List<Post>>(
           future: getPosts(user),
@@ -56,18 +58,22 @@ class _UserPostsState extends ConsumerState<UserPosts> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3),
                 itemBuilder: (context, index) {
+                  String imageURL =
+                      "http://18.184.145.252/post/${snapshot.data![index].id!}/image";
                   return Container(
                       margin: const EdgeInsets.fromLTRB(3, 3, 3, 0),
                       child: GestureDetector(
-                        onTap: () {},
-
-                        child: Image.network(
-                          "http://18.184.145.252/post/${snapshot.data![index].id!}/image",
-                          fit: BoxFit.contain,
-                        ),
-
-                        // child: Text(snapshot.data![index].title!))
-                      ));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileListView(
+                                        profilePosts: itemsList,
+                                        isUserSelf: widget.isUserSelf)));
+                          },
+                          child: Center(
+                              child: Image.network(imageURL,
+                                  fit: BoxFit.contain))));
                 },
               );
             } else {

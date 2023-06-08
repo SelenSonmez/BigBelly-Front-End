@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import '../../../../constants/Colors.dart';
 import '../../../../constants/providers/user_provider.dart';
+import '../../../authentication/model/user_model.dart';
 
 class ProfileTabs extends ConsumerStatefulWidget {
   const ProfileTabs({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   late TabController tabController;
   int activeIndex = 0;
   bool isSelf = false;
+  bool isFollowing = false;
 
   ScrollController scrollController = ScrollController();
 
@@ -81,7 +83,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
         child: TabBarView(controller: tabController, children: [
           userValue.getUser.privacySetting!.isPrivate != null &&
                   (userValue.getUser.privacySetting!.isPrivate == true &&
-                      !isSelf)
+                      !isSelf &&
+                      isFollowing)
               ? const Center(
                   child: Expanded(
                     child: Icon(
@@ -90,7 +93,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
                     ),
                   ),
                 )
-              : const UserPosts(),
+              : UserPosts(isUserSelf: isSelf),
           const LikedPosts(),
           const SavedPosts(),
           CollectionsTab()
@@ -107,5 +110,17 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
     setState(() {});
 
     return isSelf;
+  }
+
+  void checkIsFollowing() async {
+    final userValue = ref.read(userProvider);
+    final id = await SessionManager().get('id');
+
+    for (User user in userValue.getUser.followers!) {
+      if (user.id == id) {
+        isFollowing = true;
+      }
+    }
+    setState(() {});
   }
 }

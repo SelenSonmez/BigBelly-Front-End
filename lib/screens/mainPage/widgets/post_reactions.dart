@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bigbelly/constants/providers/postList_provider.dart';
+import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
 import 'package:bigbelly/screens/mainPage/widgets/collection_screen.dart';
@@ -13,9 +14,14 @@ import 'package:like_button/like_button.dart';
 import '../../model/post.dart';
 
 class postReactions extends ConsumerWidget {
-  postReactions({super.key, required this.post, required this.index});
+  postReactions(
+      {super.key,
+      required this.post,
+      this.isUserSelf = false,
+      required this.index});
   Post post;
   int index;
+  bool isUserSelf;
   void like() async {
     String id = await SessionManager().get('id');
 
@@ -25,14 +31,12 @@ class postReactions extends ConsumerWidget {
     };
     //unlike
     if (post.isLiked!) {
-      debugPrint("unlike");
       final response = await dio.post('/post/unlike', data: params);
 
       post.isLiked = false;
       return;
     }
     //like
-    debugPrint("like");
     final response = await dio.post('/post/like', data: params);
     post.isLiked = true;
   }
@@ -52,14 +56,12 @@ class postReactions extends ConsumerWidget {
             },
             onTap: (isLiked) async {
               String id = await SessionManager().get('id');
-
               Map<String, dynamic> params = <String, dynamic>{
                 'post_id': post.id,
                 'account_id': id,
               };
               //unlike
               if (post.isLiked!) {
-                debugPrint("unlike");
                 final response = await dio.post('/post/unlike', data: params);
 
                 post.isLiked = false;
@@ -67,7 +69,6 @@ class postReactions extends ConsumerWidget {
                 return !isLiked;
               }
               //like
-              debugPrint("like");
               final response = await dio.post('/post/like', data: params);
               post.isLiked = true;
               ref.watch(postListProvider).editPost(post, index);
@@ -83,9 +84,13 @@ class postReactions extends ConsumerWidget {
             icon: Icon(Icons.bookmark), type: "bookmark", post: post),
         ReactionIconAndCount(
             icon: Icon(Icons.replay_sharp), type: "recipe", post: post),
-        ReactionIconAndCount(icon: Icon(Icons.star), type: "star", post: post),
+        // ReactionIconAndCount(icon: Icon(Icons.star), type: "star", post: post),
         ReactionIconAndCount(
-            icon: Icon(Icons.more_vert), type: "more", post: post),
+          icon: Icon(Icons.more_vert),
+          type: "more",
+          post: post,
+          isUserSelf: isUserSelf,
+        ),
       ],
     );
   }
@@ -102,10 +107,12 @@ class ReactionIconAndCount extends StatefulWidget {
       required this.icon,
       this.isCountable = false,
       required this.type,
+      this.isUserSelf = false,
       this.post});
   final Icon icon;
   final bool isCountable;
   final String type;
+  bool isUserSelf;
   Post? post;
 
   @override
@@ -113,6 +120,12 @@ class ReactionIconAndCount extends StatefulWidget {
 }
 
 class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
+  @override
+  void initState() {
+    // isSelf();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -164,8 +177,6 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                             );
                           });
                       break;
-                    case "star":
-                      break;
                   }
                 },
               )
@@ -174,22 +185,48 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
                 itemBuilder: (context) {
-                  return [
-                    const PopupMenuItem<int>(
-                      value: 0,
-                      child: Text("Archive (TODO: only self post)"),
-                    ),
-                    const PopupMenuItem<int>(
-                      value: 1,
-                      child: Text("Report"),
-                    ),
-                    // PopupMenuItem<int>(value: 2, child: Text("Details")),
-                  ];
+                  List<PopupMenuEntry<Object?>> list = [];
+                  if (widget.isUserSelf) {
+                    list = [
+                      const PopupMenuItem<int>(
+                        value: 0,
+                        child: Text("Archive"),
+                      ),
+                      const PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("Report"),
+                      ),
+                    ];
+                  } else {
+                    list = [
+                      const PopupMenuItem<int>(
+                        value: 1,
+                        child: Text("Report"),
+                      ),
+                    ];
+                  }
+                  return list;
+                  // PopupMenuItem<int>(value: 2, child: Text("Details")),
                 },
-                onSelected: (value) {
+                onSelected: (value) async {
+                  if (value == 0) {
+                    final response =
+                        await dio.post('/post/${widget.post!.id}/archive');
+                    if (response.data['success'] == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.brown.shade400,
+                        content: const Text('Post Archived'),
+                      ));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.brown.shade400,
+                        content: const Text("Post can't be archived right now"),
+                      ));
+                    }
+                  }
                   if (value == 1) {
                     String reportMessage = "";
-
+                    if (!mounted) return;
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -248,6 +285,16 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
       ],
     );
   }
+
+  // Future<bool> isSelf() async {
+  //   dynamic id = await SessionManager().get("id");
+  //   print(widget.post!.account!.id == int.parse(id));
+  //   widget.isSelf = widget.post!.account!.id == int.parse(id);
+  //   print("PPPPPPPPPPPPPPPPPPPP");
+  //   print(widget.isSelf);
+  //   setState(() {});
+  //   return widget.isSelf;
+  // }
 }
 
 class _CollectionModalBottom extends ConsumerStatefulWidget {

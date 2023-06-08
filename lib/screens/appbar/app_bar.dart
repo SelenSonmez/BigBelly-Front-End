@@ -68,7 +68,6 @@ class BigBellyAppBar extends ConsumerWidget {
 
                 User user = User.fromJson(info.data['payload']['user']);
                 userValue.setUser = user;
-
                 Navigator.push(context,
                     MaterialPageRoute(builder: ((context) => ProfilePage())));
               },
