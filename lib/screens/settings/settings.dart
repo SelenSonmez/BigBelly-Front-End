@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../edit_profile_screen/edit_screen.dart';
 import '../imports.dart';
 
 class Setting extends StatefulWidget {
@@ -183,8 +184,21 @@ class _SettingState extends State<Setting> {
                           ],
                         ),
                       )),
-                  placeTile(Icons.edit, EditProfile, true,
-                      Icon(Icons.arrow_forward_ios_rounded)),
+                  placeTile(
+                      Icons.edit,
+                      EditProfile,
+                      true,
+                      IconButton(
+                        padding: EdgeInsets.only(left: 25.w),
+                        icon: Icon(Icons.arrow_forward_ios_rounded),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditScreen(),
+                              ));
+                        },
+                      )),
 
                   placeText(Privacy),
                   Container(
@@ -225,13 +239,9 @@ class _SettingState extends State<Setting> {
                     color: Colors.white,
                     child: Column(
                       children: [
-                        placeTile(Icons.favorite, "Favorites", true,
+                        placeTile(Icons.star, Collections, true,
                             Icon(Icons.arrow_forward_ios_rounded)),
-                        placeTile(Icons.star, "Collections", true,
-                            Icon(Icons.arrow_forward_ios_rounded)),
-                        placeTile(Icons.replay, "Re-cipes", true,
-                            Icon(Icons.arrow_forward_ios_rounded)),
-                        placeTile(Icons.bookmark_rounded, "Saved", true,
+                        placeTile(Icons.replay, Recipes, true,
                             Icon(Icons.arrow_forward_ios_rounded)),
                       ],
                     ),
@@ -258,18 +268,18 @@ class _SettingState extends State<Setting> {
 
                   //Log Out button
                   Container(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                     child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                             elevation: 5,
-                            minimumSize: Size.fromHeight(32.h),
+                            minimumSize: Size(330.w, 40.h),
                             backgroundColor: mainThemeColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.w),
                             )),
                         child: Text(
-                          "Log Out",
+                          LogOut,
                           style: TextStyle(
                             fontSize: 20.sp,
                             color: Colors.white,

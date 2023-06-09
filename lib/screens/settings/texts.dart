@@ -32,3 +32,5 @@ String PrivateAccount = TextDecider()
     .goOnPath("SettingsScreen")
     .target("PrivateAccount")
     .decideText();
+String LogOut =
+    TextDecider().goOnPath("SettingsScreen").target("LogOut").decideText();

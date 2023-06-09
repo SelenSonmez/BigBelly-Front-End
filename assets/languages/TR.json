@@ -1,8 +1,8 @@
 {
     "LoginScreen": {
         "Username": {
-            "HintText": "Kullanıcı adi",
-            "LabelText": "Kullanıcı adi"
+            "HintText": "Kullanıcı adı",
+            "LabelText": "Kullanıcı adı"
         },
         "Password": {
             "HintText": "Şifre",
@@ -198,6 +198,20 @@
         "Help":"Yardım",
         "PrivateAccount": "Gizli Hesap",
         "Report":"Raporla",
-        "AboutBigBelly":"BigBelly Hakkında"
+        "AboutBigBelly":"BigBelly Hakkında",
+        "LogOut": "Çıkış Yap"
+
+    },
+    "EditProfileScreen":{
+        "EditProfileInformation":"Profil Bilgilerini Güncelle",
+        "Name": "İsim",
+        "OldPassword":"Eski Şifre",
+        "PasswordIsNotMatched":"Şifre Eşleşmedi",
+        "Edit":"Düzenle",
+        "NewPassword":"Yeni Şifre",
+        "OldPasswordNotEmpty":"Eski şifre boş olamaz",
+        "NewPasswordNotEmpty":"Yeni şifre boş olamaz",
+        "RequierementsNotMet":"Lütfen aşağıdaki gerekliliklere göre belirleyiniz"
+
     }
 }

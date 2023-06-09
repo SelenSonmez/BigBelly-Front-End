@@ -1,11 +1,16 @@
+import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../constants/Colors.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
+import '../../constants/dio.dart';
 import '../authentication/helpers/field_regex.dart';
+import '../authentication/helpers/language_password_validator.dart';
 import '../authentication/register/texts.dart';
+import 'texts.dart';
 
 class EditScreen extends StatefulWidget {
   const EditScreen({Key? key}) : super(key: key);
@@ -24,8 +29,8 @@ class _EditScreenState extends State<EditScreen> {
   final TextEditingController controller = TextEditingController();
   Map<String, dynamic> fields = {
     'name': null,
-    'oldPassword': null,
-    'newPassword': null
+    'old_password': null,
+    'password': null
   };
   final formKey = GlobalKey<FormState>();
 
@@ -55,13 +60,11 @@ class _EditScreenState extends State<EditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Edit profile information',
+        title: Text(
+          EditProfileInformation,
         ),
         centerTitle: true,
       ),
-      //resizeToAvoidBottomInset: true,
-
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -72,14 +75,13 @@ class _EditScreenState extends State<EditScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         icon: Icon(Icons.account_circle_rounded),
-                        hintText: 'Name*',
-                        labelText: 'Name',
+                        hintText: Name,
+                        labelText: Name,
                       ),
                       onSaved: (String? value) {
                         fields['name'] = value;
-                        debugPrint(fields['name']);
                       },
                     ),
                     const SizedBox(width: 100.0, height: 60),
@@ -87,8 +89,8 @@ class _EditScreenState extends State<EditScreen> {
                       obscureText: _isHiddenOld,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.password_outlined),
-                        hintText: 'Old Password*',
-                        labelText: 'Old Password',
+                        hintText: OldPassword,
+                        labelText: OldPassword,
                         //helperText: "Password must contain special character",
                         helperStyle: const TextStyle(color: Colors.red),
                         suffix: InkWell(
@@ -101,13 +103,12 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       onSaved: (String? value) {
-                        fields['oldPassword'] = value;
-                        debugPrint(fields['oldPassword']);
+                        fields['old_password'] = value;
                       },
                       validator: (value) {
-                        if (fields['oldPassword'] == "" &&
-                            fields['newPassword'] != "")
-                          return "Old Password can not be empty.";
+                        if (fields['old_password'] == "" &&
+                            fields['password'] != "")
+                          return OldPasswordNotEmpty;
                       },
                     ),
                     const SizedBox(width: 100.0, height: 60),
@@ -116,8 +117,8 @@ class _EditScreenState extends State<EditScreen> {
                       controller: controller,
                       decoration: InputDecoration(
                         icon: const Icon(Icons.password_outlined),
-                        hintText: 'New Password*',
-                        labelText: 'New Password',
+                        hintText: NewPassword,
+                        labelText: NewPassword,
                         //helperText: "Password must contain special character",
                         helperStyle: const TextStyle(color: Colors.red),
                         suffix: InkWell(
@@ -130,19 +131,19 @@ class _EditScreenState extends State<EditScreen> {
                         ),
                       ),
                       validator: (value) {
-                        if (fields['newPassword'] == "" &&
-                            fields['oldPassword'] != "")
-                          return "New Password can not be empty.";
+                        if (fields['password'] == "" &&
+                            fields['old_password'] != "")
+                          return NewPasswordNotEmpty;
                         else if (!passwordRegex.hasMatch(value!))
-                          return PasswordNotValid;
+                          return RequierementsNotMet;
                       },
                       onSaved: (String? value) {
-                        fields['newPassword'] = value;
-                        debugPrint(fields['newPassword']);
+                        fields['password'] = value;
                       },
                     ),
                     const SizedBox(width: 100.0, height: 10.0),
                     FlutterPwValidator(
+                      strings: ValidatorLanguage(),
                       key: validatorKey,
                       controller: controller,
                       minLength: 8,
@@ -153,16 +154,13 @@ class _EditScreenState extends State<EditScreen> {
                       width: 400,
                       height: 150,
                       onSuccess: () {
-                        print("MATCHED");
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Password is matched")));
+                            SnackBar(content: Text(PasswordIsNotMatched)));
                         setState(() {
                           isNewPasswordAvailable = true;
                         });
                       },
                       onFail: () {
-                        print("NOT MATCHED");
                         setState(() {
                           isNewPasswordAvailable = false;
                         });
@@ -174,9 +172,20 @@ class _EditScreenState extends State<EditScreen> {
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               formKey.currentState!.save();
                               formKey.currentState!.validate();
+                              dynamic id = await SessionManager().get('id');
+
+                              final response = await dio.post(
+                                  "/profile/$id/editProfile",
+                                  data: fields);
+                              print(response.data);
+                              if (response.data['success'] == false) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(PleaseEnterValidInputs)));
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                                 elevation: 5,
@@ -186,7 +195,7 @@ class _EditScreenState extends State<EditScreen> {
                                   borderRadius: BorderRadius.circular(25.w),
                                 )),
                             child: Text(
-                              "Edit",
+                              Edit,
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 color: Colors.white,
@@ -194,6 +203,9 @@ class _EditScreenState extends State<EditScreen> {
                             )),
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 40),
+                    )
                   ]),
             ),
           ),

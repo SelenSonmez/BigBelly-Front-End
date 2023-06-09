@@ -199,6 +199,18 @@
         "Help":"Help",
         "Report":"Report",
         "PrivateAccount":"Private Account",
-        "AboutBigBelly":"About Bigbelly"
+        "AboutBigBelly":"About Bigbelly",
+        "LogOut":"Log Out"
+    },
+    "EditProfileScreen":{
+        "EditProfileInformation":"Edit Profile Information",
+        "Name": "Name",
+        "OldPassword":"Old Password",
+        "PasswordIsNotMatched":"Password is not matched",
+        "Edit":"Edit",
+        "NewPassword":"New Password",
+        "OldPasswordNotEmpty":"Old Password can not be empty",
+        "NewPasswordNotEmpty":"New Password can not be empty",
+        "RequierementsNotMet":"Please consider password requirements below"
     }
 }
