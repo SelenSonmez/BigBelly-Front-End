@@ -32,3 +32,11 @@ String PleaseEnterValidInputs = TextDecider()
     .goOnPath('LoginScreen')
     .target('PleaseEnterValidInputs')
     .decideText();
+String UserNameDoesNotExists = TextDecider()
+    .goOnPath('LoginScreen')
+    .target('UsernameDoesNotExists')
+    .decideText();
+String PasswordIsNotCorrect = TextDecider()
+    .goOnPath('LoginScreen')
+    .target('PasswordIsNotCorrect')
+    .decideText();

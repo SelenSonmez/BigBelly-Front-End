@@ -1,10 +1,12 @@
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileHeader/profile_header.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/profile_tabs.dart';
+import 'package:bigbelly/screens/settings/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constants/providers/user_provider.dart';
 import '../../authentication/model/user_model.dart';
+import '../../settings/settings.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
@@ -33,10 +35,16 @@ class ProfilePage extends ConsumerWidget {
               Icons.settings,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Setting(),
+                  ));
+            },
           )
         ],
-        //backgroundColor: const Color.fromARGB(255, 140, 204, 142),
+        backgroundColor: Colors.green,
       ),
       body: SafeArea(
         child: NestedScrollView(
@@ -49,8 +57,8 @@ class ProfilePage extends ConsumerWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 15),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 15),
                 child: ProfileTabs(),
               ),
             ),

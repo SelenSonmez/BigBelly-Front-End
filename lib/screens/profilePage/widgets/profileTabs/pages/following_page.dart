@@ -1,5 +1,6 @@
 import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
+import 'package:bigbelly/screens/profilePage/widgets/texts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FollowingsPage extends ConsumerWidget {
@@ -9,14 +10,12 @@ class FollowingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userValue = ref.watch(userProvider);
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 35, title: const Text("Following")),
+      appBar: AppBar(toolbarHeight: 35, title: Text(Following)),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: ListView.builder(
-                // physics: const NeverScrollableScrollPhysics(),
-                // shrinkWrap: true,
                 itemCount: userValue.getUser.followeds!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(

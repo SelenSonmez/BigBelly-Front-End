@@ -7,7 +7,7 @@ class User {
   PrivacySetting? privacySetting;
   List<User>? followers = [];
   List<User>? followeds = [];
-
+  int? postCount = 0;
   User(
       {this.id,
       this.username,
@@ -16,7 +16,8 @@ class User {
       this.isVerified,
       this.privacySetting,
       this.followers,
-      this.followeds});
+      this.followeds,
+      this.postCount});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,6 +41,9 @@ class User {
       });
     }
   }
+  @override
+  String toString() =>
+      "id: $id, username:  $username, name: $name, email:$email";
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -59,6 +63,9 @@ class User {
     }
     return data;
   }
+
+  map(Function(dynamic x) param0) {}
+  toMap() {}
 }
 
 class PrivacySetting {

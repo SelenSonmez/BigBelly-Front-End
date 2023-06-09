@@ -9,7 +9,6 @@ class ProfileHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final userProvider = Provider.of<UserModel>(context);
     final value = ref.watch(userProvider);
     return SliverToBoxAdapter(
       child: Padding(
@@ -30,11 +29,11 @@ class ProfileHeader extends ConsumerWidget {
                   children: [
                     Text(
                       value.getUser.name.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    UserFollowingStatus(),
+                    const UserFollowingStatus(),
                   ],
                 ),
               ),
