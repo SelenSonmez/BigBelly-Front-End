@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:bigbelly/screens/settings/texts.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../imports.dart';
 
@@ -138,7 +140,13 @@ class _SettingState extends State<Setting> {
                                                 Colors.red.shade400,
                                             content: const Text(
                                                 "Dil Türkçeye Çevrildi")));
+
+                                    final prefs =
+                                        await SharedPreferences.getInstance();
+                                    await prefs.remove('language');
+                                    await prefs.setString('language', "TR");
                                     setState(() {});
+                                    SystemNavigator.pop();
                                   }
                                 },
                                 child: Image.asset(
@@ -161,7 +169,12 @@ class _SettingState extends State<Setting> {
                                               Colors.blueAccent.shade400,
                                           content: Text(
                                               "Language Has Changed To English")));
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.remove('language');
+                                  await prefs.setString('language', "EN");
                                   setState(() {});
+                                  SystemNavigator.pop();
                                 }
                               },
                               child: Image.asset(
