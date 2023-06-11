@@ -83,7 +83,9 @@
         "EnterCollectionName": "Enter Collection Name",
         "Today":"Today",
         "Archive":"Archive",
-        "PostArchived":"Post Archived"
+        "PostArchived":"Post Archived",
+        "WhyCommentReport":"Why do you want to report this comment?"
+
     },
     "ProfileScreen":{
         "Posts":"Posts",
@@ -100,7 +102,7 @@
         "Easy":"Easy",
         "Medium":"Medium",
         "Hard":"Hard",
-        "PreparationTime":"PreparationTime",
+        "PreparationTime":"Preparation Time",
         "BakingTime":"Baking Time",
         "Ingredients":"Ingredients",
         "Servings":"Servings",
@@ -184,7 +186,11 @@
         "TableSpoon":"Table Spoon",
         "Prev":"Prev",
         "Next":"Next",
-        "IfItemIsPicked": "If item is picked from the list enter grams for calorie calculation"
+        "PleasePickAnImage":"Please pick an image",
+        "IfItemIsPicked": "If item is picked from the list enter grams for calorie calculation",
+        "ImagePickerSize": "The image should not exceed 1.5mb",
+        "Alert":"Alert!"
+
     },
     "SettingsScreen":{
         "Settings":"Settings",

@@ -1,3 +1,4 @@
+import 'package:bigbelly/screens/add_post/translate.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,19 +7,16 @@ import '../../imports.dart';
 import '../helpers/decoration.dart';
 
 class RecipeCard extends ConsumerStatefulWidget {
-  RecipeCard(
-      {super.key,
-      required this.title,
-      required this.explanation,
-      required this.textFieldLabel,
-      this.isDoubleField = false,
-      this.secondTextFieldLabel});
+  RecipeCard({
+    super.key,
+    required this.title,
+    required this.explanation,
+    this.isDoubleField = false,
+  });
 
   String title;
   String explanation;
-  String textFieldLabel;
   bool? isDoubleField;
-  String? secondTextFieldLabel;
 
   @override
   ConsumerState<RecipeCard> createState() => _RecipeCardState();
@@ -85,7 +83,7 @@ class _RecipeCardState extends ConsumerState<RecipeCard> {
                                       "${resultingDuration.toString().split(':')[0]} : ${resultingDuration.toString().split(':')[1]}"
                                   : "";
 
-                              widget.title == "Preparation Time"
+                              widget.title == PreparationTime
                                   ? post.getPost.preparation_time =
                                       resultingDuration
                                   : post.getPost.baking_time =
@@ -107,15 +105,14 @@ class _RecipeCardState extends ConsumerState<RecipeCard> {
                             controller: TextEditingController(
                                 text: post.getPost.portion),
                             onChanged: (value) => post.getPost.portion = value,
-                            decoration:
-                                postTextFieldDecoration("Servings", "1"),
+                            decoration: postTextFieldDecoration(Servings, "1"),
                           ),
                         ),
                   Text(
-                    widget.title == "Baking Time" &&
+                    widget.title == BakingTime &&
                             post.getPost.baking_time != null
                         ? post.getPost.baking_time.toString()
-                        : widget.title == "Preparation Time" &&
+                        : widget.title == PreparationTime &&
                                 post.getPost.preparation_time != null
                             ? post.getPost.preparation_time.toString()
                             : "",

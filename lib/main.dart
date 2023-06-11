@@ -19,21 +19,59 @@ void main() async {
   } else {
     await TextDecider().setPreferredLanguage('EN').load();
   }
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends ConsumerWidget {
+  MyApp({Key? key}) : super(key: key);
+  static ValueNotifier<ThemeMode> notifier = ValueNotifier(ThemeMode.light);
   @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        designSize: const Size(360, 732),
-        builder: (BuildContext context, Widget? child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(primarySwatch: Colors.green),
-            home: LoginScreen(),
-          );
-        });
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: notifier,
+      builder: (_, mode, __) {
+        return ScreenUtilInit(
+          designSize: const Size(360, 732),
+          builder: (context, child) {
+            // darkMode.setMode = mode;
+            // darkMode.setNotifier = _notifier;
+            return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(primarySwatch: Colors.green),
+                darkTheme: ThemeData(
+                  brightness: Brightness.dark,
+                  primarySwatch: Colors.green,
+                ),
+                themeMode: mode, // Decides which theme to show, light or dark.
+                home: LoginScreen());
+          },
+
+          // child: MaterialApp(
+          //   theme: ThemeData.light(),
+          //   darkTheme: ThemeData.dark(),
+          //   themeMode: mode, // Decides which theme to show, light or dark.
+          //   home: LoginScreen(),
+          // home: Scaffold(
+          //   body: Center(
+          //     child: ElevatedButton(
+          //       onPressed: () => _notifier.value =
+          //           mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light,
+          //       child: Text('Toggle Theme'),
+          //     ),
+          //   ),
+          // ),
+          // ),
+        );
+      },
+    );
+    // return ScreenUtilInit(
+    //     designSize: const Size(360, 732),
+    //     builder: (BuildContext context, Widget? child) {
+    //       return MaterialApp(
+    //         debugShowCheckedModeBanner: false,
+    //         theme: ThemeData(primarySwatch: Colors.green),
+    //         home: LoginScreen(),
+    //       );
+    //     });
   }
 }

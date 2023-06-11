@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
@@ -17,9 +19,11 @@ class ImageHelper {
     if (multiple) {
       return await _imagePicker.pickMultiImage(imageQuality: imageQuality);
     }
-    final file = await _imagePicker.pickImage(
+    final files = await _imagePicker.pickImage(
         source: source, imageQuality: imageQuality);
-    if (file != null) return [file];
+    print("AAAAAAAAAAAAAAAA");
+    print(File(source.name).length);
+    if (files != null) return [files];
     return [];
   }
 

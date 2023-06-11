@@ -16,8 +16,9 @@ class ProfileHeader extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircleAvatar(
-              radius: 50,
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: Colors.green.shade100,
               backgroundImage:
                   AssetImage('assets/images/defaultProfilePic.jpg'),
             ),

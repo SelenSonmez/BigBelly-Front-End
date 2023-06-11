@@ -20,8 +20,9 @@ import '../helpers/page_below_string.dart';
 import '../register/texts.dart';
 
 class LoginScreen extends ConsumerWidget {
-  LoginScreen({Key? key}) : super(key: key);
-
+  LoginScreen({Key? key, this.notifier, this.mode}) : super(key: key);
+  ThemeMode? mode;
+  ValueNotifier<ThemeMode>? notifier;
   final formKey = GlobalKey<FormState>();
 
   Map<String, dynamic> fields = {'username': null, 'password': null};
@@ -34,6 +35,23 @@ class LoginScreen extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // home: Scaffold(
+            //   body: Center(
+            //     child: ElevatedButton(
+            //       onPressed: () => _notifier.value =
+            //           mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light,
+            //       child: Text('Toggle Theme'),
+            //     ),
+            //   ),
+            // ),
+            // ),
+            Text(
+              SignIn,
+              style: GoogleFonts.mulish(
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.bold,
+                  color: textFieldGray),
+            ),
             Hero(tag: "logo", child: Image.asset(logoImage)),
             Form(
                 key: formKey,

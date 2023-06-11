@@ -60,3 +60,5 @@ String Archive =
     TextDecider().goOnPath('MainPage').target('Archive').decideText();
 String PostArchived =
     TextDecider().goOnPath('MainPage').target('PostArchived').decideText();
+String WhyCommentReport =
+    TextDecider().goOnPath('MainPage').target('WhyCommentReport').decideText();

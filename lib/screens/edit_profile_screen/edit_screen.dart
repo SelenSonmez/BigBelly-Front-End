@@ -154,8 +154,6 @@ class _EditScreenState extends State<EditScreen> {
                       width: 400,
                       height: 150,
                       onSuccess: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(PasswordIsNotMatched)));
                         setState(() {
                           isNewPasswordAvailable = true;
                         });

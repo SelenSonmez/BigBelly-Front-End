@@ -13,60 +13,10 @@ class PostDetails extends ConsumerWidget {
   Post post;
   int index;
   final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
-  List<Ingredient> ingredients = [
-    Ingredient(
-        id: 1,
-        name: "Agara",
-        amount: "1",
-        amountType: "Table Spoon",
-        grams: 100),
-    Ingredient(
-        id: 1,
-        name: "Sirdan",
-        amount: "1/2",
-        amountType: "Tea Spoon",
-        grams: 100),
-    Ingredient(
-        id: 1,
-        name: "Un",
-        amount: "1/4",
-        amountType: "Table Spoon",
-        grams: 100),
-    Ingredient(
-        id: 1,
-        name: "Carrot",
-        amount: "3/2",
-        amountType: "Table Spoon",
-        grams: 100),
-  ];
-  List<StepTile> steps = [
-    StepTile(
-      step: "Unu koy",
-      stepIndex: 1,
-    ),
-    StepTile(
-      step: "Sekeri cirp",
-      stepIndex: 2,
-    ),
-    StepTile(
-      step: "Tereyagini erit",
-      stepIndex: 3,
-    ),
-    StepTile(
-      step: "karistir hepsini",
-      stepIndex: 4,
-    ),
-  ];
-  List<BigBellyPostTag> tags = [
-    BigBellyPostTag(tagName: "Vegan", id: 0),
-    BigBellyPostTag(tagName: "Gluten", id: 1),
-    BigBellyPostTag(tagName: "Asgksla", id: 2),
-    BigBellyPostTag(tagName: "aksjfsa", id: 3),
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String difficulty = None;
+    String difficulty = "";
     if (post.difficulty != null) {
       switch (post.difficulty) {
         case "0":
@@ -164,7 +114,7 @@ class PostDetails extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "${post.ingredients![index].amount} (${post.ingredients![index].grams} g)   ${ingredients[index].amountType}",
+                            "${post.ingredients![index].amount} (${post.ingredients![index].grams} g)   ${post.ingredients![index].amountType}",
                             style: GoogleFonts.slabo27px(
                               fontSize: 20,
                             ),

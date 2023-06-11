@@ -39,7 +39,7 @@ class ProfilePage extends ConsumerWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Setting(),
+                    builder: (context) => Setting(),
                   ));
             },
           )

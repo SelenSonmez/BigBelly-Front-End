@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bigbelly/constants/providers/nav_bar_visible.dart';
 import 'package:bigbelly/screens/add_post/translate.dart';
@@ -42,9 +43,10 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
     super.initState();
     pages.add(const _FirstPage());
     pages.add(const _SecondPage());
+    pages.add(const FifthPage());
+
     pages.add(const _ThirdPage());
     pages.add(const FourthPage());
-    pages.add(const FifthPage());
     pages.add(const _SixthPage());
   }
 
@@ -54,61 +56,58 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
     final navbar = ref.watch(navbarProvider);
     navbar.setVisible = false;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: mainThemeColor,
-          title: Text(_changeAppBarTitle(activeStep)),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              IconStepper(
-                stepColor: Colors.green.shade100,
-                activeStepBorderColor: Colors.green.shade200,
-                activeStepBorderWidth: 1.5,
-                lineColor: const Color.fromARGB(255, 52, 123, 54),
-                icons: const [
-                  Icon(Icons.camera_alt),
-                  Icon(Icons.access_alarm),
-                  Icon(Icons.food_bank_rounded),
-                  Icon(Icons.edit),
-                  Icon(Icons.flag),
-                  Icon(Icons.tag_sharp),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: mainThemeColor,
+        title: Text(_changeAppBarTitle(activeStep)),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            IconStepper(
+              stepColor: Colors.green.shade100,
+              activeStepBorderColor: Colors.green.shade200,
+              activeStepBorderWidth: 1.5,
+              lineColor: const Color.fromARGB(255, 52, 123, 54),
+              icons: const [
+                Icon(Icons.camera_alt),
+                Icon(Icons.access_alarm),
+                Icon(Icons.food_bank_rounded),
+                Icon(Icons.edit),
+                Icon(Icons.flag),
+                Icon(Icons.tag_sharp),
+              ],
 
-                // activeStep property set to activeStep variable defined above.
-                activeStep: activeStep,
+              // activeStep property set to activeStep variable defined above.
+              activeStep: activeStep,
 
-                // This ensures step-tapping updates the activeStep.
-                onStepReached: (index) {
-                  setState(() {
-                    activeStep = index;
-                  });
-                },
-              ),
-              // header(),
-              Expanded(
-                child: pages[activeStep],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  previousButton(),
-                  Column(
-                    children: [
-                      activeStep == 5
-                          ? createPostButton(
-                              post.getPost.title, post.getPost.imageURL)
-                          : nextButton(),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
+              // This ensures step-tapping updates the activeStep.
+              onStepReached: (index) {
+                setState(() {
+                  activeStep = index;
+                });
+              },
+            ),
+            // header(),
+            Expanded(
+              child: pages[activeStep],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                previousButton(),
+                Column(
+                  children: [
+                    activeStep == 5
+                        ? createPostButton(
+                            post.getPost.title, post.getPost.imageURL)
+                        : nextButton(),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -138,13 +137,11 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
         style: ElevatedButton.styleFrom(backgroundColor: mainThemeColor),
         onPressed: () async {
           if (title == null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.red,
-                content: Text("Please enter title")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red, content: Text(PleaseEnterATitle)));
           } else if (image == null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                backgroundColor: Colors.red,
-                content: Text("Please pick an image")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red, content: Text(PleasePickAnImage)));
           } else {
             dynamic id = await SessionManager().get('id');
 
@@ -310,8 +307,34 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
                           cropStyle: CropStyle.rectangle,
                         );
                         if (croppedFile != null) {
-                          setState(
-                              () => post.getPost.imageURL = croppedFile.path);
+                          post.getPost.imageURL = croppedFile.path;
+                          final bytes =
+                              File(post.getPost.imageURL!).lengthSync();
+                          if (bytes > 1500) {
+                            post.getPost.imageURL = null;
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(Alert),
+                                  content: Text(ImagePickerSize),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(Ok,
+                                          style:
+                                              TextStyle(color: Colors.green)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            setState(
+                                () => post.getPost.imageURL = croppedFile.path);
+                          }
                         }
                       }
                     },
@@ -378,21 +401,17 @@ class _SecondPageState extends ConsumerState<_SecondPage> {
             children: difficulty,
           ),
           RecipeCard(
-              title: Portion,
-              explanation: PortionExplanation,
-              textFieldLabel: Servings),
+            title: Portion,
+            explanation: PortionExplanation,
+          ),
           RecipeCard(
             title: PreparationTime,
             explanation: PreparationTimeExplanation,
-            textFieldLabel: Hour,
-            secondTextFieldLabel: Min,
             isDoubleField: true,
           ),
           RecipeCard(
             title: BakingTime,
             explanation: BakingTimeExplanation,
-            textFieldLabel: Hour,
-            secondTextFieldLabel: Min,
             isDoubleField: true,
           ),
         ]),

@@ -54,10 +54,14 @@ class WriteComment extends StatelessWidget {
 }
 
 class Comment {
+  int? id;
   String username;
   String comment;
+  int? acc_id;
 
   Comment({
+    this.id,
+    this.acc_id,
     required this.username,
     required this.comment,
   });
@@ -71,7 +75,9 @@ class Comment {
 
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
+      id: map['id'],
       username: map['account']['username'] as String,
+      acc_id: map['account_id'],
       comment: map['comment'] as String,
     );
   }
@@ -79,7 +85,8 @@ class Comment {
   String toJson() => json.encode(toMap());
 
   @override
-  String toString() => "username: $username, comment: $comment";
+  String toString() =>
+      "username: $username, comment: $comment, id: $id, acc_id: $acc_id";
   factory Comment.fromJson(String source) =>
       Comment.fromMap(json.decode(source) as Map<String, dynamic>);
 }
@@ -107,12 +114,18 @@ class _CommentScreenState extends State<CommentScreen> {
       Comment comment = Comment.fromJson(jsonEncode(i));
       return comment;
     }));
+    print("BBBBBBBBBBBBBBBB");
+    print(commentsDatabase);
 
     commentsDatabase.forEach(
       (element) {
         comments.add(CommentTile(
-            comment:
-                Comment(comment: element.comment, username: element.username)));
+            post: widget.post,
+            comment: Comment(
+                comment: element.comment,
+                username: element.username,
+                acc_id: element.acc_id,
+                id: element.id)));
       },
     );
 
@@ -205,18 +218,32 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 }
 
-class CommentTile extends StatelessWidget {
-  CommentTile({super.key, required this.comment, this.isReply = false});
+class CommentTile extends StatefulWidget {
+  CommentTile(
+      {super.key, this.post, required this.comment, this.isReply = false});
 
   Comment comment;
   bool isReply;
+  Post? post;
 
-  TextEditingController _controller = TextEditingController();
+  @override
+  State<CommentTile> createState() => _CommentTileState();
+}
+
+class _CommentTileState extends State<CommentTile> {
+  String? reportMessage;
+
+  bool isSelf = false;
+  @override
+  void initState() {
+    super.initState();
+    checkSelfUsername(widget.comment.username);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: isReply
+      padding: widget.isReply
           ? EdgeInsets.fromLTRB(50.w, 10.h, 10.w, 20.h)
           : EdgeInsets.all(10.h),
       child: Row(children: [
@@ -231,7 +258,7 @@ class CommentTile extends StatelessWidget {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: Colors.green.shade300,
                 borderRadius: BorderRadius.circular(15.w)),
             child: Padding(
               padding: EdgeInsets.fromLTRB(10.w, 15.h, 10.w, 0),
@@ -240,40 +267,94 @@ class CommentTile extends StatelessWidget {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(bottom: 8.0.h),
-                      child: Text(comment.username,
+                      child: Text(widget.comment.username,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16))),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 18.0),
-                    child:
-                        Text(comment.comment, style: TextStyle(fontSize: 16)),
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     TextButton(
-                  //       child: const Text("Like"),
-                  //       onPressed: () {},
-                  //     ),
-                  //     // TextButton(onPressed: () {}, child: const Text("Reply")),
-                  //     TextButton(onPressed: () {}, child: const Text("Edit"))
-                  //   ],
-                  // ),
+                      padding: const EdgeInsets.only(bottom: 18.0),
+                      // child: checkSelfUsername(comment.username) == true
+                      //     ? Text("ALO")
+                      //     : Text(comment.comment, style: TextStyle(fontSize: 16)),
+                      child: isSelf == true
+                          ? TextField(
+                              onSubmitted: (value) {},
+                              decoration: InputDecoration(
+                                  hintText: widget.comment.comment),
+                            )
+                          : Text(widget.comment.comment))
                 ],
               ),
             ),
           ),
         ),
+        IconButton(
+          icon: Icon(Icons.report_problem),
+          color: Colors.red.shade900,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(Report),
+                  content: Container(
+                    height: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(WhyCommentReport,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Expanded(
+                          child: TextField(
+                            maxLength: 50,
+                            onChanged: (value) {
+                              reportMessage = value;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(Cancel)),
+                    TextButton(
+                      child: Text(Send),
+                      onPressed: () async {
+                        final id = await SessionManager().get("id");
+                        Map<String, dynamic> params = {
+                          'reason': reportMessage,
+                          'commesnt_id': widget.comment.id,
+                          'account_id': widget.comment.acc_id,
+                        };
+                        final response =
+                            await dio.post('/report/comment', data: params);
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text(ReportHasSend),
+                        ));
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        )
       ]),
     );
   }
 
   Future<bool> checkSelfUsername(String commentUsername) async {
-    if (comment.username == commentUsername) {
-      debugPrint(comment.username);
-      debugPrint(commentUsername);
-      return true;
+    dynamic username = await SessionManager().get("username");
+    if (commentUsername == username) {
+      isSelf = true;
+      setState(() {});
+      return isSelf;
     }
-    return false;
+    return !isSelf;
   }
 }

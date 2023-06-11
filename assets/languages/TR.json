@@ -83,7 +83,8 @@
         "EnterCollectionName": "Koleksiyon adı gir",
         "Today":"Bugün",
         "Archive":"Arşivle",
-        "PostArchived":"Gönderi Arşivlendi"
+        "PostArchived":"Gönderi Arşivlendi",
+        "WhyCommentReport":"Neden bu yorumu raporlamak istiyorsun?"
     },
     "ProfileScreen":{
         "Posts":"Gönderiler",
@@ -143,7 +144,7 @@
         "Hard":"Zor",
         "Portion": "Porsiyon",
         "PortionExplanation": "Tarifin kaç porsiyonluk olduğunu gir",
-        "Servings":"Kişilik",
+        "Servings":"Servis",
         "PreparationTime":"Hazırlama Süresi",
         "Hour":"saat",
         "Min":"dakika",
@@ -183,7 +184,11 @@
         "TableSpoon":"Yemek Kaşığı",
         "Prev":"Önceki",
         "Next":"Sonraki",
-        "IfItemIsPicked": "Eğer malzemeyi listeden seçtiysen, kaç gram olduğunu gir"
+        "IfItemIsPicked": "Eğer malzemeyi listeden seçtiysen, kaç gram olduğunu gir",
+        "PleasePickAnImage":"Lütfen bir resim seç",
+        "ImagePickerSize": "Fotoğrafın 1.5mb'ı aşmaması gerekli",
+        "Alert":"Uyarı!"
+
     },
     "SettingsScreen":{
         "Settings":"Ayarlar",

@@ -154,3 +154,13 @@ String Prev =
     TextDecider().goOnPath("AddPostScreen").target("Prev").decideText();
 String Next =
     TextDecider().goOnPath("AddPostScreen").target("Next").decideText();
+String PleasePickAnImage = TextDecider()
+    .goOnPath("AddPostScreen")
+    .target("PleasePickAnImage")
+    .decideText();
+String ImagePickerSize = TextDecider()
+    .goOnPath("AddPostScreen")
+    .target("ImagePickerSize")
+    .decideText();
+String Alert =
+    TextDecider().goOnPath("AddPostScreen").target("Alert").decideText();
