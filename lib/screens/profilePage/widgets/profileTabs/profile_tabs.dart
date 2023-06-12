@@ -12,7 +12,8 @@ import '../../../../constants/providers/user_provider.dart';
 import '../../../authentication/model/user_model.dart';
 
 class ProfileTabs extends ConsumerStatefulWidget {
-  const ProfileTabs({Key? key}) : super(key: key);
+  ProfileTabs({Key? key, required this.isInsitution}) : super(key: key);
+  bool isInsitution;
 
   @override
   ConsumerState<ProfileTabs> createState() => _ProfileTabsState();
@@ -24,7 +25,6 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   int activeIndex = 0;
   bool isSelf = false;
   bool isFollowing = false;
-
   ScrollController scrollController = ScrollController();
 
   @override
@@ -32,7 +32,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
     super.initState();
     checkSelfID();
 
-    tabController = TabController(length: 4, vsync: this);
+    tabController =
+        TabController(length: widget.isInsitution ? 4 : 3, vsync: this);
   }
 
   @override
@@ -48,58 +49,61 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
     });
     return Column(children: [
       TabBar(
-        indicatorColor: mainThemeColor,
-        indicatorWeight: 1.8,
-        indicatorPadding: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        controller: tabController,
-        tabs: [
-          Tab(
-              icon: Icon(Icons.grid_on_outlined,
-                  color: activeIndex == 0
-                      ? mainThemeColor
-                      : const Color.fromARGB(255, 140, 204, 142))),
-          Tab(
-            icon: Icon(Icons.favorite_border_sharp,
-                color: activeIndex == 1
-                    ? mainThemeColor
-                    : const Color.fromARGB(255, 140, 204, 142)),
-          ),
-          Tab(
-              icon: Icon(Icons.bookmark_added_outlined,
-                  color: activeIndex == 2
-                      ? mainThemeColor
-                      : const Color.fromARGB(255, 140, 204, 142))),
-          Tab(
-              icon: Icon(Icons.menu_book,
-                  color: activeIndex == 3
-                      ? mainThemeColor
-                      : const Color.fromARGB(255, 140, 204, 142))),
-        ],
-      ),
+          indicatorColor: mainThemeColor,
+          indicatorWeight: 1.8,
+          indicatorPadding: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
+          controller: tabController,
+          tabs: showTabs(userValue)),
       Expanded(
         // width: 100,
         // height: 100,
-        child: TabBarView(controller: tabController, children: [
-          userValue.getUser.privacySetting!.isPrivate != null &&
-                  (userValue.getUser.privacySetting!.isPrivate == true &&
-                      !isSelf &&
-                      isFollowing)
-              ? const Center(
-                  child: Expanded(
-                    child: Icon(
-                      Icons.lock_outline,
-                      size: 55,
-                    ),
-                  ),
-                )
-              : UserPosts(isUserSelf: isSelf),
-          const LikedPosts(),
-          const SavedPosts(),
-          CollectionsTab()
-        ]),
+        child:
+            TabBarView(controller: tabController, children: getTabs(userValue)),
       )
     ]);
+  }
+
+  getTabs(var userValue) {
+    if (userValue.getUser.isInstitution != null &&
+        userValue.getUser.isInstitution == true) {
+      [
+        userValue.getUser.privacySetting!.isPrivate != null &&
+                (userValue.getUser.privacySetting!.isPrivate == true &&
+                    !isSelf &&
+                    isFollowing)
+            ? const Center(
+                child: Expanded(
+                  child: Icon(
+                    Icons.lock_outline,
+                    size: 55,
+                  ),
+                ),
+              )
+            : UserPosts(isUserSelf: isSelf),
+        CollectionsTab(),
+        const Recipes(),
+        MealMenu()
+      ];
+    } else {
+      return [
+        userValue.getUser.privacySetting!.isPrivate != null &&
+                (userValue.getUser.privacySetting!.isPrivate == true &&
+                    !isSelf &&
+                    isFollowing)
+            ? const Center(
+                child: Expanded(
+                  child: Icon(
+                    Icons.lock_outline,
+                    size: 55,
+                  ),
+                ),
+              )
+            : UserPosts(isUserSelf: isSelf),
+        CollectionsTab(),
+        const Recipes(),
+      ];
+    }
   }
 
   Future<bool> checkSelfID() async {
@@ -122,5 +126,53 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
       }
     }
     setState(() {});
+  }
+
+  List<Widget> showTabs(var userValue) {
+    if (userValue.getUser.isInstitution != null &&
+        userValue.getUser.isInstitution == true) {
+      return [
+        Tab(
+            icon: Icon(Icons.grid_on_outlined,
+                color: activeIndex == 0
+                    ? mainThemeColor
+                    : const Color.fromARGB(255, 140, 204, 142))),
+        Tab(
+          icon: Icon(Icons.bookmarks,
+              color: activeIndex == 1
+                  ? mainThemeColor
+                  : const Color.fromARGB(255, 140, 204, 142)),
+        ),
+        Tab(
+            icon: Icon(Icons.replay,
+                color: activeIndex == 2
+                    ? mainThemeColor
+                    : const Color.fromARGB(255, 140, 204, 142))),
+        Tab(
+            icon: Icon(Icons.menu_book,
+                color: activeIndex == 3
+                    ? mainThemeColor
+                    : const Color.fromARGB(255, 140, 204, 142)))
+      ];
+    } else {
+      return [
+        Tab(
+            icon: Icon(Icons.grid_on_outlined,
+                color: activeIndex == 0
+                    ? mainThemeColor
+                    : const Color.fromARGB(255, 140, 204, 142))),
+        Tab(
+          icon: Icon(Icons.bookmarks,
+              color: activeIndex == 1
+                  ? mainThemeColor
+                  : const Color.fromARGB(255, 140, 204, 142)),
+        ),
+        Tab(
+            icon: Icon(Icons.replay,
+                color: activeIndex == 2
+                    ? mainThemeColor
+                    : const Color.fromARGB(255, 140, 204, 142))),
+      ];
+    }
   }
 }

@@ -270,7 +270,6 @@ class _SettingState extends ConsumerState<Setting> {
                                 Response response = await dio.post(
                                     "/profile/$id/edit",
                                     data: {"privacy_setting": value ? 1 : 0});
-                                debugPrint(response.data.toString());
                               },
                             ),
                           )

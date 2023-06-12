@@ -41,7 +41,6 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     }));
     user.setPostCount(itemsList.length);
     const ProfileInfo();
-    print(itemsList);
     return itemsList;
   }
 

@@ -71,16 +71,30 @@ class MealMenu extends ConsumerWidget {
                       Container(
                         width: 90,
                         height: 90,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            image: menuIngredient.imageUrl != null
-                                ? DecorationImage(
-                                    image: FileImage(
-                                        File(menuIngredient.imageUrl!)))
-                                : DecorationImage(
-                                    image: FileImage(
-                                        File("assets/images/hamburger.jpg.")))),
                         alignment: Alignment.bottomLeft,
+                        decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.circular(20),
+                          // color: Colors.red,
+                          // image: DecorationImage(
+                          //   image: menuIngredient.imageUrl != null
+                          //       ? AssetImage(menuIngredient.imageUrl!)
+                          //       : AssetImage('assets/images/hamburger.jpg'),
+                          //   fit: BoxFit.fill,
+                          // ),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/images/hamburger.jpg')),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        // image: menuIngredient.imageUrl != null
+                        //     ? DecorationImage(
+                        //         image: FileImage(
+                        //             File(menuIngredient.imageUrl!)))
+                        //     : DecorationImage(
+                        //         image: AssetImage(
+                        //             'assets/images/defaultProfilePic.jpg'),
+                        //       )
+                        // child: Image.asset('assets/images/hamburger.jpg')),
                       ),
                       Row(
                         children: [

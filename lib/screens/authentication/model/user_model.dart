@@ -8,6 +8,7 @@ class User {
   List<User>? followers = [];
   List<User>? followeds = [];
   int? postCount = 0;
+  bool? isInstitution = false;
   User(
       {this.id,
       this.username,
@@ -17,6 +18,7 @@ class User {
       this.privacySetting,
       this.followers,
       this.followeds,
+      this.isInstitution,
       this.postCount});
 
   User.fromJson(Map<String, dynamic> json) {

@@ -45,6 +45,7 @@ class LoginScreen extends ConsumerWidget {
             //   ),
             // ),
             // ),
+            Hero(tag: "logo", child: Image.asset(logoImage)),
             Text(
               SignIn,
               style: GoogleFonts.mulish(
@@ -52,7 +53,6 @@ class LoginScreen extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                   color: textFieldGray),
             ),
-            Hero(tag: "logo", child: Image.asset(logoImage)),
             Form(
                 key: formKey,
                 child: Column(

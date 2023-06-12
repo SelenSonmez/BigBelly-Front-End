@@ -57,9 +57,11 @@ class ProfilePage extends ConsumerWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.only(top: 15),
-                child: ProfileTabs(),
+                child: ProfileTabs(
+                  isInsitution: userValue.getUser.isInstitution!,
+                ),
               ),
             ),
           ),

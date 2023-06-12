@@ -1,8 +1,8 @@
 import 'package:bigbelly/screens/mainPage/home_page.dart';
 import 'package:flutter/material.dart';
 
-class SavedPosts extends StatelessWidget {
-  const SavedPosts({super.key});
+class Recipes extends StatelessWidget {
+  const Recipes({super.key});
 
   @override
   Widget build(BuildContext context) {
