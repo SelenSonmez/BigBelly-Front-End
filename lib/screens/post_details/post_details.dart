@@ -9,9 +9,11 @@ import '../model/post.dart';
 import 'texts.dart';
 
 class PostDetails extends ConsumerWidget {
-  PostDetails({super.key, required this.post, required this.index});
+  PostDetails(
+      {super.key, required this.post, this.hideUsername, required this.index});
   Post post;
   int index;
+  bool? hideUsername = false;
   final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
 
   @override
@@ -39,7 +41,7 @@ class PostDetails extends ConsumerWidget {
             child: Column(
               children: [
                 PostitleAndTags(post: post),
-                PostOwnerAndDate(post: post),
+                PostOwnerAndDate(post: post, hideUsername: hideUsername),
                 postReactions(
                   post: post,
                   index: index,
@@ -127,7 +129,8 @@ class PostDetails extends ConsumerWidget {
                       ),
                     );
                   },
-                  itemCount: post.ingredients!.length,
+                  itemCount:
+                      post.ingredients != null ? post.ingredients!.length : 0,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -194,27 +197,29 @@ class PostDetails extends ConsumerWidget {
                       ),
                     );
                   },
-                  itemCount: post.steps!.length,
+                  itemCount: post.steps != null ? post.steps!.length : 0,
                 ),
                 title(Tags),
                 Wrap(
                   spacing: 10.w,
-                  children: post.tags!
-                      .map((chip) => Chip(
-                            avatar: const Icon(
-                              Icons.flag_rounded,
-                              color: Color.fromARGB(255, 18, 72, 5),
-                            ),
-                            labelStyle: TextStyle(fontSize: 15.sp),
-                            key: ValueKey(chip.id),
-                            label: Text(chip.tagName),
-                            backgroundColor: chip.id % 2 == 0
-                                ? const Color.fromARGB(255, 159, 205, 164)
-                                : const Color.fromARGB(255, 213, 232, 214),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 7.h, horizontal: 10.w),
-                          ))
-                      .toList(),
+                  children: post.tags != null
+                      ? post.tags!
+                          .map((chip) => Chip(
+                                avatar: const Icon(
+                                  Icons.flag_rounded,
+                                  color: Color.fromARGB(255, 18, 72, 5),
+                                ),
+                                labelStyle: TextStyle(fontSize: 15.sp),
+                                key: ValueKey(chip.id),
+                                label: Text(chip.tagName),
+                                backgroundColor: chip.id % 2 == 0
+                                    ? const Color.fromARGB(255, 159, 205, 164)
+                                    : const Color.fromARGB(255, 213, 232, 214),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 7.h, horizontal: 10.w),
+                              ))
+                          .toList()
+                      : [Container()],
                 ),
                 const SizedBox(
                   height: 60,

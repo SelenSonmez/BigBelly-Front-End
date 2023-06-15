@@ -57,6 +57,17 @@ class BigBellyAppBar extends ConsumerWidget {
               },
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(5.0),
+          //   child: IconButton(
+          //     icon: Icon(Icons.tag),
+          //     iconSize: 35,
+          //     onPressed: () {
+          //       Navigator.push(context,
+          //           MaterialPageRoute(builder: (context) => FollowerRequest()));
+          //     },
+          //   ),
+          // ),
           Padding(
             padding: EdgeInsets.only(right: 10.0.w),
             child: GestureDetector(
@@ -64,8 +75,7 @@ class BigBellyAppBar extends ConsumerWidget {
               onTap: () async {
                 dynamic id = await SessionManager().get('id');
                 Response info = await dio.get('/profile/$id/', data: id);
-                debugPrint(info.data['payload']['user'].toString());
-
+                print(info.data);
                 User user = User.fromJson(info.data['payload']['user']);
                 userValue.setUser = user;
                 Navigator.push(context,

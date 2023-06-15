@@ -92,6 +92,10 @@ String Hour =
 String Min = TextDecider().goOnPath("AddPostScreen").target("Min").decideText();
 String RemovingStep =
     TextDecider().goOnPath("AddPostScreen").target("RemovingStep").decideText();
+String RemovingIngredient = TextDecider()
+    .goOnPath("AddPostScreen")
+    .target("RemovingIngredient")
+    .decideText();
 String TagLimitReached = TextDecider()
     .goOnPath("AddPostScreen")
     .target("TagLimitReached")

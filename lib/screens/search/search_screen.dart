@@ -20,7 +20,20 @@ class SearchScreen extends StatelessWidget {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
           BigBellyAppBar(
-              trailingWidget: IconButton(
+              trailingWidget: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: IconButton(
+                  icon: Icon(Icons.tag),
+                  iconSize: 35,
+                  onPressed: () {
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => FollowerRequest()));
+                  },
+                ),
+              ),
+              IconButton(
                   onPressed: () {},
                   icon: IconButton(
                     icon: Icon(size: 30.w, Icons.search),
@@ -28,10 +41,12 @@ class SearchScreen extends StatelessWidget {
                       await showSearch(
                           context: context, delegate: BigBellySearchDelegate());
                     },
-                  )))
+                  )),
+            ],
+          )),
         ];
       },
-      body: Container(),
+      body: Container(child: Text("alo")),
     ));
   }
 }

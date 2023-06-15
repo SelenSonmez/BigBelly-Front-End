@@ -180,21 +180,21 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text: DidntReceiveTheCode,
-                    style: TextStyle(color: Colors.black54, fontSize: 15.sp),
-                    children: [
-                      TextSpan(
-                          text: " ${Resend.toUpperCase()}",
-                          recognizer: onTapRecognizer,
-                          style: TextStyle(
-                              color: const Color(0xFF91D3B3),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.sp))
-                    ]),
-              ),
+              // RichText(
+              //   textAlign: TextAlign.center,
+              //   text: TextSpan(
+              //       text: DidntReceiveTheCode,
+              //       style: TextStyle(color: Colors.black54, fontSize: 15.sp),
+              //       children: [
+              //         TextSpan(
+              //             text: " ${Resend.toUpperCase()}",
+              //             recognizer: onTapRecognizer,
+              //             style: TextStyle(
+              //                 color: const Color(0xFF91D3B3),
+              //                 fontWeight: FontWeight.bold,
+              //                 fontSize: 16.sp))
+              //       ]),
+              // ),
               //Verify Button
               Column(
                 children: [

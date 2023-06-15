@@ -1,14 +1,17 @@
+import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../constants/providers/user_provider.dart';
 import '../../../constants/styles.dart';
 import '../../model/post.dart';
 import '../texts.dart';
 
 class PostOwnerAndDate extends ConsumerWidget {
-  PostOwnerAndDate({super.key, required this.post});
+  PostOwnerAndDate({super.key, this.hideUsername, required this.post});
   Post post;
+  bool? hideUsername = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -29,7 +32,25 @@ class PostOwnerAndDate extends ConsumerWidget {
               ),
               Padding(
                 padding: EdgeInsets.all(8.0.h),
-                child: Text(post.account!.username!),
+                child: hideUsername == false
+                    ? TextButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                EdgeInsets.fromLTRB(0, 0, 17, 0))),
+                        child: Text(
+                          post.account!.username!,
+                        ),
+                        onPressed: () {
+                          final userValue = ref.watch(userProvider);
+                          userValue.setUser = post.account!;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(),
+                              ));
+                        },
+                      )
+                    : Text(post.account!.username!),
               ),
             ],
           ),

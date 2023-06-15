@@ -37,6 +37,7 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     itemsList = List.from(postsJson.map((i) {
       Post post = Post.fromJson(jsonEncode(i));
       post.account = User.fromJson(response.data['payload']['account']);
+
       return post;
     }));
     user.setPostCount(itemsList.length);

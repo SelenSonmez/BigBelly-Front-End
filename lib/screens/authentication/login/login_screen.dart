@@ -11,6 +11,7 @@ import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/recommendation/recommendation_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/providers/currentUser_provider.dart';
 import '../model/user_model.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../helpers/page_below_string.dart';
 import '../register/texts.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({Key? key, this.notifier, this.mode}) : super(key: key);
@@ -120,13 +122,22 @@ class LoginScreen extends ConsumerWidget {
       case "Account needs verification":
         String email = response.data['payload']['email'];
         setSession(response);
-
+        sendEmail(
+            to_email: email,
+            name: fields['username'],
+            email: "selensonmez2001@gmail.com",
+            subject: "Verification Code",
+            message: "1234");
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: ((context) => PinCodeVerificationScreen(email))));
         break;
       case "Login successful":
+        final prefs = await SharedPreferences.getInstance();
+        // prefs.setString("username", fields['username']);
+        print("pw" + fields['password']);
+        prefs.setString("password", fields['password']);
         var userID = ref.watch(userIDProvider);
         userID.setUserID = response.data['payload']['id'];
         setSession(response);
@@ -149,5 +160,36 @@ class LoginScreen extends ConsumerWidget {
         .set('username', jsonEncode(response.data['payload']['username']));
     await SessionManager()
         .set('privacy', jsonEncode(response.data['payload']['privacy']));
+  }
+
+  Future sendEmail({
+    required String name,
+    required String email,
+    required String subject,
+    required String message,
+    required String to_email,
+  }) async {
+    final serviceID = 'service_reomxzb';
+    final templateID = 'template_k0cgsde';
+    final userID = '-SFDvk8X6DfzqOwEn';
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode({
+          'service_id': serviceID,
+          'template_id': templateID,
+          'user_id': userID,
+          'template_params': {
+            'user_name': name,
+            'user_email': email,
+            'to_email': to_email,
+            'user_subject': subject,
+            'user_message': message
+          }
+        }));
+    print(response.body);
   }
 }

@@ -33,7 +33,8 @@ class _PostListViewState extends ConsumerState<PostListView> {
     var postsJson = response.data['payload']['posts'];
     List<Post> itemsList = List.from(postsJson.map((i) {
       Post post = Post.fromJson(jsonEncode(i));
-      // post.account = User.fromJson(response.data['payload']['account']);
+      post.account!.privacySetting!.isPrivate =
+          i['account']['privacy_setting']['is_private'];
       return post;
     }));
     for (var element in itemsList) {
@@ -111,7 +112,7 @@ class _PostListViewState extends ConsumerState<PostListView> {
                 child: Column(
                   children: [
                     PostitleAndTags(post: post),
-                    PostOwnerAndDate(post: post),
+                    PostOwnerAndDate(hideUsername: false, post: post),
                     postReactions(
                       post: post,
                       index: index,

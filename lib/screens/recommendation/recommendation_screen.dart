@@ -1,4 +1,6 @@
+import 'package:bigbelly/constants/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecommendationScreen extends StatelessWidget {
@@ -9,28 +11,29 @@ class RecommendationScreen extends StatelessWidget {
     const appTitle = "Big Belly";
     return Scaffold(
         appBar: AppBar(
+          title: Text("Recommendation"),
           leading: Container(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Row(
                 children: [
-                  Text(
-                      style: GoogleFonts.patrickHand(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                      "Big"),
-                  Text(
-                      style: GoogleFonts.patrickHand(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.green.shade900),
-                      "Belly"),
-                  Container(
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      scale: 2,
-                    ),
-                  ),
+                  // Text(
+                  //     style: GoogleFonts.patrickHand(
+                  //         fontSize: 30,
+                  //         fontWeight: FontWeight.w500,
+                  //         color: Colors.white),
+                  //     "Big"),
+                  // Text(
+                  //     style: GoogleFonts.patrickHand(
+                  //         fontSize: 30,
+                  //         fontWeight: FontWeight.w500,
+                  //         color: Colors.green.shade900),
+                  //     "Belly"),
+                  // Container(
+                  //   child: Image.asset(
+                  //     'assets/images/logo.png',
+                  //     scale: 2,
+                  //   ),
+                  // ),
                 ],
               )),
         ),
@@ -38,8 +41,9 @@ class RecommendationScreen extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(10, 20, 0, 15),
+              padding: EdgeInsets.fromLTRB(0, 20, 75, 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Text(
                       style: TextStyle(
@@ -48,7 +52,7 @@ class RecommendationScreen extends StatelessWidget {
                       ),
                       "Recommendation History"),
                   Container(
-                      padding: EdgeInsets.only(left: 25),
+                      // padding: EdgeInsets.only(left: 25),
                       child: Text(
                           style: TextStyle(
                             color: Colors.green,
@@ -67,7 +71,7 @@ class RecommendationScreen extends StatelessWidget {
               ),
               child: SizedBox(
                 width: 350,
-                height: 150,
+                height: 175,
                 child: Center(
                     child: Row(
                   // mainAxisAlignment: MainAxisAlignment.start,
@@ -75,9 +79,10 @@ class RecommendationScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
+                            padding: EdgeInsets.only(bottom: 3),
                             child: ClipRRect(
                               borderRadius:
                                   BorderRadius.circular(20), // Image border
@@ -98,37 +103,60 @@ class RecommendationScreen extends StatelessWidget {
                                   color: Colors.white,
                                   size: 20,
                                   Icons.thumb_up_outlined),
-                              Text(
-                                  style: TextStyle(color: Colors.white), "1000")
+                              Text(style: TextStyle(color: Colors.white), "35")
                             ],
                           ))
                         ],
                       ),
                     ),
                     Container(
-                        // padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                         child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        //Recipe Title
-                        Text(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                            "Recipe Title"),
-                        Text(
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                            "By: Recipe creator's name"),
-                      ],
-                    ))
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: const [
+                            //Recipe Title
+                            Text(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
+                                "Vegan Noodle"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
+                                "By: Chef Ramsay"),
+                          ],
+                        ))
                   ],
                 )),
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text("Get Recommendation"))
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Get Recommendation",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20))),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      dynamic id = await SessionManager().get("id");
+                      final response =
+                          await dio.get("/recommendation?account_id=$id");
+                      print(response.data);
+                    },
+                    child: Text("For Self")),
+                ElevatedButton(onPressed: () {}, child: Text("For Group")),
+              ],
+            )
           ],
         )));
   }

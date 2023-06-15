@@ -2,7 +2,6 @@ import 'package:bigbelly/screens/menu_post/post_meal_for_menu.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/collections/collections_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/liked_posts_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/meal_menu.dart';
-import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/saved_posts_page.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profileTabs/pages/user_posts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import '../../../../constants/Colors.dart';
 import '../../../../constants/providers/user_provider.dart';
 import '../../../authentication/model/user_model.dart';
+import 'pages/recipes.dart';
 
 class ProfileTabs extends ConsumerStatefulWidget {
   ProfileTabs({Key? key, required this.isInsitution}) : super(key: key);

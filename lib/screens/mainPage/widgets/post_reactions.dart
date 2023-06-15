@@ -159,7 +159,21 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                                 TextButton(
                                   child: Text(Accept,
                                       style: TextStyle(fontSize: 18)),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    dynamic id =
+                                        await SessionManager().get("id");
+                                    final response = await dio.post(
+                                        "/post/${widget.post!.id}/recipe",
+                                        data: {
+                                          "account_id": id,
+                                        });
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text("Post has been re-cipe'd"),
+                                    ));
+                                  },
                                 ),
                                 TextButton(
                                   child: Text(Cancel,

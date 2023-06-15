@@ -36,12 +36,7 @@ class _ProfileListViewState extends ConsumerState<ProfileListView> {
   @override
   Widget build(BuildContext context) {
     var user = ref.watch(userProvider);
-
-    // user!.setPostCount(widget.profilePosts!.length);
-    // ProfileInfo();
-
     var userID = ref.watch(userIDProvider);
-    // var id = getID();
     return Scaffold(
         body: Center(
             child: ListView.builder(

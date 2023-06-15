@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bigbelly/screens/authentication/login/login_screen.dart';
 import 'package:bigbelly/screens/settings/texts.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../main.dart';
 import '../edit_profile_screen/edit_screen.dart';
 import '../imports.dart';
+import 'archived.dart';
 
 class Setting extends ConsumerStatefulWidget {
   Setting({Key? key, this.notifier, this.mode}) : super(key: key);
@@ -119,7 +121,17 @@ class _SettingState extends ConsumerState<Setting> {
                       Icons.restore_from_trash_rounded,
                       ArchivedRecipe,
                       true,
-                      Icon(Icons.arrow_forward_ios_rounded),
+                      IconButton(
+                        padding: EdgeInsets.only(left: 25),
+                        icon: Icon(Icons.arrow_forward_ios_rounded),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ArchivedRecipes(),
+                              ));
+                        },
+                      ),
                     ),
                     placeTile(
                         Icons.language,
@@ -316,7 +328,15 @@ class _SettingState extends ConsumerState<Setting> {
                     Container(
                       padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            print(prefs.getString("username"));
+                            print(prefs.getString("password"));
+                            await SessionManager().destroy();
+
+                            SystemChannels.platform
+                                .invokeMethod('SystemNavigator.pop');
+                          },
                           style: ElevatedButton.styleFrom(
                               elevation: 5,
                               minimumSize: Size(330.w, 40.h),

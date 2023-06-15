@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
 import 'package:bigbelly/screens/authentication/login/texts.dart';
 import 'package:bigbelly/screens/authentication/register/register_screen.dart';
 import 'package:bigbelly/screens/follower_request/follower_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/screens/imports.dart';
+import 'constants/providers/currentUser_provider.dart';
 import 'screens/add_post/add_post_screen.dart';
 import 'constants/providers/user_provider.dart';
 
@@ -33,45 +38,65 @@ class MyApp extends ConsumerWidget {
         return ScreenUtilInit(
           designSize: const Size(360, 732),
           builder: (context, child) {
-            // darkMode.setMode = mode;
-            // darkMode.setNotifier = _notifier;
-            return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: ThemeData(primarySwatch: Colors.green),
-                darkTheme: ThemeData(
-                  brightness: Brightness.dark,
-                  primarySwatch: Colors.green,
-                ),
-                themeMode: mode, // Decides which theme to show, light or dark.
-                home: LoginScreen());
+            return FutureBuilder(
+              future: isSignedIn(ref),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return MaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      theme: ThemeData(primarySwatch: Colors.green),
+                      darkTheme: ThemeData(
+                        brightness: Brightness.dark,
+                        primarySwatch: Colors.green,
+                      ),
+                      themeMode:
+                          mode, // Decides which theme to show, light or dark.
+                      home: snapshot.data);
+                } else {
+                  return Stack(
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      Image.asset("assets/images/frameBig.png"),
+                    ],
+                  );
+                }
+              },
+            );
           },
-
-          // child: MaterialApp(
-          //   theme: ThemeData.light(),
-          //   darkTheme: ThemeData.dark(),
-          //   themeMode: mode, // Decides which theme to show, light or dark.
-          //   home: LoginScreen(),
-          // home: Scaffold(
-          //   body: Center(
-          //     child: ElevatedButton(
-          //       onPressed: () => _notifier.value =
-          //           mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light,
-          //       child: Text('Toggle Theme'),
-          //     ),
-          //   ),
-          // ),
-          // ),
         );
       },
     );
-    // return ScreenUtilInit(
-    //     designSize: const Size(360, 732),
-    //     builder: (BuildContext context, Widget? child) {
-    //       return MaterialApp(
-    //         debugShowCheckedModeBanner: false,
-    //         theme: ThemeData(primarySwatch: Colors.green),
-    //         home: LoginScreen(),
-    //       );
-    //     });
+  }
+
+  Future<Widget> isSignedIn(ref) async {
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.clear();
+    print(prefs.getString("username"));
+    if (prefs.getString("username") != null) {
+      var username = prefs.getString("username");
+      username = username!.substring(1, username!.length - 1);
+      Response response = await dio.post('/account/login', data: {
+        'username': username,
+        'password': prefs.getString("password")
+      });
+      var userID = ref.watch(userIDProvider);
+      // print(username);
+      print(prefs.getString("password"));
+      // print(response.data);
+      userID.setUserID = response.data['payload']['id'];
+      setSession(response);
+      return MainPage();
+    } else {
+      return LoginScreen();
+    }
+  }
+
+  void setSession(Response response) async {
+    await SessionManager()
+        .set('id', jsonEncode(response.data['payload']['id'].toString()));
+    await SessionManager()
+        .set('username', jsonEncode(response.data['payload']['username']));
+    await SessionManager()
+        .set('privacy', jsonEncode(response.data['payload']['privacy']));
   }
 }

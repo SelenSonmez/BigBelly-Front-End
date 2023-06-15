@@ -21,6 +21,7 @@ class _FollowerRequestState extends State<FollowerRequest> {
       body: Column(children: [
         AppBar(
           backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

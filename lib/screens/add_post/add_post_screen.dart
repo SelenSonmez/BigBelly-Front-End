@@ -6,6 +6,7 @@ import 'package:bigbelly/constants/providers/nav_bar_visible.dart';
 import 'package:bigbelly/screens/add_post/translate.dart';
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
 import 'package:bigbelly/screens/recommendation/recommendation_screen.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:im_stepper/stepper.dart';
@@ -14,6 +15,7 @@ import 'package:image_cropper/image_cropper.dart';
 import '../../constants/providers/post_provider.dart';
 import '../imports.dart';
 
+import '../mainPage/home_page.dart';
 import '../model/bigbelly_post_tag.dart';
 import '../model/ingredient.dart';
 import '../model/post.dart';
@@ -50,6 +52,16 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
     pages.add(const _SixthPage());
   }
 
+  // Future<bool> onWillPop(itemToBeShown, context) {
+  //   Navigator.of(context).pop(true);
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => HomePage(),
+  //       ));
+  //   return Future.value(true);
+  // }
+
   @override
   Widget build(BuildContext context) {
     final post = ref.watch(postProvider);
@@ -59,7 +71,28 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainThemeColor,
-        title: Text(_changeAppBarTitle(activeStep)),
+        title: Row(
+          children: [
+            IconButton(
+              padding: EdgeInsets.only(right: 22),
+              icon: Icon(Icons.arrow_back_sharp),
+              onPressed: () {
+                if (activeStep == 0) {
+                  navbar.setVisible = true;
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MainPage()));
+                } else if (activeStep > 0) {
+                  setState(() {
+                    activeStep--;
+                  });
+                }
+              },
+            ),
+            Text(_changeAppBarTitle(activeStep)),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -73,9 +106,9 @@ class _AddPostScreen extends ConsumerState<AddPostScreen> {
               icons: const [
                 Icon(Icons.camera_alt),
                 Icon(Icons.access_alarm),
-                Icon(Icons.food_bank_rounded),
+                Icon(Icons.fastfood_rounded),
+                Icon(Icons.tips_and_updates),
                 Icon(Icons.edit),
-                Icon(Icons.flag),
                 Icon(Icons.tag_sharp),
               ],
 
@@ -308,33 +341,46 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
                         );
                         if (croppedFile != null) {
                           post.getPost.imageURL = croppedFile.path;
-                          final bytes =
-                              File(post.getPost.imageURL!).lengthSync();
-                          if (bytes > 1500) {
-                            post.getPost.imageURL = null;
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(Alert),
-                                  content: Text(ImagePickerSize),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(Ok,
-                                          style:
-                                              TextStyle(color: Colors.green)),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            setState(
-                                () => post.getPost.imageURL = croppedFile.path);
-                          }
+                          final filePath = post.getPost.imageURL;
+                          final lastIndex =
+                              filePath!.lastIndexOf(new RegExp(r'.jp'));
+                          final splitted = filePath.substring(0, (lastIndex));
+                          final outPath =
+                              "${splitted}_out${filePath.substring(lastIndex)}";
+                          var result =
+                              await FlutterImageCompress.compressAndGetFile(
+                                  post.getPost.imageURL!, outPath,
+                                  quality: 25);
+
+                          // final bytes =
+                          //     File(post.getPost.imageURL!).lengthSync();
+                          // if (bytes > 1500) {
+                          //   post.getPost.imageURL = null;
+                          //   showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context) {
+                          //       return AlertDialog(
+                          //         title: Text(Alert),
+                          //         content: Text(ImagePickerSize),
+                          //         actions: [
+                          //           TextButton(
+                          //             child: Text(Ok,
+                          //                 style:
+                          //                     TextStyle(color: Colors.green)),
+                          //             onPressed: () {
+                          //               Navigator.of(context).pop();
+                          //             },
+                          //           ),
+                          //         ],
+                          //       );
+                          //     },
+                          //   );
+
+                          setState(() {
+                            post.getPost.imageURL = outPath;
+                            print("SIZZZZZZZZZZZZZZZZZZZZE");
+                            print(File(post.getPost.imageURL!).lengthSync());
+                          });
                         }
                       }
                     },
@@ -583,7 +629,7 @@ class _FifthPageState extends ConsumerState<FifthPage> {
                             color: Colors.red.shade400,
                             child: ListTile(
                               leading: const Icon(Icons.delete),
-                              title: Text(RemovingStep,
+                              title: Text(RemovingIngredient,
                                   style: const TextStyle(color: Colors.black)),
                             ),
                           ),

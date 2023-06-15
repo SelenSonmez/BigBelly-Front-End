@@ -288,7 +288,7 @@ class _CommentTileState extends State<CommentTile> {
           ),
         ),
         IconButton(
-          icon: Icon(Icons.report_problem),
+          icon: Icon(Icons.flag_sharp),
           color: Colors.red.shade900,
           onPressed: () {
             showDialog(
