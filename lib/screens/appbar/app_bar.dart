@@ -75,7 +75,6 @@ class BigBellyAppBar extends ConsumerWidget {
               onTap: () async {
                 dynamic id = await SessionManager().get('id');
                 Response info = await dio.get('/profile/$id/', data: id);
-                print(info.data);
                 User user = User.fromJson(info.data['payload']['user']);
                 userValue.setUser = user;
                 Navigator.push(context,

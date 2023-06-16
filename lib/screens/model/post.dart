@@ -30,6 +30,8 @@ class Post {
   List<BigBellyPostTag>? tags;
   User? account;
   List<dynamic>? likes;
+  int likeCount;
+  int commentCount;
   bool? isLiked;
   String? dateCreated;
   Post({
@@ -44,6 +46,8 @@ class Post {
     this.description,
     this.ingredients,
     this.tags,
+    required this.likeCount,
+    required this.commentCount,
     this.account,
     this.likes,
     this.dateCreated,
@@ -72,6 +76,8 @@ class Post {
       portion: portion ?? this.portion,
       preparation_time: preparation_time ?? this.preparation_time,
       baking_time: baking_time ?? this.baking_time,
+      likeCount: likeCount,
+      commentCount: commentCount,
       steps: steps ?? this.steps,
       description: description ?? this.description,
       ingredients: ingredients ?? this.ingredients,
@@ -141,6 +147,8 @@ class Post {
       account: map["account"] == null ? null : User.fromJson(map["account"]),
       likes: map["likes"] == null ? null : map['likes'],
       isLiked: false,
+      likeCount: map["likes"] == null ? 0 : map['likes'].length,
+      commentCount: map["comments"] == null ? 0 : map['comments'].length,
       dateCreated:
           map['created_at'] != null ? map['created_at'] as String : null,
     );

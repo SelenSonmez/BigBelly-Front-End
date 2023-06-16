@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bigbelly/constants/providers/postList_provider.dart';
+import 'package:bigbelly/constants/providers/post_provider.dart';
 import 'package:bigbelly/constants/providers/user_provider.dart';
 import 'package:bigbelly/screens/imports.dart';
 import 'package:bigbelly/screens/mainPage/comment/comment.dart';
@@ -23,23 +24,28 @@ class postReactions extends ConsumerWidget {
   Post post;
   int index;
   bool isUserSelf;
-  void like() async {
-    String id = await SessionManager().get('id');
 
+  Future<bool> onTapped(bool isLiked) async {
+    String id = await SessionManager().get('id');
     Map<String, dynamic> params = <String, dynamic>{
       'post_id': post.id,
       'account_id': id,
     };
     //unlike
-    if (post.isLiked!) {
+    if (isLiked) {
       final response = await dio.post('/post/unlike', data: params);
-
       post.isLiked = false;
-      return;
+      post.likes!.removeAt(
+          post.likes!.indexWhere((element) => element['post_id'] == post.id!));
+      post.likeCount--;
+      return false;
     }
     //like
     final response = await dio.post('/post/like', data: params);
     post.isLiked = true;
+    post.likeCount++;
+
+    return true;
   }
 
   @override
@@ -50,32 +56,12 @@ class postReactions extends ConsumerWidget {
         LikeButton(
             isLiked: post.isLiked,
             size: 23.h,
-            likeCount: post.likes!.length,
+            likeCount: post.likeCount,
             likeBuilder: (isLiked) {
-              final color = isLiked ? Colors.red : Colors.green;
+              final color = post.isLiked! ? Colors.red : Colors.green;
               return Icon(Icons.favorite, color: color);
             },
-            onTap: (isLiked) async {
-              String id = await SessionManager().get('id');
-              Map<String, dynamic> params = <String, dynamic>{
-                'post_id': post.id,
-                'account_id': id,
-              };
-              //unlike
-              if (post.isLiked!) {
-                final response = await dio.post('/post/unlike', data: params);
-
-                post.isLiked = false;
-                ref.watch(postListProvider).editPost(post, index);
-                return !isLiked;
-              }
-              //like
-              final response = await dio.post('/post/like', data: params);
-              post.isLiked = true;
-              ref.watch(postListProvider).editPost(post, index);
-
-              return !isLiked;
-            }),
+            onTap: onTapped),
         ReactionIconAndCount(
             icon: const Icon(Icons.comment_rounded),
             isCountable: true,
@@ -289,7 +275,7 @@ class _ReactionIconAndCountState extends State<ReactionIconAndCount> {
                 },
               ),
         Text(
-          widget.isCountable ? "2234" : " ",
+          widget.isCountable ? widget.post!.commentCount.toString() : " ",
         )
       ],
     );

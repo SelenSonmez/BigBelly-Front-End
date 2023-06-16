@@ -11,12 +11,12 @@ class ProfileTile extends StatelessWidget {
   const ProfileTile(
       {super.key,
       required this.username,
-      required this.followerCount,
+      this.followerCount,
       this.requestId = -1,
       this.updateFollowerRequests});
 
   final String username;
-  final int followerCount;
+  final int? followerCount;
   final int requestId;
   final Function? updateFollowerRequests;
 
@@ -46,7 +46,6 @@ class ProfileTile extends StatelessWidget {
                 username,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: Text("$followerCount $Followers"),
               trailing: SizedBox(
                 width: 100.w,
                 height: 75.h,

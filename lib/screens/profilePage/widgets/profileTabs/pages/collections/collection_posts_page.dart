@@ -1,5 +1,6 @@
 import 'package:bigbelly/screens/mainPage/home_page.dart';
 import 'package:bigbelly/screens/model/post.dart';
+import 'package:bigbelly/screens/post_details/post_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../imports.dart';
@@ -22,6 +23,8 @@ class CollectionPosts extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3),
           itemBuilder: (context, index) {
+            collectionPosts![index].imageURL =
+                "http://18.184.145.252/post/${collectionPosts![index].id!}/image";
             return Container(
                 margin: const EdgeInsets.only(right: 3, top: 3, left: 3),
                 child: GestureDetector(
@@ -29,10 +32,8 @@ class CollectionPosts extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => MainPage(
-                              // postIndexToBeShown: index,
-                              // isVisible: false,
-                              ))),
+                          builder: ((context) => PostDetails(
+                              post: collectionPosts![index], index: index))),
                     );
                   },
                   child: Image.network(

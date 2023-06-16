@@ -50,8 +50,7 @@ class _FollowerRequestState extends State<FollowerRequest> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return ProfileTile(
-                          username: snapshot.data[index].account_id.toString(),
-                          followerCount: 123,
+                          username: snapshot.data[index].username.toString(),
                           requestId: snapshot.data[index].id,
                           updateFollowerRequests: () => setState(() {}),
                         );

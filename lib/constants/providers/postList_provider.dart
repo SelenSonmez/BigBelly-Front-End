@@ -17,6 +17,15 @@ class PostListModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Post? getPostByID(int id) {
+    for (Post post in _posts) {
+      if (post.id == id) {
+        return post;
+      }
+    }
+    return null;
+  }
+
   void editPost(Post post, int index) {
     _posts[index] = post;
     notifyListeners();

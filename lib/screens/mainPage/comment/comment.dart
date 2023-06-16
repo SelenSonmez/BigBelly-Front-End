@@ -9,49 +9,49 @@ import '../../authentication/model/user_model.dart';
 import '../../imports.dart';
 import '../../model/post.dart';
 
-class WriteComment extends StatelessWidget {
-  WriteComment({super.key});
+// class WriteComment extends StatelessWidget {
+//   WriteComment({super.key});
 
-  late final TextEditingController _controller = TextEditingController();
+//   late final TextEditingController _controller = TextEditingController();
 
-  String comment = "";
+//   String comment = "";
 
-  late Widget sentComment;
+//   late Widget sentComment;
 
-  late List comments;
+//   late List comments;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(15.0.h),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/defaultProfilePic.jpg"),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(labelText: WriteYourComment),
-              controller: _controller,
-              onChanged: (String value) {
-                comment = value;
-              },
-            ),
-          ),
-          TextButton(
-              onPressed: () {
-                sentComment = CommentTile(
-                    comment: Comment(username: "aaa", comment: comment));
-              },
-              child: Text(Send))
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.all(15.0.h),
+//       child: Row(
+//         children: [
+//           const CircleAvatar(
+//             backgroundImage: AssetImage("assets/images/defaultProfilePic.jpg"),
+//           ),
+//           const SizedBox(
+//             width: 15,
+//           ),
+//           Expanded(
+//             child: TextField(
+//               decoration: InputDecoration(labelText: WriteYourComment),
+//               controller: _controller,
+//               onChanged: (String value) {
+//                 comment = value;
+//               },
+//             ),
+//           ),
+//           TextButton(
+//               onPressed: () {
+//                 sentComment = CommentTile(
+//                     comment: Comment(username: "aaa", comment: comment));
+//               },
+//               child: Text(Send))
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class Comment {
   int? id;
@@ -187,6 +187,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       ),
                       TextButton(
                           onPressed: () async {
+                            widget.post.commentCount++;
                             sentComment = CommentTile(
                                 comment: Comment(
                                     comment: comment, username: username));

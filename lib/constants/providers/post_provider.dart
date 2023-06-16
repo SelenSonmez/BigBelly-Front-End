@@ -8,7 +8,8 @@ final postProvider = StateProvider<PostModel>((ref) {
 });
 
 class PostModel extends ChangeNotifier {
-  Post _post = Post(steps: [], tags: [], ingredients: []);
+  Post _post =
+      Post(steps: [], tags: [], ingredients: [], likeCount: 0, commentCount: 0);
 
   Post get getPost => _post;
 

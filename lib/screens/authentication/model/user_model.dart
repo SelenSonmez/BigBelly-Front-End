@@ -42,6 +42,8 @@ class User {
         followeds!.add(new User.fromJson(v['followed_account']));
       });
     }
+    isInstitution =
+        json['is_institutional'] != null ? json['is_institutional'] : null;
   }
   @override
   String toString() =>

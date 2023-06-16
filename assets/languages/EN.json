@@ -156,7 +156,7 @@
         "BakingTimeExplanation":"How much time does it take to bake this recipe?",
         "LetTheWorldKnow":"Let the World know your tricks!",
         "EnterYourStep":"Enter Your Step",
-        "EnterDescription":"Enter description for your recipe",
+        "EnterDescription":"Enter Description",
         "IngredientAmount":"Amount",
         "IngredientScaleLabel":"Scale",
         "IngredientScaleHintText": "Table Spoon",
@@ -207,7 +207,14 @@
         "Report":"Report",
         "PrivateAccount":"Private Account",
         "AboutBigBelly":"About Bigbelly",
-        "LogOut":"Log Out"
+        "LogOut":"Log Out",
+        "Theme":"Theme",
+        "Light":"Light",
+        "Dark":"Dark",
+        "ContactBigBelly":"Contact bigbelly@gmail.com for any questions",
+        "About": "BigBelly is a social media platform made by students from Izmir University of Economics "
+
+
     },
     "EditProfileScreen":{
         "EditProfileInformation":"Edit Profile Information",
@@ -219,5 +226,14 @@
         "OldPasswordNotEmpty":"Old Password can not be empty",
         "NewPasswordNotEmpty":"New Password can not be empty",
         "RequierementsNotMet":"Please consider password requirements below"
+    },
+    "RecommendationScreen":{
+        "Recommendation":"Recommendation",
+        "RecommendationHistory":"Recommendation History",
+        "SeeAll":"See All",
+        "GetRecommendation":"Get Recommendation",
+        "ForSelf":"For Self",
+        "ForGroup":"For Group",
+        "By":"By: "
     }
 }

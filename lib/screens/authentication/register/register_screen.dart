@@ -9,10 +9,16 @@ import '../login/login_screen.dart';
 import '../login/texts.dart';
 import 'texts.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
-
   static final _formKey = GlobalKey<FormState>();
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool isInstitution = false;
 
   Map<String, dynamic> fields = {
     'name': null,
@@ -31,7 +37,7 @@ class RegisterScreen extends StatelessWidget {
       reverse: true,
       padding: EdgeInsets.all(15.w),
       child: Form(
-        key: _formKey,
+        key: RegisterScreen._formKey,
         child: Column(children: <Widget>[
           Container(
               padding: EdgeInsets.only(top: 50.w),
@@ -97,7 +103,21 @@ class RegisterScreen extends StatelessWidget {
                 return PasswordNotValid;
             },
           ),
-
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Is institutional Account?",
+                style: TextStyle(fontSize: 17),
+              ),
+              Checkbox(
+                  value: isInstitution,
+                  onChanged: (value) {
+                    setState(() {});
+                    isInstitution = value!;
+                  }),
+            ],
+          ),
           //Sign In Text
           PageBelowString(
               actionString: SignIn,
@@ -107,8 +127,8 @@ class RegisterScreen extends StatelessWidget {
           //Register Button
           ElevatedButton(
               onPressed: () async {
-                _formKey.currentState!.save();
-                if (!_formKey.currentState!.validate()) {
+                RegisterScreen._formKey.currentState!.save();
+                if (!RegisterScreen._formKey.currentState!.validate()) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: Colors.red,
                       content: Text("Please enter valid inputs")));

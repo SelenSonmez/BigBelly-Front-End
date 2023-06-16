@@ -28,7 +28,6 @@ class _ArchivedRecipesState extends State<ArchivedRecipes> {
 
     final response = await dio.get("/post/get-archiveds", data: params);
     var postsJson = response.data['payload']['posts'];
-    print(postsJson);
     List<Post> posts = List.from(postsJson.map((i) {
       Post post = Post.fromJson(jsonEncode(i));
       // post.account = User.fromJson(response.data['payload']['account']);

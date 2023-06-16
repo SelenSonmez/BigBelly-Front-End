@@ -25,7 +25,7 @@ class _RecipesState extends State<Recipes> {
     var postsJson = response.data['payload']['posts'];
     List<Post> posts = List.from(postsJson.map((i) {
       Post post = Post.fromJson(jsonEncode(i['post']));
-      // post.account = User.fromJson(response.data['payload']['account']);
+      post.account = User.fromJson(i['post']['account']);
       return post;
     }));
     print("----------recipes.dart------------");
@@ -54,9 +54,19 @@ class _RecipesState extends State<Recipes> {
                     children: [
                       Container(
                           child: Center(
-                              child: Image.network(
-                                  snapshot.data![index].imageURL!,
-                                  fit: BoxFit.contain))),
+                              child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostDetails(
+                                    index: snapshot.data![index].id!,
+                                    post: snapshot.data![index]),
+                              ));
+                        },
+                        child: Image.network(snapshot.data![index].imageURL!,
+                            fit: BoxFit.contain),
+                      ))),
                       Positioned(
                         child: CircleAvatar(
                           radius: 16,

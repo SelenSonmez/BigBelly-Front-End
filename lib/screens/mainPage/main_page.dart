@@ -37,14 +37,15 @@ class _MainPageState extends ConsumerState<MainPage> {
       TabItem.search: SearchScreen(),
       TabItem.post: AddPostScreen(),
       TabItem.menu: MenuPosts(),
-      TabItem.recommendation: const RecommendationScreen(),
+      TabItem.recommendation: RecommendationScreen(),
     };
   }
 
   @override
   Widget build(BuildContext context) {
     final post = ref.watch(postProvider);
-    post.setPost(Post(steps: [], ingredients: [], tags: []));
+    post.setPost(Post(
+        steps: [], ingredients: [], tags: [], likeCount: 0, commentCount: 0));
 
     final navbar = ref.watch(navbarProvider);
     return WillPopScope(

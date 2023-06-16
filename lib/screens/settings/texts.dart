@@ -32,5 +32,17 @@ String PrivateAccount = TextDecider()
     .goOnPath("SettingsScreen")
     .target("PrivateAccount")
     .decideText();
+String ThemeBelly =
+    TextDecider().goOnPath("SettingsScreen").target("Theme").decideText();
 String LogOut =
     TextDecider().goOnPath("SettingsScreen").target("LogOut").decideText();
+String Light =
+    TextDecider().goOnPath("SettingsScreen").target("Light").decideText();
+String Dark =
+    TextDecider().goOnPath("SettingsScreen").target("Dark").decideText();
+String ContactBigBelly = TextDecider()
+    .goOnPath("SettingsScreen")
+    .target("ContactBigBelly")
+    .decideText();
+String About =
+    TextDecider().goOnPath("SettingsScreen").target("About").decideText();

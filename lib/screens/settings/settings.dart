@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bigbelly/screens/authentication/login/login_screen.dart';
+import 'package:bigbelly/screens/settings/report.dart';
 import 'package:bigbelly/screens/settings/texts.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../main.dart';
 import '../edit_profile_screen/edit_screen.dart';
 import '../imports.dart';
+import 'about.dart';
 import 'archived.dart';
 
 class Setting extends ConsumerStatefulWidget {
@@ -122,7 +124,6 @@ class _SettingState extends ConsumerState<Setting> {
                       ArchivedRecipe,
                       true,
                       IconButton(
-                        padding: EdgeInsets.only(left: 25),
                         icon: Icon(Icons.arrow_forward_ios_rounded),
                         onPressed: () {
                           Navigator.push(
@@ -207,7 +208,6 @@ class _SettingState extends ConsumerState<Setting> {
                         EditProfile,
                         true,
                         IconButton(
-                          padding: EdgeInsets.only(left: 25.w),
                           icon: Icon(Icons.arrow_forward_ios_rounded),
                           onPressed: () {
                             Navigator.push(
@@ -221,30 +221,27 @@ class _SettingState extends ConsumerState<Setting> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: placeTile(
                         Icons.sunny,
-                        "Theme",
+                        ThemeBelly,
                         true,
                         Padding(
-                          padding: const EdgeInsets.only(top: 8, left: 28.0),
+                          padding: const EdgeInsets.only(top: 8),
                           child: LiteRollingSwitch(
                             //initial value
                             value: MyApp.notifier.value == ThemeMode.light
                                 ? true
                                 : false,
                             width: 100,
-                            textOn: 'Light',
-                            textOff: 'Dark',
+                            textOn: Light,
+                            textOff: Dark,
                             colorOn: Colors.green,
                             colorOff: Colors.black,
                             iconOn: Icons.sunny,
                             iconOff: Icons.dark_mode,
-                            textSize: 15.0,
+                            textSize: 14.0,
                             onChanged: (bool state) {
                               //Use it to manage the different states
                               if (state == true) {
                                 MyApp.notifier.value = ThemeMode.light;
-                                // darkMode.notifier.value = ThemeMode.light;
-                                // darkMode.setNotifier =
-                                //     ValueNotifier(ThemeMode.dark);
                               } else if (state == false) {
                                 MyApp.notifier.value = ThemeMode.dark;
                               }
@@ -261,7 +258,6 @@ class _SettingState extends ConsumerState<Setting> {
 
                     placeText(Privacy),
                     Container(
-                      // color: Colors.white,
                       child: Column(
                         children: [
                           placeTile(
@@ -307,16 +303,37 @@ class _SettingState extends ConsumerState<Setting> {
                     placeText(Help),
 
                     Container(
-                      // color: Colors.white,
                       child: Column(
                         children: [
-                          placeTile(Icons.help_outline, Report, true,
-                              Icon(Icons.arrow_forward_ios_rounded)),
+                          placeTile(
+                            Icons.help_outline,
+                            Report,
+                            true,
+                            IconButton(
+                              icon: Icon(Icons.arrow_forward_ios_rounded),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReportScreen(),
+                                    ));
+                              },
+                            ),
+                          ),
                           placeTile(
                             Icons.live_help_rounded,
                             AboutBigBelly,
                             true,
-                            Icon(Icons.arrow_forward_ios_rounded),
+                            IconButton(
+                              icon: Icon(Icons.arrow_forward_ios_rounded),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AboutScreen(),
+                                    ));
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -330,8 +347,6 @@ class _SettingState extends ConsumerState<Setting> {
                       child: ElevatedButton(
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
-                            print(prefs.getString("username"));
-                            print(prefs.getString("password"));
                             await SessionManager().destroy();
 
                             SystemChannels.platform

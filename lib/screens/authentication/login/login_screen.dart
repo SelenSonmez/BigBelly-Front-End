@@ -127,7 +127,9 @@ class LoginScreen extends ConsumerWidget {
             name: fields['username'],
             email: "selensonmez2001@gmail.com",
             subject: "Verification Code",
-            message: "1234");
+            message: response.data['payload']['code'].toString());
+
+        print("NNNNNNNNNN" + response.data['payload']['code'].toString());
         Navigator.push(
             context,
             MaterialPageRoute(

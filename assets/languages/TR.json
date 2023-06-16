@@ -153,8 +153,8 @@
         "BakingTime":"Pişirme Süresi",
         "BakingTimeExplanation":"Bu tarifi pişirmek için ne kadar süre gerekli?",
         "LetTheWorldKnow":"İnsanlara püf noktalarını anlat!",
-        "EnterYourStep":"Adımları gir",
-        "EnterDescription":"Tarifin için açıklama gir",
+        "EnterYourStep":"Adımları Gir",
+        "EnterDescription":"Açıklama Gir",
         "IngredientAmount":"Miktar",
         "IngredientScaleLabel":"Ölçek",
         "IngredientScaleHintText": "Yemek Kaşığı",
@@ -205,7 +205,12 @@
         "PrivateAccount": "Gizli Hesap",
         "Report":"Raporla",
         "AboutBigBelly":"BigBelly Hakkında",
-        "LogOut": "Çıkış Yap"
+        "LogOut": "Çıkış Yap",
+        "Theme":"Tema",
+        "Light":"Açık",
+        "Dark":"Koyu",
+        "ContactBigBelly":"Herhangi bir soru için bigbelly@gmail.com ile iletişime geçin",
+        "About": "BigBelly, Izmir Ekonomi Üniversitesi öğrencileri tarafından yapılmış bir sosyal medya uygulamasıdır."
 
     },
     "EditProfileScreen":{
@@ -219,5 +224,14 @@
         "NewPasswordNotEmpty":"Yeni şifre boş olamaz",
         "RequierementsNotMet":"Lütfen aşağıdaki gerekliliklere göre belirleyiniz"
 
+    },
+    "RecommendationScreen":{
+        "Recommendation":"Tavsiye",
+        "RecommendationHistory":"Tavsiye Geçmişi",
+        "SeeAll":"Hepsini Gör",
+        "GetRecommendation":"Tavsiye Al",
+        "ForSelf":"Kendin İçin",
+        "ForGroup":"Grup İçin",
+        "By":"Sahibi: "
     }
 }
