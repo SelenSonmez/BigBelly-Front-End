@@ -351,31 +351,6 @@ class _FirstPageState extends ConsumerState<_FirstPage> {
                               await FlutterImageCompress.compressAndGetFile(
                                   post.getPost.imageURL!, outPath,
                                   quality: 25);
-
-                          // final bytes =
-                          //     File(post.getPost.imageURL!).lengthSync();
-                          // if (bytes > 1500) {
-                          //   post.getPost.imageURL = null;
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return AlertDialog(
-                          //         title: Text(Alert),
-                          //         content: Text(ImagePickerSize),
-                          //         actions: [
-                          //           TextButton(
-                          //             child: Text(Ok,
-                          //                 style:
-                          //                     TextStyle(color: Colors.green)),
-                          //             onPressed: () {
-                          //               Navigator.of(context).pop();
-                          //             },
-                          //           ),
-                          //         ],
-                          //       );
-                          //     },
-                          //   );
-
                           setState(() {
                             post.getPost.imageURL = outPath;
                             print("SIZZZZZZZZZZZZZZZZZZZZE");

@@ -61,6 +61,7 @@ dependencies:
   lite_rolling_switch: ^1.0.1
   flutter_image_compress: ^2.0.3
   flutter_email_sender: ^6.0.0
+  logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:

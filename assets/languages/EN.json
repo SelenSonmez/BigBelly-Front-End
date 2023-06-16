@@ -234,6 +234,8 @@
         "GetRecommendation":"Get Recommendation",
         "ForSelf":"For Self",
         "ForGroup":"For Group",
-        "By":"By: "
+        "By":"By: ",
+        "AddFriends": "Add Friends",
+        "Get": "Get"
     }
 }

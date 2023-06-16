@@ -20,6 +20,8 @@ class Post {
   int? id;
   String? title;
   String? imageURL;
+  String? price;
+  bool? isHidden;
   String? difficulty;
   String? portion;
   String? preparation_time;
@@ -46,6 +48,8 @@ class Post {
     this.description,
     this.ingredients,
     this.tags,
+    this.price,
+    this.isHidden,
     required this.likeCount,
     required this.commentCount,
     this.account,
@@ -130,6 +134,12 @@ class Post {
           : null,
       description:
           map['description'] != null ? map['description'] as String : null,
+      price: map['institutional_post']['price'] != null
+          ? map['institutional_post']['price'] as String
+          : null,
+      isHidden: map['institutional_post']['is_hidden'] != null
+          ? map['institutional_post']['is_hidden'] as bool
+          : null,
       ingredients: map['ingredients'] != null
           ? List<Ingredient>.from(
               (map['ingredients'] as List<dynamic>).map<Ingredient?>(

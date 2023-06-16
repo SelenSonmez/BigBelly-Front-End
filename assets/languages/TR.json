@@ -232,6 +232,9 @@
         "GetRecommendation":"Tavsiye Al",
         "ForSelf":"Kendin İçin",
         "ForGroup":"Grup İçin",
-        "By":"Sahibi: "
+        "By":"Sahibi: ",
+        "AddFriends": "Arkadaşlarını Ekle",
+        "Get": "Al"
+
     }
 }

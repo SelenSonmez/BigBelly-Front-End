@@ -9,31 +9,31 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import '../../../../constants/Colors.dart';
 import '../../../../constants/providers/user_provider.dart';
 import '../../../authentication/model/user_model.dart';
+import '../../../recommendation/recommendation_screen.dart';
 import 'pages/recipes.dart';
 
 class ProfileTabs extends ConsumerStatefulWidget {
-  ProfileTabs({Key? key, required this.isInsitution}) : super(key: key);
-  bool isInsitution;
-
+  ProfileTabs({Key? key, required this.isInstitution}) : super(key: key);
+  bool isInstitution;
   @override
   ConsumerState<ProfileTabs> createState() => _ProfileTabsState();
 }
 
 class _ProfileTabsState extends ConsumerState<ProfileTabs>
     with SingleTickerProviderStateMixin {
-  late TabController tabController;
+  late TabController tabController = TabController(length: 0, vsync: this);
   int activeIndex = 0;
   bool isSelf = false;
   bool isFollowing = false;
   ScrollController scrollController = ScrollController();
+  // bool isInsitution = false;
 
   @override
   void initState() {
     super.initState();
     checkSelfID();
-
     tabController =
-        TabController(length: widget.isInsitution ? 4 : 3, vsync: this);
+        TabController(length: widget.isInstitution ? 4 : 3, vsync: this);
   }
 
   @override
@@ -65,9 +65,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   }
 
   getTabs(var userValue) {
-    if (userValue.getUser.isInstitution != null &&
-        userValue.getUser.isInstitution == true) {
-      [
+    if (widget.isInstitution == true) {
+      return [
         userValue.getUser.privacySetting!.isPrivate != null &&
                 (userValue.getUser.privacySetting!.isPrivate == true &&
                     !isSelf &&

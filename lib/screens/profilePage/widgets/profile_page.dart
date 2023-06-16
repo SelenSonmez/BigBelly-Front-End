@@ -60,7 +60,7 @@ class ProfilePage extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: ProfileTabs(
-                  isInsitution: userValue.getUser.isInstitution!,
+                  isInstitution: userValue.getUser.isInstitution!,
                 ),
               ),
             ),

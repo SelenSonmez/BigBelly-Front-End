@@ -23,7 +23,7 @@ class UserPosts extends ConsumerStatefulWidget {
 }
 
 class _UserPostsState extends ConsumerState<UserPosts> {
-  late List<Post> itemsList;
+  List<Post> itemsList = [];
 
   @override
   void initState() {
@@ -34,12 +34,16 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     dynamic id = await SessionManager().get('id');
     final response = await dio.get('/profile/${user!.getUser.id}/posts');
     var postsJson = response.data['payload']['posts'];
-    itemsList = List.from(postsJson.map((i) {
-      Post post = Post.fromJson(jsonEncode(i));
-      post.account = User.fromJson(response.data['payload']['account']);
+    List<Post> institutionalPosts = [];
 
-      return post;
-    }));
+    for (var element in postsJson) {
+      Post post = Post.fromJson(jsonEncode(element));
+      if (element['institutional_post'] == null) {
+        itemsList.add(post);
+      }
+      post.account = User.fromJson(response.data['payload']['account']);
+    }
+
     user.setPostCount(itemsList.length);
     const ProfileInfo();
     return itemsList;

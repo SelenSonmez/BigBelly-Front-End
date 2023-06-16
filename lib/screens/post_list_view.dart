@@ -11,6 +11,7 @@ import 'imports.dart';
 import 'mainPage/main_page_imports.dart';
 import 'model/post.dart';
 import 'post_details/post_details.dart';
+import 'recommendation/recommendation_screen.dart';
 
 class PostListView extends ConsumerStatefulWidget {
   PostListView({super.key, this.postsDeneme});

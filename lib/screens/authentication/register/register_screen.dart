@@ -1,6 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'package:bigbelly/screens/imports.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../helpers/page_below_string.dart';
 import '../helpers/big_belly_text_field.dart';
@@ -8,6 +9,14 @@ import '../helpers/field_regex.dart';
 import '../login/login_screen.dart';
 import '../login/texts.dart';
 import 'texts.dart';
+
+Map<String, dynamic> fields = {
+  'name': null,
+  'username': null,
+  'email': null,
+  'password': null,
+  'is_institutional': null
+};
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -20,14 +29,12 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isInstitution = false;
 
-  Map<String, dynamic> fields = {
-    'name': null,
-    'username': null,
-    'email': null,
-    'password': null
-  };
-
   Response? response;
+  @override
+  void initState() {
+    // checkIfInstitution();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 "Is institutional Account?",
                 style: TextStyle(fontSize: 17),
               ),
-              Checkbox(
-                  value: isInstitution,
-                  onChanged: (value) {
-                    setState(() {});
-                    isInstitution = value!;
-                  }),
+              BigBellyCheckBox()
             ],
           ),
           //Sign In Text
@@ -129,12 +131,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: () async {
                 RegisterScreen._formKey.currentState!.save();
                 if (!RegisterScreen._formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text("Please enter valid inputs")));
+                      content: Text(PleaseEnterValidInputs)));
                 } else {
                   response = await dio.post('/account/register', data: fields);
-
+                  print("ALOOOO");
                   debugPrint(response!.data.toString());
                   if (response!.data['success']) {
                     Navigator.pop(context);
@@ -157,5 +159,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ]),
       ),
     )));
+  }
+
+  checkIfInstitution() async {
+    dynamic institution = await SessionManager().get("is_institutional");
+    if (institution == true) {
+      isInstitution = true;
+    } else {
+      isInstitution = false;
+    }
+  }
+}
+
+class BigBellyCheckBox extends StatefulWidget {
+  const BigBellyCheckBox({super.key});
+
+  @override
+  State<BigBellyCheckBox> createState() => _BigBellyCheckBoxState();
+}
+
+class _BigBellyCheckBoxState extends State<BigBellyCheckBox> {
+  bool isInstitution = false;
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+        value: isInstitution,
+        onChanged: (value) {
+          setState(() {});
+          isInstitution = value!;
+          fields['is_institutional'] = isInstitution;
+        });
   }
 }

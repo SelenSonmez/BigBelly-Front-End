@@ -26,3 +26,9 @@ String ForGroup = TextDecider()
     .decideText();
 String By =
     TextDecider().goOnPath("RecommendationScreen").target("By").decideText();
+String AddFriends = TextDecider()
+    .goOnPath("RecommendationScreen")
+    .target("AddFriends")
+    .decideText();
+String Get =
+    TextDecider().goOnPath("RecommendationScreen").target("Get").decideText();

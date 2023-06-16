@@ -7,11 +7,13 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../mainPage/home_page.dart';
+import '../recommendation/recommendation_screen.dart';
 import 'tab_items.dart';
 
-class NavBar extends ConsumerWidget {
+class NavBar extends ConsumerStatefulWidget {
   const NavBar(
       {super.key,
       required this.currentTab,
@@ -23,9 +25,21 @@ class NavBar extends ConsumerWidget {
   final ValueChanged<TabItem> onSelectedTab;
   final Map<TabItem, Widget> pageCreator;
   final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys;
+  @override
+  ConsumerState<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends ConsumerState<NavBar> {
+  List<BottomNavigationBarItem> items = [];
+  bool isInstitution = false;
+  @override
+  void initState() {
+    getIsInstitution();
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final navbar = ref.watch(navbarProvider);
     if (!navbar.isVisible) {
       return AddPostScreen();
@@ -35,26 +49,49 @@ class NavBar extends ConsumerWidget {
         height: 70.h,
         activeColor: mainThemeColor,
         inactiveColor: const Color.fromARGB(255, 140, 204, 142),
-        items: [
-          buildNavBarItem(TabItem.home),
-          buildNavBarItem(TabItem.search),
-          buildNavBarItem(TabItem.post),
-          buildNavBarItem(TabItem.menu),
-          buildNavBarItem(TabItem.recommendation),
-        ],
+        items: buildd(isInstitution),
         onTap: (index) {
-          onSelectedTab(TabItem.values[index]);
+          widget.onSelectedTab(TabItem.values[index]);
         },
       ),
       tabBuilder: (context, index) {
         final itemToBeShown = TabItem.values[index];
         return CupertinoTabView(
-            navigatorKey: navigatorKeys[itemToBeShown],
+            navigatorKey: widget.navigatorKeys[itemToBeShown],
             builder: (context) {
-              return pageCreator[itemToBeShown]!;
+              return widget.pageCreator[itemToBeShown]!;
             });
       },
     );
+  }
+
+  getIsInstitution() async {
+    dynamic institution = await SessionManager().get("is_institutional");
+    if (institution == true) {
+      isInstitution = true;
+    } else {
+      isInstitution = false;
+    }
+    setState(() {});
+  }
+}
+
+buildd(isInstitution) {
+  if (isInstitution == true) {
+    return [
+      buildNavBarItem(TabItem.home),
+      buildNavBarItem(TabItem.search),
+      buildNavBarItem(TabItem.post),
+      buildNavBarItem(TabItem.menu),
+      buildNavBarItem(TabItem.recommendation),
+    ];
+  } else {
+    return [
+      buildNavBarItem(TabItem.home),
+      buildNavBarItem(TabItem.search),
+      buildNavBarItem(TabItem.post),
+      buildNavBarItem(TabItem.recommendation),
+    ];
   }
 }
 

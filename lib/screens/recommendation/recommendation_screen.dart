@@ -6,9 +6,11 @@ import 'package:bigbelly/screens/recommendation/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:logger/logger.dart';
 import '../authentication/model/user_model.dart';
 import '../model/post.dart';
+
+var logger = Logger();
 
 class RecommendationScreen extends StatefulWidget {
   RecommendationScreen({Key? key}) : super(key: key);
@@ -21,17 +23,15 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   Post post = Post(likeCount: 0, commentCount: 0);
   bool isChecked = false;
   List<User> users = [];
+  List checkboxes = [];
+
   Future<Post> getRecommendation() async {
     dynamic id = await SessionManager().get("id");
     final response =
         await dio.get("/recommendation/", data: {'account_id': id});
 
-    print(response.data);
     post = Post.fromJson(jsonEncode(response.data['payload']['post']));
     post.imageURL = "http://18.184.145.252/post/${post.id!}/image";
-    print("--------------------------");
-    print(post.likeCount);
-    print("--------------------------");
     setState(() {});
 
     return post;
@@ -39,22 +39,36 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
 
   Future<List<User>> getFollowers() async {
     dynamic id = await SessionManager().get("id");
-    final response = await dio.get("/profile/$id/followers");
+    final response = await dio.get("/profile/$id/followeds");
 
-    var usersJson = response.data['payload']['followers'];
-    print(usersJson);
-    // users = List.from(usersJson.map((i) {
-    //   User user = User.fromJson(i);
-    //   print("AAAA" + user.username!);
-    //   return user;
-    // }));
+    var usersJson = response.data['payload']['followeds'];
+
+    users = List.from(usersJson.map((i) {
+      User user = User.fromJson(i['followed_account']);
+      // user.username = i['']
+      return user;
+    }));
+    // logger.i(users);
+    int count = 0;
+    users.forEach((element) {
+      print(element);
+      checkboxes.add({
+        "id": count,
+        "username": element.username,
+        "isChecked": false,
+      });
+      count++;
+    });
     return users;
   }
 
   @override
   void initState() {
     getFollowers();
+    // logger.i("Logger is working!");
     // TODO: implement initState
+
+    // logger.i(checkboxes);
     super.initState();
   }
 
@@ -166,6 +180,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                   //Recipe Title
                                   Text(
                                       style: TextStyle(
+                                          letterSpacing: 1.4,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 17,
                                           color: Colors.white),
@@ -177,11 +192,12 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                   ),
                                   Text(
                                       style: TextStyle(
+                                          letterSpacing: 0.8,
                                           overflow: TextOverflow.ellipsis,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w700,
                                           color: Colors.white),
-                                      "${By} ${post.title != null ? "post.account!.username!" : "Old Recommendation"}"),
+                                      "${By} ${post.title != null ? post.account!.username : "Old Recommendation"}"),
                                 ],
                               ))
                         ],
@@ -207,7 +223,6 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                       dynamic id = await SessionManager().get("id");
                       final response =
                           await dio.get("/recommendation?account_id=$id");
-                      print(response.data);
                       getRecommendation();
                     },
                     child: Text(ForSelf)),
@@ -223,53 +238,72 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                   return Scaffold(
                                     floatingActionButton: FloatingActionButton(
                                       backgroundColor: Colors.green.shade700,
-                                      onPressed: () {},
-                                      child: Text("Get"),
+                                      onPressed: () {
+                                        //TODO got all users checked. Send them to backend
+                                        checkboxes.forEach((element) {
+                                          if (element['isChecked'] == true) {
+                                            // logger.i(element);
+                                          }
+                                        });
+                                      },
+                                      child: Text(Get),
                                     ),
                                     floatingActionButtonLocation:
                                         FloatingActionButtonLocation.miniEndTop,
-                                    appBar: AppBar(title: Text("Add Friends")),
+                                    appBar: AppBar(title: Text(AddFriends)),
                                     body: ListView.builder(
-                                      itemCount: 1,
+                                      itemCount: users.length,
                                       itemBuilder: (context, index) {
                                         return Container(
-                                          padding: EdgeInsets.all(15),
-                                          // height: 70,
-                                          // width: 350,
+                                          padding:
+                                              const EdgeInsets.only(top: 15.0),
                                           child: Column(
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                    radius: 27.0,
-                                                    child: CircleAvatar(
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 30),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    CircleAvatar(
                                                       backgroundColor:
-                                                          Colors.green.shade300,
-                                                      backgroundImage: AssetImage(
-                                                          "assets/images/yesilSef.jpg"),
-                                                      radius: 25.0,
+                                                          Colors.green,
+                                                      radius: 27.0,
+                                                      child: CircleAvatar(
+                                                        backgroundColor: Colors
+                                                            .green.shade300,
+                                                        backgroundImage: AssetImage(
+                                                            "assets/images/yesilSef.jpg"),
+                                                        radius: 25.0,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    "Post.account",
-                                                    style:
-                                                        TextStyle(fontSize: 17),
-                                                  ),
-                                                  Checkbox(
-                                                      value: isChecked,
-                                                      onChanged: (bool? value) {
-                                                        print(isChecked
-                                                            .toString());
-                                                        setState(() {
-                                                          isChecked = value!;
-                                                        });
-                                                      })
-                                                ],
+                                                    Expanded(
+                                                      child: Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          users[index]
+                                                              .username!,
+                                                          style: TextStyle(
+                                                              fontSize: 17),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Checkbox(
+                                                        value: checkboxes[index]
+                                                            ['isChecked'],
+                                                        onChanged:
+                                                            (bool? value) {
+                                                          checkboxes[index][
+                                                                  "isChecked"] =
+                                                              value;
+                                                          setState(() {});
+                                                        })
+                                                  ],
+                                                ),
                                               ),
                                               Divider(
                                                 thickness: 2,

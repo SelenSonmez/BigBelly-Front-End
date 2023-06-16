@@ -14,6 +14,7 @@ import '/screens/imports.dart';
 import 'constants/providers/currentUser_provider.dart';
 import 'screens/add_post/add_post_screen.dart';
 import 'constants/providers/user_provider.dart';
+import 'screens/recommendation/recommendation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,9 +70,8 @@ class MyApp extends ConsumerWidget {
   }
 
   Future<Widget> isSignedIn(ref) async {
+    dynamic isINstitution = await SessionManager().get("is_institutional");
     final prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
-    print(prefs.getString("username"));
     if (prefs.getString("username") != null) {
       var username = prefs.getString("username");
       username = username!.substring(1, username!.length - 1);
@@ -80,9 +80,6 @@ class MyApp extends ConsumerWidget {
         'password': prefs.getString("password")
       });
       var userID = ref.watch(userIDProvider);
-      // print(username);
-      print(prefs.getString("password"));
-      // print(response.data);
       userID.setUserID = response.data['payload']['id'];
       setSession(response);
       return MainPage();
@@ -98,5 +95,7 @@ class MyApp extends ConsumerWidget {
         .set('username', jsonEncode(response.data['payload']['username']));
     await SessionManager()
         .set('privacy', jsonEncode(response.data['payload']['privacy']));
+    await SessionManager().set('is_institutional',
+        jsonEncode(response.data['payload']['is_institutional']));
   }
 }

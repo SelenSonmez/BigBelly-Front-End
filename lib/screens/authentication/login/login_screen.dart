@@ -129,7 +129,10 @@ class LoginScreen extends ConsumerWidget {
             subject: "Verification Code",
             message: response.data['payload']['code'].toString());
 
-        print("NNNNNNNNNN" + response.data['payload']['code'].toString());
+        final prefs = await SharedPreferences.getInstance();
+
+        prefs.setString("password", fields['password']);
+
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -138,7 +141,7 @@ class LoginScreen extends ConsumerWidget {
       case "Login successful":
         final prefs = await SharedPreferences.getInstance();
         // prefs.setString("username", fields['username']);
-        print("pw" + fields['password']);
+        // print("psssw" + fields['password']);
         prefs.setString("password", fields['password']);
         var userID = ref.watch(userIDProvider);
         userID.setUserID = response.data['payload']['id'];
@@ -162,6 +165,8 @@ class LoginScreen extends ConsumerWidget {
         .set('username', jsonEncode(response.data['payload']['username']));
     await SessionManager()
         .set('privacy', jsonEncode(response.data['payload']['privacy']));
+    await SessionManager().set('is_institutional',
+        jsonEncode(response.data['payload']['is_institutional']));
   }
 
   Future sendEmail({
@@ -192,6 +197,5 @@ class LoginScreen extends ConsumerWidget {
             'user_message': message
           }
         }));
-    print(response.body);
   }
 }

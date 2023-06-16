@@ -14,7 +14,7 @@ String MenuIngredientToJson(List<MenuIngredient> data) =>
 class MenuIngredient {
   String title;
   String? imageUrl;
-  List<String> ingredients;
+  List<dynamic> ingredients;
   bool isMealHidden;
   double? price;
 
