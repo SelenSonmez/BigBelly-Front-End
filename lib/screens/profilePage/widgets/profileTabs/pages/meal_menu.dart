@@ -86,6 +86,7 @@ class MealMenu extends ConsumerWidget {
                                     shrinkWrap: true,
                                     itemCount: snapshot
                                         .data![index].ingredients!.length,
+                                    physics: BouncingScrollPhysics(),
                                     // menuIngredient.ingredients.length,
                                     itemBuilder: (context, subIndex) {
                                       return Text(

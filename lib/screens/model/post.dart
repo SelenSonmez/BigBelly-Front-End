@@ -134,10 +134,10 @@ class Post {
           : null,
       description:
           map['description'] != null ? map['description'] as String : null,
-      price: map['institutional_post']['price'] != null
+      price: map['institutional_post'] != null
           ? map['institutional_post']['price'] as String
           : null,
-      isHidden: map['institutional_post']['is_hidden'] != null
+      isHidden: map['institutional_post'] != null
           ? map['institutional_post']['is_hidden'] as bool
           : null,
       ingredients: map['ingredients'] != null
