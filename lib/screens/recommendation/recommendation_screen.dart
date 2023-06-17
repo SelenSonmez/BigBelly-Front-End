@@ -39,6 +39,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
 
   Future<List<User>> getFollowers() async {
     dynamic id = await SessionManager().get("id");
+    dynamic username = await SessionManager().get("username");
     final response = await dio.get("/profile/$id/followeds");
 
     var usersJson = response.data['payload']['followeds'];
@@ -49,16 +50,20 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
       return user;
     }));
     // logger.i(users);
-    int count = 0;
+    checkboxes.add(
+        {'id': 0, 'username': username, 'account_id': id, 'isChecked': false});
+    int count = 1;
     users.forEach((element) {
       print(element);
       checkboxes.add({
         "id": count,
         "username": element.username,
+        'account_id': element.id,
         "isChecked": false,
       });
       count++;
     });
+
     return users;
   }
 
@@ -238,13 +243,37 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                   return Scaffold(
                                     floatingActionButton: FloatingActionButton(
                                       backgroundColor: Colors.green.shade700,
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        dynamic id =
+                                            await SessionManager().get("id");
+                                        List<dynamic> users_id = [];
+
                                         //TODO got all users checked. Send them to backend
                                         checkboxes.forEach((element) {
                                           if (element['isChecked'] == true) {
-                                            // logger.i(element);
+                                            users_id.add(element['account_id']);
                                           }
                                         });
+
+                                        final response = await dio.get(
+                                            '/recommendation/group',
+                                            data: {
+                                              'account_id': id,
+                                              'accounts': users_id
+                                            });
+                                        if (response.data["success"] == false) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                                "There is no enough information to recommend"),
+                                          ));
+                                        } else {
+                                          post = Post.fromJson(
+                                              response.data['payload']['post']);
+
+                                          setState(() {});
+                                        }
                                       },
                                       child: Text(Get),
                                     ),
@@ -252,7 +281,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                         FloatingActionButtonLocation.miniEndTop,
                                     appBar: AppBar(title: Text(AddFriends)),
                                     body: ListView.builder(
-                                      itemCount: users.length,
+                                      itemCount: checkboxes.length,
                                       itemBuilder: (context, index) {
                                         return Container(
                                           padding:
@@ -285,8 +314,8 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                                         alignment:
                                                             Alignment.center,
                                                         child: Text(
-                                                          users[index]
-                                                              .username!,
+                                                          checkboxes[index]
+                                                              ['username'],
                                                           style: TextStyle(
                                                               fontSize: 17),
                                                         ),
