@@ -54,11 +54,12 @@ class MyApp extends ConsumerWidget {
                           mode, // Decides which theme to show, light or dark.
                       home: snapshot.data);
                 } else {
-                  return Stack(
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      Image.asset("assets/images/frameBig.png"),
-                    ],
+                  return Container(
+                    //textDirection: TextDirection.rtl,
+                    child: Image.asset(
+                      "assets/images/frameBig.png",
+                      fit: BoxFit.cover,
+                    ),
                   );
                 }
               },

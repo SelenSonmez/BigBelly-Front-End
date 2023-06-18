@@ -14,6 +14,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../../../../authentication/model/user_model.dart';
 import '../../../../model/post.dart';
+import '../../../../recommendation/recommendation_screen.dart';
 
 class UserPosts extends ConsumerStatefulWidget {
   UserPosts({super.key, this.isUserSelf = false});
@@ -30,10 +31,14 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     super.initState();
   }
 
-  Future<List<Post>> getPosts([UserModel? user]) async {
+  Future<List<Post>> getPosts() async {
+    var user = ref.watch(userProvider);
     dynamic id = await SessionManager().get('id');
     final response = await dio.get('/profile/${user!.getUser.id}/posts');
     var postsJson = response.data['payload']['posts'];
+    itemsList = [];
+    //logger.i(postsJson);
+    print("1");
 
     for (var element in postsJson) {
       Post post = Post.fromJson(jsonEncode(element));
@@ -44,16 +49,16 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     }
 
     user.setPostCount(itemsList.length);
-    const ProfileInfo();
+    //const ProfileInfo();
     return itemsList;
   }
 
   @override
   Widget build(BuildContext context) {
-    var user = ref.watch(userProvider);
+    //var user = ref.read(userProvider);
     return Center(
       child: FutureBuilder<List<Post>>(
-          future: getPosts(user),
+          future: getPosts(),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               return GridView.builder(

@@ -8,6 +8,7 @@ import 'package:bigbelly/screens/mainPage/main_page_imports.dart';
 import 'package:bigbelly/screens/model/post.dart';
 import 'package:bigbelly/screens/post_details/post_details.dart';
 import 'package:bigbelly/screens/profilePage/widgets/profile_page.dart';
+import 'package:bigbelly/screens/search/text.dart';
 import 'package:bigbelly/screens/search/widgets/profile_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as r;
 import '../authentication/model/user_model.dart';
@@ -50,7 +51,25 @@ class SearchScreen extends StatelessWidget {
           )),
         ];
       },
-      body: Container(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 150.w,
+            height: 200.h,
+            child: Image.asset("assets/images/panda_with_magnifying_glass.png"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0),
+            child: Text(
+              Search,
+              style: TextStyle(
+                fontSize: 16.sp,
+              ),
+            ),
+          )
+        ],
+      ),
     ));
   }
 }

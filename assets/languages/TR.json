@@ -210,7 +210,8 @@
         "Light":"Açık",
         "Dark":"Koyu",
         "ContactBigBelly":"Herhangi bir soru için bigbelly@gmail.com ile iletişime geçin",
-        "About": "BigBelly, Izmir Ekonomi Üniversitesi öğrencileri tarafından yapılmış bir sosyal medya uygulamasıdır."
+        "About": "BigBelly, Izmir Ekonomi Üniversitesi öğrencileri tarafından yapılmış bir sosyal medya uygulamasıdır.",
+        "Unarchived" : "Gönderi arşivlerden kaldırıldı"
 
     },
     "EditProfileScreen":{
@@ -222,7 +223,8 @@
         "NewPassword":"Yeni Şifre",
         "OldPasswordNotEmpty":"Eski şifre boş olamaz",
         "NewPasswordNotEmpty":"Yeni şifre boş olamaz",
-        "RequierementsNotMet":"Lütfen aşağıdaki gerekliliklere göre belirleyiniz"
+        "RequierementsNotMet":"Lütfen aşağıdaki gerekliliklere göre belirleyiniz",
+        "EditingCorrect" : "Profil bilgisi güncellendi."
 
     },
     "RecommendationScreen":{
@@ -238,7 +240,12 @@
         "OldRecommendation":"Eski Tavsiye",
         "Owner":"Sahibi",
         "ThereIsNoInfo": "Tavsiye Edilebilcek Kadar Veri Yok",
-        "History":"Geçmiş"
+        "History":"Geçmiş",
+        "Recommended" : "Tavsiye alındı"
+
         
+    },
+    "SearchScreen":{
+        "Search":"Kullanıcı ve etiket arayın!"
     }
 }

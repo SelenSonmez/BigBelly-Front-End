@@ -46,3 +46,8 @@ String RecHistory = TextDecider()
     .goOnPath("RecommendationScreen")
     .target("History")
     .decideText();
+
+String Recommended = TextDecider()
+    .goOnPath("RecommendationScreen")
+    .target("Recommended")
+    .decideText();

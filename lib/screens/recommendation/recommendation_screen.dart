@@ -44,6 +44,11 @@ class _RecommendationScreenState extends ConsumerState<RecommendationScreen> {
           Post.fromJson(jsonEncode(response.data['payload']['post']));
       post.getPost.imageURL =
           "http://18.184.145.252/post/${post.getPost.id!}/image";
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text(Recommended),
+      ));
     }
 
     setState(() {});
@@ -315,7 +320,11 @@ class _RecommendationScreenState extends ConsumerState<RecommendationScreen> {
                                               "http://18.184.145.252/post/${json['id']}/image";
                                           // print(recPost.getPost);
                                           // logger.i(post);
-
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.green,
+                                            content: Text(Recommended),
+                                          ));
                                           Navigator.pop(context);
                                         }
                                       },

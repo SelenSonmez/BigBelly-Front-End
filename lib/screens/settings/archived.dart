@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bigbelly/screens/imports.dart';
+import 'package:bigbelly/screens/settings/texts.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -79,9 +80,7 @@ class _ArchivedRecipesState extends State<ArchivedRecipes> {
                                     final response = await dio.post(
                                         "/post/${snapshot.data![index].id!}/dearchive");
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                "Post Removed From Archives")));
+                                        SnackBar(content: Text(Unarchived)));
                                     setState(() {});
                                   },
                                 ),

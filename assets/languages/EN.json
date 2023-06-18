@@ -212,7 +212,8 @@
         "Light":"Light",
         "Dark":"Dark",
         "ContactBigBelly":"Contact bigbelly@gmail.com for any questions",
-        "About": "BigBelly is a social media platform made by students from Izmir University of Economics "
+        "About": "BigBelly is a social media platform made by students from Izmir University of Economics ",
+        "Unarchived" : "Post Removed From Archives"
 
 
     },
@@ -225,7 +226,8 @@
         "NewPassword":"New Password",
         "OldPasswordNotEmpty":"Old Password can not be empty",
         "NewPasswordNotEmpty":"New Password can not be empty",
-        "RequierementsNotMet":"Please consider password requirements below"
+        "RequierementsNotMet":"Please consider password requirements below",
+        "EditingCorrect" : "Profile information is updated"
     },
     "RecommendationScreen":{
         "Recommendation":"Recommendation",
@@ -240,8 +242,12 @@
         "OldRecommendation":"Recommendation Title",
         "Owner":"Owner",
         "ThereIsNoInfo": "Tavsiye Edilebilcek Kadar Veri Yok",
-        "History":"History"
+        "History":"History",
+        "Recommended" : "Recommendation has been given"
 
 
+    },
+    "SearchScreen":{
+        "Search":"Search users and tags!"
     }
 }

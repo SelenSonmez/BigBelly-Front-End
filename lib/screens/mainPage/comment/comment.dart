@@ -276,13 +276,8 @@ class _CommentTileState extends State<CommentTile> {
                       // child: checkSelfUsername(comment.username) == true
                       //     ? Text("ALO")
                       //     : Text(comment.comment, style: TextStyle(fontSize: 16)),
-                      child: isSelf == true
-                          ? TextField(
-                              onSubmitted: (value) {},
-                              decoration: InputDecoration(
-                                  hintText: widget.comment.comment),
-                            )
-                          : Text(widget.comment.comment))
+
+                      child: Text(widget.comment.comment))
                 ],
               ),
             ),

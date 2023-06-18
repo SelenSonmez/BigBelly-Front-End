@@ -32,3 +32,7 @@ String RequierementsNotMet = TextDecider()
     .goOnPath("EditProfileScreen")
     .target("RequierementsNotMet")
     .decideText();
+String EditingCorrect = TextDecider()
+    .goOnPath('EditProfileScreen')
+    .target('EditingCorrect')
+    .decideText();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/Colors.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
@@ -183,6 +184,14 @@ class _EditScreenState extends State<EditScreen> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(PleaseEnterValidInputs)));
+                              } else {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+
+                                prefs.setString("password", fields['password']);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(EditingCorrect)));
+                                Navigator.pop(context);
                               }
                             },
                             style: ElevatedButton.styleFrom(

@@ -46,3 +46,5 @@ String ContactBigBelly = TextDecider()
     .decideText();
 String About =
     TextDecider().goOnPath("SettingsScreen").target("About").decideText();
+String Unarchived =
+    TextDecider().goOnPath("SettingsScreen").target("Unarchived").decideText();

@@ -31,9 +31,11 @@ class UserModel extends ChangeNotifier {
   }
 
   void setPostCount(int count) {
-    _user.postCount = count;
+    if (_user.postCount != count) {
+      _user.postCount = count;
 
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
   void userUnfollowedPrivateAccount(String id) {
