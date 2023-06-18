@@ -82,8 +82,8 @@ buildd(isInstitution) {
       buildNavBarItem(TabItem.home),
       buildNavBarItem(TabItem.search),
       buildNavBarItem(TabItem.post),
-      buildNavBarItem(TabItem.menu),
       buildNavBarItem(TabItem.recommendation),
+      buildNavBarItem(TabItem.menu),
     ];
   } else {
     return [

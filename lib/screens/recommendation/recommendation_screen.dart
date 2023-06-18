@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:bigbelly/constants/dio.dart';
+import 'package:bigbelly/constants/providers/group_state_provider.dart';
 import 'package:bigbelly/screens/post_details/post_details.dart';
+import 'package:bigbelly/screens/recommendation/history.dart';
 import 'package:bigbelly/screens/recommendation/texts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
@@ -12,29 +16,37 @@ import '../model/post.dart';
 
 var logger = Logger();
 
-class RecommendationScreen extends StatefulWidget {
+class RecommendationScreen extends ConsumerStatefulWidget {
   RecommendationScreen({Key? key}) : super(key: key);
 
   @override
-  State<RecommendationScreen> createState() => _RecommendationScreenState();
+  ConsumerState<RecommendationScreen> createState() =>
+      _RecommendationScreenState();
 }
 
-class _RecommendationScreenState extends State<RecommendationScreen> {
-  Post post = Post(likeCount: 0, commentCount: 0);
+class _RecommendationScreenState extends ConsumerState<RecommendationScreen> {
+  // Post post = Post(likeCount: 0, commentCount: 0);
   bool isChecked = false;
   List<User> users = [];
   List checkboxes = [];
 
-  Future<Post> getRecommendation() async {
+  getRecommendation(var post) async {
     dynamic id = await SessionManager().get("id");
     final response =
         await dio.get("/recommendation/", data: {'account_id': id});
+    if (response.data["success"] == false) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(ThereIsNoInfo),
+      ));
+    } else {
+      post.setRecommendationPost =
+          Post.fromJson(jsonEncode(response.data['payload']['post']));
+      post.getPost.imageURL =
+          "http://18.184.145.252/post/${post.getPost.id!}/image";
+    }
 
-    post = Post.fromJson(jsonEncode(response.data['payload']['post']));
-    post.imageURL = "http://18.184.145.252/post/${post.id!}/image";
     setState(() {});
-
-    return post;
   }
 
   Future<List<User>> getFollowers() async {
@@ -50,11 +62,15 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
       return user;
     }));
     // logger.i(users);
-    checkboxes.add(
-        {'id': 0, 'username': username, 'account_id': id, 'isChecked': false});
+    checkboxes.add({
+      'id': 0,
+      'username': username + " (Self)",
+      'account_id': id,
+      'isChecked': false
+    });
     int count = 1;
     users.forEach((element) {
-      print(element);
+      // print(element);
       checkboxes.add({
         "id": count,
         "username": element.username,
@@ -67,18 +83,33 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
     return users;
   }
 
+  getLastRecommendation(var recPost) async {
+    dynamic id = await SessionManager().get("id");
+
+    final response =
+        await dio.get("/recommendation/history", data: {'account_id': id});
+
+    var postsJson = response.data['payload']['posts'];
+
+    List<Post> itemsList = List.from(postsJson.map((i) {
+      Post post = Post.fromJson(jsonEncode(i["post"]));
+      post.account!.username = i['post']['account']['username'];
+      post.imageURL = "http://18.184.145.252/post/${post.id!}/image";
+      return post;
+    }));
+    if (!itemsList.isEmpty) recPost.setRecommendationPost = itemsList.last;
+  }
+
   @override
   void initState() {
     getFollowers();
-    // logger.i("Logger is working!");
-    // TODO: implement initState
-
-    // logger.i(checkboxes);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var recPost = ref.watch(groupStateProvider);
+
     return Scaffold(
         appBar: AppBar(
           title: Text(Recommendation),
@@ -99,13 +130,23 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                       RecommendationHistory),
                   Container(
                       // padding: EdgeInsets.only(left: 25),
-                      child: Text(
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SeeAll))
+                      child: TextButton(
+                    child: Text(
+                      SeeAll,
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => History(),
+                          ));
+                    },
+                  ))
                 ],
               ),
             ),
@@ -114,21 +155,21 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          PostDetails(post: post, index: post.id!),
+                      builder: (context) => PostDetails(
+                          post: recPost.getPost, index: recPost.getPost.id!),
                     ));
               },
-              child: Card(
-                elevation: 25,
-                color: Colors.green,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                child: SizedBox(
-                  width: 350,
-                  height: 175,
-                  child: Center(child: FutureBuilder(
-                    // future: getRecommendation(),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Card(
+                  elevation: 25,
+                  color: Colors.green,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  child: Center(
+                      child: FutureBuilder(
+                    future: getLastRecommendation(recPost),
                     builder: (context, snapshot) {
                       return Row(
                         // mainAxisAlignment: MainAxisAlignment.start,
@@ -136,7 +177,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
                                   padding: EdgeInsets.only(bottom: 3),
@@ -145,14 +186,14 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                         20), // Image border
                                     child: SizedBox.fromSize(
                                       size: Size.fromRadius(50), // Image radius
-                                      child: post.title == null
+                                      child: recPost.getPost.title == null
                                           ? Image.network(
                                               'https://images.unsplash.com/photo-1565976469782-7c92daebc42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80',
                                               fit: BoxFit.cover)
                                           : Card(
                                               elevation: 17,
                                               child: Image.network(
-                                                  post.imageURL!)),
+                                                  recPost.getPost.imageURL!)),
                                     ),
                                   ),
                                 ),
@@ -168,43 +209,44 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                     Text(
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 22),
-                                        post.title != null
-                                            ? post.likeCount.toString()
+                                        recPost.getPost.title != null
+                                            ? recPost.getPost.likeCount
+                                                .toString()
                                             : "")
                                   ],
                                 ))
                               ],
                             ),
                           ),
-                          Container(
-                              padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Recipe Title
-                                  Text(
-                                      style: TextStyle(
-                                          letterSpacing: 1.4,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 17,
-                                          color: Colors.white),
-                                      post.title != null
-                                          ? post.title!
-                                          : "Old Recommendation Title"),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                      style: TextStyle(
-                                          letterSpacing: 0.8,
-                                          overflow: TextOverflow.ellipsis,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white),
-                                      "${By} ${post.title != null ? post.account!.username : "Old Recommendation"}"),
-                                ],
-                              ))
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              //Recipe Title
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 26.0),
+                                child: Text(
+                                    style: TextStyle(
+                                        // letterSpacing: 1.4.sp,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17.sp,
+                                        color: Colors.white),
+                                    recPost.getPost.title != null
+                                        ? recPost.getPost.title!
+                                        : OldRecommendation),
+                              ),
+
+                              Text(
+                                  style: TextStyle(
+                                      letterSpacing: 0.8,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white),
+                                  "${By} ${recPost.getPost.title != null ? recPost.getPost.account!.username : Owner}"),
+                            ],
+                          )
                         ],
                       );
                     },
@@ -225,15 +267,12 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
               children: [
                 ElevatedButton(
                     onPressed: () async {
-                      dynamic id = await SessionManager().get("id");
-                      final response =
-                          await dio.get("/recommendation?account_id=$id");
-                      getRecommendation();
+                      getRecommendation(recPost);
                     },
                     child: Text(ForSelf)),
                 ElevatedButton(
-                    onPressed: () {
-                      showModalBottomSheet<void>(
+                    onPressed: () async {
+                      await showModalBottomSheet<void>(
                         context: context,
                         builder: (context) {
                           return BottomSheet(
@@ -248,7 +287,6 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                             await SessionManager().get("id");
                                         List<dynamic> users_id = [];
 
-                                        //TODO got all users checked. Send them to backend
                                         checkboxes.forEach((element) {
                                           if (element['isChecked'] == true) {
                                             users_id.add(element['account_id']);
@@ -265,14 +303,20 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             backgroundColor: Colors.red,
-                                            content: Text(
-                                                "There is no enough information to recommend"),
+                                            content: Text(ThereIsNoInfo),
                                           ));
                                         } else {
-                                          post = Post.fromJson(
-                                              response.data['payload']['post']);
+                                          final json =
+                                              response.data['payload']['post'];
+                                          recPost.setRecommendationPost =
+                                              Post.fromJson(jsonEncode(json));
 
-                                          setState(() {});
+                                          recPost.getPost.imageURL =
+                                              "http://18.184.145.252/post/${json['id']}/image";
+                                          // print(recPost.getPost);
+                                          // logger.i(post);
+
+                                          Navigator.pop(context);
                                         }
                                       },
                                       child: Text(Get),
@@ -350,6 +394,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                           );
                         },
                       );
+                      setState(() {});
                     },
                     child: Text(ForGroup)),
               ],

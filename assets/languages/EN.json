@@ -236,6 +236,12 @@
         "ForGroup":"For Group",
         "By":"By: ",
         "AddFriends": "Add Friends",
-        "Get": "Get"
+        "Get": "Get",
+        "OldRecommendation":"Recommendation Title",
+        "Owner":"Owner",
+        "ThereIsNoInfo": "Tavsiye Edilebilcek Kadar Veri Yok",
+        "History":"History"
+
+
     }
 }

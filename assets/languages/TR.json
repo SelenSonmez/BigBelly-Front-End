@@ -234,7 +234,11 @@
         "ForGroup":"Grup İçin",
         "By":"Sahibi: ",
         "AddFriends": "Arkadaşlarını Ekle",
-        "Get": "Al"
-
+        "Get": "Al",
+        "OldRecommendation":"Eski Tavsiye",
+        "Owner":"Sahibi",
+        "ThereIsNoInfo": "Tavsiye Edilebilcek Kadar Veri Yok",
+        "History":"Geçmiş"
+        
     }
 }

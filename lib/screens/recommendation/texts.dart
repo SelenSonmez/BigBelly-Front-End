@@ -32,3 +32,17 @@ String AddFriends = TextDecider()
     .decideText();
 String Get =
     TextDecider().goOnPath("RecommendationScreen").target("Get").decideText();
+String OldRecommendation = TextDecider()
+    .goOnPath("RecommendationScreen")
+    .target("OldRecommendation")
+    .decideText();
+String Owner =
+    TextDecider().goOnPath("RecommendationScreen").target("Owner").decideText();
+String ThereIsNoInfo = TextDecider()
+    .goOnPath("RecommendationScreen")
+    .target("ThereIsNoInfo")
+    .decideText();
+String RecHistory = TextDecider()
+    .goOnPath("RecommendationScreen")
+    .target("History")
+    .decideText();

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-enum TabItem { home, search, post, menu, recommendation }
+enum TabItem { home, search, post, recommendation, menu }
 
 class TabItemData {
   final String title;
@@ -13,7 +13,7 @@ class TabItemData {
     TabItem.home: TabItemData("home", Icons.home_outlined),
     TabItem.search: TabItemData("search", Icons.search),
     TabItem.post: TabItemData("post", Icons.add_circle_outline),
-    TabItem.menu: TabItemData("menu", Icons.menu_book_rounded),
     TabItem.recommendation: TabItemData("recommendation", Icons.people_alt),
+    TabItem.menu: TabItemData("menu", Icons.menu_book_rounded),
   };
 }

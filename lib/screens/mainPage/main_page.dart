@@ -27,8 +27,8 @@ class _MainPageState extends ConsumerState<MainPage> {
     TabItem.home: GlobalKey<NavigatorState>(),
     TabItem.search: GlobalKey<NavigatorState>(),
     TabItem.post: GlobalKey<NavigatorState>(),
-    TabItem.menu: GlobalKey<NavigatorState>(),
     TabItem.recommendation: GlobalKey<NavigatorState>(),
+    TabItem.menu: GlobalKey<NavigatorState>(),
   };
 
   Map<TabItem, Widget> allPages() {
@@ -36,8 +36,8 @@ class _MainPageState extends ConsumerState<MainPage> {
       TabItem.home: HomePage(),
       TabItem.search: SearchScreen(),
       TabItem.post: AddPostScreen(),
-      TabItem.menu: MenuPosts(),
       TabItem.recommendation: RecommendationScreen(),
+      TabItem.menu: MenuPosts(),
     };
   }
 

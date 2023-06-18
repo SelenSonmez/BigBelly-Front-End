@@ -34,7 +34,6 @@ class _UserPostsState extends ConsumerState<UserPosts> {
     dynamic id = await SessionManager().get('id');
     final response = await dio.get('/profile/${user!.getUser.id}/posts');
     var postsJson = response.data['payload']['posts'];
-    List<Post> institutionalPosts = [];
 
     for (var element in postsJson) {
       Post post = Post.fromJson(jsonEncode(element));
