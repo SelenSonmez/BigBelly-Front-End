@@ -13,12 +13,14 @@ class ProfileTile extends StatelessWidget {
       required this.username,
       this.followerCount,
       this.requestId = -1,
-      this.updateFollowerRequests});
+      this.updateFollowerRequests,
+      this.imageURL});
 
   final String username;
   final int? followerCount;
   final int requestId;
   final Function? updateFollowerRequests;
+  final String? imageURL;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,17 @@ class ProfileTile extends StatelessWidget {
               leading: CircleAvatar(
                 backgroundColor: mainThemeColor,
                 radius: 22.h,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage(defaultProfileImage),
-                  radius: 20.0.h,
-                ),
+                child: imageURL == null
+                    ? CircleAvatar(
+                        backgroundImage: AssetImage(defaultProfileImage),
+                        radius: 20.0.h,
+                      )
+                    : CircleAvatar(
+                        radius: 40,
+                        child: ClipOval(
+                          child: Image.network(imageURL.toString()),
+                        ),
+                      ),
               ),
               title: Text(
                 username,

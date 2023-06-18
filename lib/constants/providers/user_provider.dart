@@ -10,6 +10,8 @@ final userProvider = StateProvider<UserModel>((ref) {
 class UserModel extends ChangeNotifier {
   late User _user;
 
+  bool isFollowingUser = false;
+
   User get getUser => _user;
 
   set setUser(User value) {
@@ -19,9 +21,23 @@ class UserModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get getFollowingStatus => isFollowingUser;
+
+  set setFollowingStatus(bool value) {
+    isFollowingUser = value;
+
+    //here the model value changes. you can call 'notifyListeners' to notify all the 'Consumer<UserModel>'
+    notifyListeners();
+  }
+
   void setPostCount(int count) {
     _user.postCount = count;
 
+    notifyListeners();
+  }
+
+  void userUnfollowedPrivateAccount(String id) {
+    isFollowingUser = false;
     notifyListeners();
   }
 }

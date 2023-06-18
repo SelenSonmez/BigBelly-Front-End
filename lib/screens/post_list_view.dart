@@ -118,18 +118,19 @@ class _PostListViewState extends ConsumerState<PostListView> {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    children: [
-                      PostitleAndTags(post: post),
-                      PostOwnerAndDate(hideUsername: false, post: post),
-                      postReactions(
-                        post: post,
-                        index: index,
-                      ),
-                      const Divider(thickness: 2)
-                    ],
-                  )),
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  children: [
+                    PostitleAndTags(post: post),
+                    PostOwnerAndDate(hideUsername: false, post: post),
+                    postReactions(
+                      post: post,
+                      index: index,
+                    ),
+                    const Divider(thickness: 2)
+                  ],
+                ),
+              ),
               index == posts.getPost.length - 1
                   ? const SizedBox(
                       height: 30,

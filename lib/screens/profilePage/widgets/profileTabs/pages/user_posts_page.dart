@@ -68,8 +68,10 @@ class _UserPostsState extends ConsumerState<UserPosts> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProfileListView(
-                                        profilePosts: itemsList,
-                                        isUserSelf: widget.isUserSelf)));
+                                          profilePosts: itemsList,
+                                          isUserSelf: widget.isUserSelf,
+                                          indexToJump: index,
+                                        )));
                           },
                           child: Center(
                               child: Image.network(imageURL,

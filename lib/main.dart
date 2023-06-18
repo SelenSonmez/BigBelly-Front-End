@@ -70,7 +70,7 @@ class MyApp extends ConsumerWidget {
 
   Future<Widget> isSignedIn(ref) async {
     final prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
+    //prefs.clear();
     print(prefs.getString("username"));
     if (prefs.getString("username") != null) {
       var username = prefs.getString("username");
