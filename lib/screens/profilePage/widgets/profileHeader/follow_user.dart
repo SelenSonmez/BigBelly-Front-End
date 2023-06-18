@@ -19,10 +19,13 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
   bool isSelf = false;
   bool isRequest = false;
 
+  String? requestID;
+
   void initState() {
     super.initState();
     checkSelfID();
     checkFollowingStatus();
+    _isFollowerRequestSent();
   }
 
   @override
@@ -34,6 +37,7 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
 
   @override
   Widget build(BuildContext context) {
+    print(isFollowing);
     return Container(
       child: isSelf
           ? Container()
@@ -41,8 +45,8 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
               onPressed: () {
                 followUser();
               },
-              icon: isFollowing
-                  ? const Icon(Icons.person_add_disabled_outlined)
+              icon: isFollowing == true
+                  ? const Icon(Icons.check_rounded)
                   : (isRequest
                       ? const Icon(Icons.lock_clock_outlined)
                       : const Icon(Icons.person_add_alt_outlined)),
@@ -64,13 +68,16 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
     bool followerFound = false;
     final userValue = ref.read(userProvider);
     final id = await SessionManager().get('id');
+    print(userValue.getUser.id);
     for (var follower in userValue.getUser.followers!) {
-      if (id == follower.id.toString()) {
+      if (id.toString() == follower.id.toString()) {
+        userValue.setFollowingStatus = true;
         followerFound = true;
         break;
       }
     }
-    followerFound ? isFollowing = true : isFollowing = false;
+    userValue.getFollowingStatus ? isFollowing = true : isFollowing = false;
+
     setState(() {});
   }
 
@@ -93,7 +100,11 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
           isRequest = true;
           break;
         case 'Request has succeed':
+          if (isFollowing) {
+            userValue.userUnfollowedPrivateAccount(id);
+          }
           isFollowing = !isFollowing;
+          userValue.setFollowingStatus = isFollowing;
           break;
         default:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -104,6 +115,31 @@ class _UserFollowingStatusState extends ConsumerState<UserFollowingStatus> {
 
       //if it is request remove request
       setState(() {});
+    } else {
+      Response response = await dio
+          .post("/profile/followers/decline", data: {"request_id": requestID});
+      isRequest = !isRequest;
+      setState(() {});
     }
+  }
+
+  Future<bool> _isFollowerRequestSent() async {
+    dynamic id = await SessionManager().get('id');
+    final userValue = ref.watch(userProvider);
+    final uri = '/profile/${userValue.getUser.id.toString()}/requests';
+
+    try {
+      Response response = await dio.get(uri);
+      response.data['payload']['requests'].forEach((v) {
+        if (id.toString() == v['account_id'].toString()) {
+          requestID = v['id'].toString();
+          isRequest = true;
+          setState(() {});
+        }
+      });
+    } catch (_) {
+      rethrow;
+    }
+    return isRequest;
   }
 }

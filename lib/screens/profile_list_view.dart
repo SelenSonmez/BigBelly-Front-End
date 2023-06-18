@@ -1,4 +1,5 @@
 import 'package:bigbelly/constants/providers/currentUser_provider.dart';
+import 'package:bigbelly/screens/imports.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
@@ -9,9 +10,14 @@ import 'post_details/post_details.dart';
 import 'profilePage/widgets/profileHeader/profile_info.dart';
 
 class ProfileListView extends ConsumerStatefulWidget {
-  ProfileListView({super.key, this.profilePosts, this.isUserSelf = false});
+  ProfileListView(
+      {super.key,
+      this.profilePosts,
+      this.isUserSelf = false,
+      required this.indexToJump});
   List<Post>? profilePosts = [];
   bool isUserSelf;
+  int indexToJump = 0;
   @override
   ConsumerState<ProfileListView> createState() => _ProfileListViewState();
 }
@@ -19,6 +25,7 @@ class ProfileListView extends ConsumerStatefulWidget {
 class _ProfileListViewState extends ConsumerState<ProfileListView> {
   int postCount = 0;
   final ScrollController _scrollController = ScrollController();
+  final dataKey = new GlobalKey();
   bool _isLoadingMore = false;
 
   @override
@@ -33,13 +40,45 @@ class _ProfileListViewState extends ConsumerState<ProfileListView> {
     return id;
   }
 
+  void jumpToIndex(int index) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Scrollable.ensureVisible(dataKey.currentContext!);
+      if (_scrollController.hasClients && index != 0) {
+        /*_scrollController.jumpTo(665.1.h * index);
+        print(599.1 * index);*/
+
+        final contentSize = _scrollController.position.viewportDimension +
+            _scrollController.position.maxScrollExtent -
+            100;
+// Estimate the target scroll position.
+        final target = contentSize * index / widget.profilePosts!.length;
+        print(widget.profilePosts!.length);
+// Scroll to that position.
+        _scrollController.position.jumpTo(
+          target,
+        );
+      }
+    });
+
+    /* if (_scrollController.hasClients && index != 0) {
+      print("girdi");
+      _scrollController.jumpTo(250.0 * index);
+    }
+    ;*/
+  }
+
+  Size postSize = Size.zero;
+
   @override
   Widget build(BuildContext context) {
     var user = ref.watch(userProvider);
     var userID = ref.watch(userIDProvider);
+    jumpToIndex(widget.indexToJump);
+
     return Scaffold(
         body: Center(
             child: ListView.builder(
+      key: dataKey,
       controller: _scrollController,
       itemCount: _isLoadingMore
           ? widget.profilePosts!.length + 1

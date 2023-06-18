@@ -24,7 +24,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   late TabController tabController = TabController(length: 0, vsync: this);
   int activeIndex = 0;
   bool isSelf = false;
-  bool isFollowing = false;
+  //bool isFollowing = false;
   ScrollController scrollController = ScrollController();
   // bool isInsitution = false;
 
@@ -32,6 +32,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   void initState() {
     super.initState();
     checkSelfID();
+    checkIsFollowing();
+
     tabController =
         TabController(length: widget.isInstitution ? 4 : 3, vsync: this);
   }
@@ -39,6 +41,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
   @override
   Widget build(BuildContext context) {
     final userValue = ref.watch(userProvider);
+    updatePrivateAccountAppearance(userValue);
     tabController.addListener(() {
       if (tabController.indexIsChanging ||
           tabController.animation!.value == tabController.index) {
@@ -47,21 +50,33 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
         });
       }
     });
-    return Column(children: [
-      TabBar(
-          indicatorColor: mainThemeColor,
-          indicatorWeight: 1.8,
-          indicatorPadding: EdgeInsets.zero,
-          padding: EdgeInsets.zero,
-          controller: tabController,
-          tabs: showTabs(userValue)),
-      Expanded(
-        // width: 100,
-        // height: 100,
-        child:
-            TabBarView(controller: tabController, children: getTabs(userValue)),
-      )
-    ]);
+    return userValue.getUser.privacySetting!.isPrivate != null &&
+            (userValue.getUser.privacySetting!.isPrivate == true &&
+                !isSelf &&
+                !userValue.getFollowingStatus)
+        ? const Center(
+            child: Expanded(
+              child: Icon(
+                Icons.lock_outline,
+                size: 55,
+              ),
+            ),
+          )
+        : Column(children: [
+            TabBar(
+                indicatorColor: mainThemeColor,
+                indicatorWeight: 1.8,
+                indicatorPadding: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
+                controller: tabController,
+                tabs: showTabs(userValue)),
+            Expanded(
+              // width: 100,
+              // height: 100,
+              child: TabBarView(
+                  controller: tabController, children: getTabs(userValue)),
+            )
+          ]);
   }
 
   getTabs(var userValue) {
@@ -70,7 +85,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
         userValue.getUser.privacySetting!.isPrivate != null &&
                 (userValue.getUser.privacySetting!.isPrivate == true &&
                     !isSelf &&
-                    isFollowing)
+                    userValue.getFollowingStatus)
             ? const Center(
                 child: Expanded(
                   child: Icon(
@@ -86,19 +101,7 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
       ];
     } else {
       return [
-        userValue.getUser.privacySetting!.isPrivate != null &&
-                (userValue.getUser.privacySetting!.isPrivate == true &&
-                    !isSelf &&
-                    isFollowing)
-            ? const Center(
-                child: Expanded(
-                  child: Icon(
-                    Icons.lock_outline,
-                    size: 55,
-                  ),
-                ),
-              )
-            : UserPosts(isUserSelf: isSelf),
+        UserPosts(isUserSelf: isSelf),
         CollectionsTab(),
         const Recipes(),
       ];
@@ -120,8 +123,8 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
     final id = await SessionManager().get('id');
 
     for (User user in userValue.getUser.followers!) {
-      if (user.id == id) {
-        isFollowing = true;
+      if (user.id.toString() == id.toString()) {
+        //isFollowing = true;
       }
     }
     setState(() {});
@@ -173,5 +176,14 @@ class _ProfileTabsState extends ConsumerState<ProfileTabs>
                     : const Color.fromARGB(255, 140, 204, 142))),
       ];
     }
+  }
+
+  void updatePrivateAccountAppearance(UserModel userValue) {
+    userValue.addListener(() {
+      if (mounted) {
+        //checkIsFollowing();
+        setState(() {});
+      }
+    });
   }
 }
