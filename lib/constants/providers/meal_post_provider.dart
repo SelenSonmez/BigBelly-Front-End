@@ -9,7 +9,12 @@ final mealPostProvider = StateProvider<MealModel>((ref) {
 
 class MealModel extends ChangeNotifier {
   MenuIngredient _ingredient = MenuIngredient(
-      title: "", imageUrl: "", ingredients: [], isMealHidden: false, price: 0);
+      id: "",
+      title: "",
+      imageUrl: "",
+      ingredients: [],
+      isMealHidden: false,
+      price: 0);
 
   MenuIngredient get getMenuIngredient => _ingredient;
 

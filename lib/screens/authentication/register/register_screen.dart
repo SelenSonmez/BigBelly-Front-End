@@ -15,7 +15,7 @@ Map<String, dynamic> fields = {
   'username': null,
   'email': null,
   'password': null,
-  'is_institutional': null
+  'is_institutional': false
 };
 
 class RegisterScreen extends StatefulWidget {

@@ -120,8 +120,9 @@ class _MenuPostsState extends ConsumerState<MenuPosts> {
 
                         List<dynamic> ingredients = [];
 
-                        mealIngredient.getMenuIngredient.ingredients.map(
+                        mealIngredient.getMenuIngredient.ingredients.forEach(
                             (e) => ingredients.add({'ingredient_name': e}));
+                        print(mealIngredient.getMenuIngredient.ingredients);
 
                         Map<String, dynamic> params = {
                           'account_id': id,

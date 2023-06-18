@@ -12,6 +12,7 @@ String MenuIngredientToJson(List<MenuIngredient> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MenuIngredient {
+  String id;
   String title;
   String? imageUrl;
   List<dynamic> ingredients;
@@ -19,6 +20,7 @@ class MenuIngredient {
   double? price;
 
   MenuIngredient({
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.ingredients,
@@ -27,9 +29,10 @@ class MenuIngredient {
   });
 
   factory MenuIngredient.fromJson(Map<String, dynamic> json) => MenuIngredient(
+        id: json["institutional_post"]['post_id'],
         title: json["title"],
         imageUrl: json["imageURL"],
-        isMealHidden: json["isMealHidden"],
+        isMealHidden: json["institutional_post"]["is_hidden"],
         price: json["price"],
         ingredients: List<String>.from(json["MenuIngredients"].map((x) => x)),
       );
